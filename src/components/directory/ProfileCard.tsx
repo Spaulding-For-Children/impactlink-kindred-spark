@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
 import { MapPin, Mail, ExternalLink } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 interface ProfileCardProps {
+  id: number;
   name: string;
   title?: string;
   organization?: string;
@@ -17,6 +19,7 @@ interface ProfileCardProps {
 }
 
 export const ProfileCard = ({
+  id,
   name,
   title,
   organization,
@@ -28,6 +31,7 @@ export const ProfileCard = ({
   type,
   index,
 }: ProfileCardProps) => {
+  const profileUrl = `/${type}s/${id}`;
   const colorClasses = {
     student: {
       bg: "bg-amber/10",
@@ -119,14 +123,16 @@ export const ProfileCard = ({
               </span>
             )}
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            className={`${colors.text} hover:${colors.bg}`}
-          >
-            View Profile
-            <ExternalLink className="h-3 w-3 ml-1" />
-          </Button>
+          <Link to={profileUrl}>
+            <Button
+              variant="ghost"
+              size="sm"
+              className={`${colors.text} hover:${colors.bg}`}
+            >
+              View Profile
+              <ExternalLink className="h-3 w-3 ml-1" />
+            </Button>
+          </Link>
         </div>
       </div>
     </motion.div>

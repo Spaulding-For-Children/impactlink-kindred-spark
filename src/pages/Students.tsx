@@ -251,6 +251,7 @@ export default function Students() {
                 {filteredStudents.map((student, index) => (
                   <ProfileCard
                     key={student.id}
+                    id={student.id}
                     name={student.name}
                     title={student.title}
                     organization={student.organization}

@@ -247,6 +247,7 @@ export default function Researchers() {
                 {filteredResearchers.map((researcher, index) => (
                   <ProfileCard
                     key={researcher.id}
+                    id={researcher.id}
                     name={researcher.name}
                     title={researcher.title}
                     organization={researcher.organization}

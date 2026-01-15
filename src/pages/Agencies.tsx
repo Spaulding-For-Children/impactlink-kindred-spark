@@ -247,6 +247,7 @@ export default function Agencies() {
                 {filteredAgencies.map((agency, index) => (
                   <ProfileCard
                     key={agency.id}
+                    id={agency.id}
                     name={agency.name}
                     title={agency.title}
                     organization={agency.organization}
