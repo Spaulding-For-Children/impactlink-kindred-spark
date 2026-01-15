@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { GraduationCap, Microscope, Building2, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const profiles = [
@@ -129,17 +130,19 @@ export const Directory = () => {
                 </ul>
 
                 {/* CTA */}
-                <Button 
-                  variant="ghost" 
-                  className={`group/btn w-full justify-between ${
-                    profile.color === 'amber' ? 'hover:text-amber' : 
-                    profile.color === 'navy' ? 'hover:text-navy' : 
-                    'hover:text-sage'
-                  }`}
-                >
-                  Browse {profile.title}
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                </Button>
+                <Link to={`/${profile.title.toLowerCase()}`}>
+                  <Button 
+                    variant="ghost" 
+                    className={`group/btn w-full justify-between ${
+                      profile.color === 'amber' ? 'hover:text-amber' : 
+                      profile.color === 'navy' ? 'hover:text-navy' : 
+                      'hover:text-sage'
+                    }`}
+                  >
+                    Browse {profile.title}
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                  </Button>
+                </Link>
               </div>
             </motion.div>
           ))}
