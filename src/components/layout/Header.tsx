@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Menu, X, ChevronDown, User, LogOut } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -26,7 +27,14 @@ export const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const location = useLocation();
+  const navigate = useNavigate();
   const isHomePage = location.pathname === "/";
+  const { user, signOut, loading } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
 
   const handleNavClick = (href: string) => {
     if (href.startsWith("#") && !isHomePage) {
@@ -118,12 +126,31 @@ export const Header = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <Button variant="ghost" size="sm">
-              Sign In
-            </Button>
-            <Button variant="hero" size="sm">
-              Get Started
-            </Button>
+            {!loading && (
+              user ? (
+                <>
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to="/create-profile">
+                      <User className="w-4 h-4 mr-2" />
+                      Profile
+                    </Link>
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={handleSignOut}>
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to="/auth">Sign In</Link>
+                  </Button>
+                  <Button variant="hero" size="sm" asChild>
+                    <Link to="/auth">Get Started</Link>
+                  </Button>
+                </>
+              )
+            )}
           </motion.div>
 
           {/* Mobile menu button */}
@@ -203,12 +230,31 @@ export const Header = () => {
                   </Link>
                 </div>
                 <div className="pt-4 flex flex-col gap-2">
-                  <Button variant="ghost" className="w-full justify-center">
-                    Sign In
-                  </Button>
-                  <Button variant="hero" className="w-full justify-center">
-                    Get Started
-                  </Button>
+                  {!loading && (
+                    user ? (
+                      <>
+                        <Button variant="ghost" className="w-full justify-center" asChild>
+                          <Link to="/create-profile" onClick={() => setMobileMenuOpen(false)}>
+                            <User className="w-4 h-4 mr-2" />
+                            Profile
+                          </Link>
+                        </Button>
+                        <Button variant="outline" className="w-full justify-center" onClick={() => { handleSignOut(); setMobileMenuOpen(false); }}>
+                          <LogOut className="w-4 h-4 mr-2" />
+                          Sign Out
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button variant="ghost" className="w-full justify-center" asChild>
+                          <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>Sign In</Link>
+                        </Button>
+                        <Button variant="hero" className="w-full justify-center" asChild>
+                          <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>Get Started</Link>
+                        </Button>
+                      </>
+                    )
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -218,3 +264,5 @@ export const Header = () => {
     </header>
   );
 };
+
+export default Header;
