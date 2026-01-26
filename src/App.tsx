@@ -14,6 +14,8 @@ import ResearcherProfile from "./pages/ResearcherProfile";
 import AgencyProfile from "./pages/AgencyProfile";
 import Auth from "./pages/Auth";
 import CreateProfile from "./pages/CreateProfile";
+import ProfileSettings from "./pages/ProfileSettings";
+import ProfileDetail from "./pages/ProfileDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +31,8 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/create-profile" element={<CreateProfile />} />
+            <Route path="/profile-settings" element={<ProfileSettings />} />
+            <Route path="/profile/:id" element={<ProfileDetail />} />
             <Route path="/directory" element={<Directory />} />
             <Route path="/students" element={<Students />} />
             <Route path="/students/:id" element={<StudentProfile />} />
