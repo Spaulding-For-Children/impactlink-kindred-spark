@@ -17,7 +17,7 @@ const navigation = [
       { name: "Agencies", href: "/agencies" },
     ]
   },
-  { name: "Collaboration", href: "#collaboration" },
+  { name: "Collaboration", href: "/collaboration" },
   { name: "Data & Tools", href: "#data-tools" },
   { name: "Resources", href: "#resources" },
   { name: "Events", href: "#events" },
