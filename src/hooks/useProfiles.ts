@@ -38,6 +38,9 @@ export interface UnifiedProfile {
   description: string;
   type: 'student' | 'researcher' | 'agency';
   userId: string;
+  avatar: string | null;
+  institution: string | null;
+  interests: string[] | null;
 }
 
 export function useProfiles() {
@@ -94,6 +97,9 @@ export function useProfiles() {
         description: p.bio || '',
         type: p.profile_type,
         userId: p.user_id,
+        avatar: p.avatar_url,
+        institution: p.institution || p.university || null,
+        interests: p.interests || p.focus_areas || null,
       };
     });
 

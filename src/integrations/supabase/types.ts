@@ -14,6 +14,171 @@ export type Database = {
   }
   public: {
     Tables: {
+      collaborations: {
+        Row: {
+          created_at: string
+          id: string
+          message: string | null
+          recipient_id: string
+          requester_id: string
+          status: Database["public"]["Enums"]["collaboration_status"] | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          recipient_id: string
+          requester_id: string
+          status?: Database["public"]["Enums"]["collaboration_status"] | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          recipient_id?: string
+          requester_id?: string
+          status?: Database["public"]["Enums"]["collaboration_status"] | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collaborations_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collaborations_requester_id_fkey"
+            columns: ["requester_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      forum_posts: {
+        Row: {
+          author_id: string
+          content: string
+          created_at: string
+          id: string
+          reply_count: number | null
+          title: string
+          topic_id: string
+          updated_at: string
+        }
+        Insert: {
+          author_id: string
+          content: string
+          created_at?: string
+          id?: string
+          reply_count?: number | null
+          title: string
+          topic_id: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          reply_count?: number | null
+          title?: string
+          topic_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "forum_posts_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "forum_posts_topic_id_fkey"
+            columns: ["topic_id"]
+            isOneToOne: false
+            referencedRelation: "forum_topics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      forum_replies: {
+        Row: {
+          author_id: string
+          content: string
+          created_at: string
+          id: string
+          post_id: string
+          updated_at: string
+        }
+        Insert: {
+          author_id: string
+          content: string
+          created_at?: string
+          id?: string
+          post_id: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          post_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "forum_replies_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "forum_replies_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "forum_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      forum_topics: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          post_count: number | null
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          post_count?: number | null
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          post_count?: number | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           agency_type: string | null
@@ -92,15 +257,79 @@ export type Database = {
         }
         Relationships: []
       }
+      research_questions: {
+        Row: {
+          author_id: string
+          created_at: string
+          description: string
+          id: string
+          populations: string[] | null
+          regions: string[] | null
+          status: Database["public"]["Enums"]["research_question_status"] | null
+          title: string
+          topics: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          author_id: string
+          created_at?: string
+          description: string
+          id?: string
+          populations?: string[] | null
+          regions?: string[] | null
+          status?:
+            | Database["public"]["Enums"]["research_question_status"]
+            | null
+          title: string
+          topics?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string
+          created_at?: string
+          description?: string
+          id?: string
+          populations?: string[] | null
+          regions?: string[] | null
+          status?:
+            | Database["public"]["Enums"]["research_question_status"]
+            | null
+          title?: string
+          topics?: string[] | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "research_questions_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_partner_matches: {
+        Args: { user_profile_id: string }
+        Returns: {
+          interests: string[]
+          location: string
+          match_score: number
+          name: string
+          profile_id: string
+          profile_type: string
+          shared_interests: string[]
+        }[]
+      }
     }
     Enums: {
+      collaboration_status: "pending" | "accepted" | "declined"
       profile_type: "student" | "researcher" | "agency"
+      research_question_status: "open" | "in_progress" | "completed" | "closed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -228,7 +457,9 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      collaboration_status: ["pending", "accepted", "declined"],
       profile_type: ["student", "researcher", "agency"],
+      research_question_status: ["open", "in_progress", "completed", "closed"],
     },
   },
 } as const

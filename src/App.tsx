@@ -16,6 +16,7 @@ import Auth from "./pages/Auth";
 import CreateProfile from "./pages/CreateProfile";
 import ProfileSettings from "./pages/ProfileSettings";
 import ProfileDetail from "./pages/ProfileDetail";
+import Collaboration from "./pages/Collaboration";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
             <Route path="/profile-settings" element={<ProfileSettings />} />
             <Route path="/profile/:id" element={<ProfileDetail />} />
             <Route path="/directory" element={<Directory />} />
+            <Route path="/collaboration" element={<Collaboration />} />
             <Route path="/students" element={<Students />} />
             <Route path="/students/:id" element={<StudentProfile />} />
             <Route path="/researchers" element={<Researchers />} />

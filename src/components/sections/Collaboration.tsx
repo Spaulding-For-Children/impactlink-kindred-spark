@@ -86,8 +86,8 @@ export const Collaboration = () => {
               ))}
             </div>
 
-            <Button variant="default" size="lg">
-              Start Collaborating
+            <Button variant="default" size="lg" asChild>
+              <a href="/collaboration">Start Collaborating</a>
             </Button>
           </motion.div>
 
