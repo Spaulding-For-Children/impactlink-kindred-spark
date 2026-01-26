@@ -308,6 +308,98 @@ export type Database = {
           },
         ]
       }
+      resource_bookmarks: {
+        Row: {
+          created_at: string
+          id: string
+          resource_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          resource_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          resource_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resource_bookmarks_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "resources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      resources: {
+        Row: {
+          author: string | null
+          category: string
+          created_at: string
+          description: string
+          download_count: number | null
+          duration: string | null
+          external_url: string | null
+          featured: boolean | null
+          file_url: string | null
+          format: Database["public"]["Enums"]["resource_format"]
+          id: string
+          publication_date: string | null
+          resource_type: Database["public"]["Enums"]["resource_type"]
+          tags: string[] | null
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+          view_count: number | null
+        }
+        Insert: {
+          author?: string | null
+          category: string
+          created_at?: string
+          description: string
+          download_count?: number | null
+          duration?: string | null
+          external_url?: string | null
+          featured?: boolean | null
+          file_url?: string | null
+          format: Database["public"]["Enums"]["resource_format"]
+          id?: string
+          publication_date?: string | null
+          resource_type: Database["public"]["Enums"]["resource_type"]
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Update: {
+          author?: string | null
+          category?: string
+          created_at?: string
+          description?: string
+          download_count?: number | null
+          duration?: string | null
+          external_url?: string | null
+          featured?: boolean | null
+          file_url?: string | null
+          format?: Database["public"]["Enums"]["resource_format"]
+          id?: string
+          publication_date?: string | null
+          resource_type?: Database["public"]["Enums"]["resource_type"]
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -330,6 +422,14 @@ export type Database = {
       collaboration_status: "pending" | "accepted" | "declined"
       profile_type: "student" | "researcher" | "agency"
       research_question_status: "open" | "in_progress" | "completed" | "closed"
+      resource_format:
+        | "live"
+        | "recorded"
+        | "pdf"
+        | "article"
+        | "report"
+        | "book"
+      resource_type: "workshop" | "toolkit" | "reading"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -460,6 +560,8 @@ export const Constants = {
       collaboration_status: ["pending", "accepted", "declined"],
       profile_type: ["student", "researcher", "agency"],
       research_question_status: ["open", "in_progress", "completed", "closed"],
+      resource_format: ["live", "recorded", "pdf", "article", "report", "book"],
+      resource_type: ["workshop", "toolkit", "reading"],
     },
   },
 } as const
