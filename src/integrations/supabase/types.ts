@@ -14,7 +14,84 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          agency_type: string | null
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          department: string | null
+          email: string
+          employees: string | null
+          focus_areas: string[] | null
+          founded: string | null
+          id: string
+          institution: string | null
+          interests: string[] | null
+          location: string | null
+          major: string | null
+          name: string
+          profile_type: Database["public"]["Enums"]["profile_type"]
+          publications: number | null
+          title: string | null
+          university: string | null
+          updated_at: string
+          user_id: string
+          website: string | null
+          year: string | null
+        }
+        Insert: {
+          agency_type?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          department?: string | null
+          email: string
+          employees?: string | null
+          focus_areas?: string[] | null
+          founded?: string | null
+          id?: string
+          institution?: string | null
+          interests?: string[] | null
+          location?: string | null
+          major?: string | null
+          name: string
+          profile_type: Database["public"]["Enums"]["profile_type"]
+          publications?: number | null
+          title?: string | null
+          university?: string | null
+          updated_at?: string
+          user_id: string
+          website?: string | null
+          year?: string | null
+        }
+        Update: {
+          agency_type?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          department?: string | null
+          email?: string
+          employees?: string | null
+          focus_areas?: string[] | null
+          founded?: string | null
+          id?: string
+          institution?: string | null
+          interests?: string[] | null
+          location?: string | null
+          major?: string | null
+          name?: string
+          profile_type?: Database["public"]["Enums"]["profile_type"]
+          publications?: number | null
+          title?: string | null
+          university?: string | null
+          updated_at?: string
+          user_id?: string
+          website?: string | null
+          year?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +100,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      profile_type: "student" | "researcher" | "agency"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +227,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      profile_type: ["student", "researcher", "agency"],
+    },
   },
 } as const
