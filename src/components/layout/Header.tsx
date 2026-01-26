@@ -130,7 +130,7 @@ export const Header = () => {
               user ? (
                 <>
                   <Button variant="ghost" size="sm" asChild>
-                    <Link to="/create-profile">
+                    <Link to="/profile-settings">
                       <User className="w-4 h-4 mr-2" />
                       Profile
                     </Link>
@@ -234,7 +234,7 @@ export const Header = () => {
                     user ? (
                       <>
                         <Button variant="ghost" className="w-full justify-center" asChild>
-                          <Link to="/create-profile" onClick={() => setMobileMenuOpen(false)}>
+                          <Link to="/profile-settings" onClick={() => setMobileMenuOpen(false)}>
                             <User className="w-4 h-4 mr-2" />
                             Profile
                           </Link>
