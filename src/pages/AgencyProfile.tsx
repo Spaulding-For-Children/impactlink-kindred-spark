@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, Mail, MapPin, Globe, Phone, Building2, Target, Users, Database, Handshake } from "lucide-react";
@@ -6,11 +7,13 @@ import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ContactFormModal } from "@/components/modals/ContactFormModal";
 import { agenciesData } from "@/data/profiles";
 
 export default function AgencyProfile() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [contactModalOpen, setContactModalOpen] = useState(false);
   const agency = agenciesData.find((a) => a.id === Number(id));
 
   if (!agency) {
@@ -98,7 +101,10 @@ export default function AgencyProfile() {
 
               {/* Contact Button */}
               <div className="flex-shrink-0">
-                <Button className="bg-sage hover:bg-sage/90 text-white">
+                <Button 
+                  className="bg-sage hover:bg-sage/90 text-white"
+                  onClick={() => setContactModalOpen(true)}
+                >
                   <Mail className="h-4 w-4 mr-2" />
                   Contact Agency
                 </Button>
@@ -106,6 +112,14 @@ export default function AgencyProfile() {
             </motion.div>
           </div>
         </section>
+
+        {/* Contact Modal */}
+        <ContactFormModal
+          open={contactModalOpen}
+          onOpenChange={setContactModalOpen}
+          recipientName={agency.name}
+          recipientType="agency"
+        />
 
         {/* Content Grid */}
         <section className="py-12">
