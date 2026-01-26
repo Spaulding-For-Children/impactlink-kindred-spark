@@ -67,10 +67,16 @@ export const Directory = () => {
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-foreground mb-6">
             Connect with the Right People
           </h2>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-lg text-muted-foreground mb-8">
             Our directory brings together students, researchers, and agencies from around the globe, 
             making it easy to find the perfect collaboration partners.
           </p>
+          <Link to="/directory">
+            <Button variant="hero" size="lg">
+              Browse Complete Directory
+              <ArrowRight className="h-4 w-4 ml-2" />
+            </Button>
+          </Link>
         </motion.div>
 
         {/* Profile Cards */}

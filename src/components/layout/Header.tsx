@@ -8,8 +8,9 @@ const navigation = [
   { name: "Home", href: "/" },
   { 
     name: "Directory", 
-    href: "#directory",
+    href: "/directory",
     children: [
+      { name: "All Profiles", href: "/directory" },
       { name: "Students", href: "/students" },
       { name: "Researchers", href: "/researchers" },
       { name: "Agencies", href: "/agencies" },
@@ -172,6 +173,13 @@ export const Header = () => {
                 ))}
                 {/* Mobile dropdown items */}
                 <div className="pl-4 space-y-1">
+                  <Link
+                    to="/directory"
+                    className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    All Profiles
+                  </Link>
                   <Link
                     to="/students"
                     className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
