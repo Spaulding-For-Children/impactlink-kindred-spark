@@ -3,6 +3,7 @@ import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { Calendar, MapPin, Users, Clock, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const upcomingEvents = [
   {
@@ -99,9 +100,11 @@ export const Events = () => {
               ))}
             </div>
 
-            <Button variant="ghost" className="mt-6 group">
-              View Full Calendar
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            <Button variant="ghost" className="mt-6 group" asChild>
+              <Link to="/events">
+                View Full Calendar
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
             </Button>
           </motion.div>
 

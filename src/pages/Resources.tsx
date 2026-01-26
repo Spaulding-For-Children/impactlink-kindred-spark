@@ -6,7 +6,8 @@ import { Footer } from "@/components/layout/Footer";
 import { WorkshopsWebinars } from "@/components/resources/WorkshopsWebinars";
 import { ToolkitsGuides } from "@/components/resources/ToolkitsGuides";
 import { ReadingLists } from "@/components/resources/ReadingLists";
-import { Video, FileText, BookOpen, Bookmark } from "lucide-react";
+import { ResearchSubmissions } from "@/components/resources/ResearchSubmissions";
+import { Video, FileText, BookOpen, Bookmark, Upload } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { SavedResources } from "@/components/resources/SavedResources";
 
@@ -68,6 +69,13 @@ const Resources = () => {
                   <BookOpen className="w-4 h-4 mr-2" />
                   Reading Lists
                 </TabsTrigger>
+                <TabsTrigger
+                  value="submissions"
+                  className="data-[state=active]:bg-amber data-[state=active]:text-white rounded-full px-6 py-2.5"
+                >
+                  <Upload className="w-4 h-4 mr-2" />
+                  Research Showcase
+                </TabsTrigger>
                 {user && (
                   <TabsTrigger
                     value="saved"
@@ -89,6 +97,10 @@ const Resources = () => {
 
               <TabsContent value="readings" className="mt-0">
                 <ReadingLists />
+              </TabsContent>
+
+              <TabsContent value="submissions" className="mt-0">
+                <ResearchSubmissions />
               </TabsContent>
 
               {user && (
