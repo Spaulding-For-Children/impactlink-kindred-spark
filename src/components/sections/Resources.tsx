@@ -3,6 +3,7 @@ import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { Video, BookOpen, FileText, GraduationCap, FlaskConical, Building, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const resources = [
   {
@@ -126,8 +127,11 @@ export const Resources = () => {
             ))}
           </div>
 
-          <div className="text-center mt-8">
-            <Button variant="default" size="lg">
+          <div className="text-center mt-8 flex flex-wrap gap-4 justify-center">
+            <Button variant="default" size="lg" asChild>
+              <Link to="/resources">Browse All Resources</Link>
+            </Button>
+            <Button variant="outline" size="lg">
               Submit Your Research
             </Button>
           </div>
