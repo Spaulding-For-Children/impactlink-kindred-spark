@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, Mail, MapPin, Calendar, BookOpen, Award, Briefcase, Globe, Linkedin, GraduationCap } from "lucide-react";
@@ -6,11 +7,13 @@ import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ContactFormModal } from "@/components/modals/ContactFormModal";
 import { studentsData } from "@/data/profiles";
 
 export default function StudentProfile() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [contactModalOpen, setContactModalOpen] = useState(false);
   const student = studentsData.find((s) => s.id === Number(id));
 
   if (!student) {
@@ -100,7 +103,10 @@ export default function StudentProfile() {
 
               {/* Contact Button */}
               <div className="flex-shrink-0">
-                <Button className="bg-amber hover:bg-amber/90 text-white">
+                <Button 
+                  className="bg-amber hover:bg-amber/90 text-white"
+                  onClick={() => setContactModalOpen(true)}
+                >
                   <Mail className="h-4 w-4 mr-2" />
                   Contact Student
                 </Button>
@@ -108,6 +114,14 @@ export default function StudentProfile() {
             </motion.div>
           </div>
         </section>
+
+        {/* Contact Modal */}
+        <ContactFormModal
+          open={contactModalOpen}
+          onOpenChange={setContactModalOpen}
+          recipientName={student.name}
+          recipientType="student"
+        />
 
         {/* Content Grid */}
         <section className="py-12">
