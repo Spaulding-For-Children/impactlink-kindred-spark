@@ -19,8 +19,8 @@ const navigation = [
   },
   { name: "Collaboration", href: "/collaboration" },
   { name: "Resources", href: "/resources" },
+  { name: "Events", href: "/events" },
   { name: "Data & Tools", href: "#data-tools" },
-  { name: "Events", href: "#events" },
 ];
 
 export const Header = () => {

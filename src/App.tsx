@@ -18,6 +18,7 @@ import ProfileSettings from "./pages/ProfileSettings";
 import ProfileDetail from "./pages/ProfileDetail";
 import Collaboration from "./pages/Collaboration";
 import Resources from "./pages/Resources";
+import Events from "./pages/Events";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,6 +39,7 @@ const App = () => (
             <Route path="/directory" element={<Directory />} />
             <Route path="/collaboration" element={<Collaboration />} />
             <Route path="/resources" element={<Resources />} />
+            <Route path="/events" element={<Events />} />
             <Route path="/students" element={<Students />} />
             <Route path="/students/:id" element={<StudentProfile />} />
             <Route path="/researchers" element={<Researchers />} />

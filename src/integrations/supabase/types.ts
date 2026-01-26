@@ -59,6 +59,104 @@ export type Database = {
           },
         ]
       }
+      event_registrations: {
+        Row: {
+          attended: boolean | null
+          event_id: string
+          id: string
+          registered_at: string
+          reminder_sent: boolean | null
+          user_id: string
+        }
+        Insert: {
+          attended?: boolean | null
+          event_id: string
+          id?: string
+          registered_at?: string
+          reminder_sent?: boolean | null
+          user_id: string
+        }
+        Update: {
+          attended?: boolean | null
+          event_id?: string
+          id?: string
+          registered_at?: string
+          reminder_sent?: boolean | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_registrations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          created_at: string
+          description: string
+          end_date: string
+          event_type: Database["public"]["Enums"]["event_type"]
+          featured: boolean | null
+          host_name: string | null
+          host_organization: string | null
+          id: string
+          is_virtual: boolean | null
+          location: string | null
+          max_attendees: number | null
+          registration_deadline: string | null
+          start_date: string
+          tags: string[] | null
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+          virtual_link: string | null
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          end_date: string
+          event_type: Database["public"]["Enums"]["event_type"]
+          featured?: boolean | null
+          host_name?: string | null
+          host_organization?: string | null
+          id?: string
+          is_virtual?: boolean | null
+          location?: string | null
+          max_attendees?: number | null
+          registration_deadline?: string | null
+          start_date: string
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string
+          virtual_link?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          end_date?: string
+          event_type?: Database["public"]["Enums"]["event_type"]
+          featured?: boolean | null
+          host_name?: string | null
+          host_organization?: string | null
+          id?: string
+          is_virtual?: boolean | null
+          location?: string | null
+          max_attendees?: number | null
+          registration_deadline?: string | null
+          start_date?: string
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string
+          virtual_link?: string | null
+        }
+        Relationships: []
+      }
       forum_posts: {
         Row: {
           author_id: string
@@ -308,6 +406,59 @@ export type Database = {
           },
         ]
       }
+      research_submissions: {
+        Row: {
+          author_id: string
+          created_at: string
+          description: string
+          file_name: string
+          file_size: number | null
+          file_url: string
+          id: string
+          status: Database["public"]["Enums"]["submission_status"] | null
+          submission_type: Database["public"]["Enums"]["submission_type"]
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_id: string
+          created_at?: string
+          description: string
+          file_name: string
+          file_size?: number | null
+          file_url: string
+          id?: string
+          status?: Database["public"]["Enums"]["submission_status"] | null
+          submission_type: Database["public"]["Enums"]["submission_type"]
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string
+          created_at?: string
+          description?: string
+          file_name?: string
+          file_size?: number | null
+          file_url?: string
+          id?: string
+          status?: Database["public"]["Enums"]["submission_status"] | null
+          submission_type?: Database["public"]["Enums"]["submission_type"]
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "research_submissions_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       resource_bookmarks: {
         Row: {
           created_at: string
@@ -420,6 +571,12 @@ export type Database = {
     }
     Enums: {
       collaboration_status: "pending" | "accepted" | "declined"
+      event_type:
+        | "workshop"
+        | "webinar"
+        | "conference"
+        | "networking"
+        | "training"
       profile_type: "student" | "researcher" | "agency"
       research_question_status: "open" | "in_progress" | "completed" | "closed"
       resource_format:
@@ -430,6 +587,12 @@ export type Database = {
         | "report"
         | "book"
       resource_type: "workshop" | "toolkit" | "reading"
+      submission_status: "pending" | "approved" | "rejected"
+      submission_type:
+        | "student_project"
+        | "faculty_research"
+        | "agency_report"
+        | "global_showcase"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -558,10 +721,24 @@ export const Constants = {
   public: {
     Enums: {
       collaboration_status: ["pending", "accepted", "declined"],
+      event_type: [
+        "workshop",
+        "webinar",
+        "conference",
+        "networking",
+        "training",
+      ],
       profile_type: ["student", "researcher", "agency"],
       research_question_status: ["open", "in_progress", "completed", "closed"],
       resource_format: ["live", "recorded", "pdf", "article", "report", "book"],
       resource_type: ["workshop", "toolkit", "reading"],
+      submission_status: ["pending", "approved", "rejected"],
+      submission_type: [
+        "student_project",
+        "faculty_research",
+        "agency_report",
+        "global_showcase",
+      ],
     },
   },
 } as const
