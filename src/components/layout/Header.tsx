@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, User, LogOut } from "lucide-react";
+import { Menu, X, ChevronDown, User, LogOut, Shield } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -30,6 +32,22 @@ export const Header = () => {
   const navigate = useNavigate();
   const isHomePage = location.pathname === "/";
   const { user, signOut, loading } = useAuth();
+
+  // Check if user is admin
+  const { data: isAdmin } = useQuery({
+    queryKey: ["isAdmin", user?.id],
+    queryFn: async () => {
+      if (!user) return false;
+      const { data } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id)
+        .eq("role", "admin")
+        .maybeSingle();
+      return !!data;
+    },
+    enabled: !!user,
+  });
 
   const handleSignOut = async () => {
     await signOut();
@@ -129,6 +147,14 @@ export const Header = () => {
             {!loading && (
               user ? (
                 <>
+                  {isAdmin && (
+                    <Button variant="outline" size="sm" asChild className="border-primary/50 text-primary">
+                      <Link to="/admin">
+                        <Shield className="w-4 h-4 mr-2" />
+                        Admin
+                      </Link>
+                    </Button>
+                  )}
                   <Button variant="ghost" size="sm" asChild>
                     <Link to="/profile-settings">
                       <User className="w-4 h-4 mr-2" />
@@ -233,6 +259,14 @@ export const Header = () => {
                   {!loading && (
                     user ? (
                       <>
+                        {isAdmin && (
+                          <Button variant="outline" className="w-full justify-center border-primary/50 text-primary" asChild>
+                            <Link to="/admin" onClick={() => setMobileMenuOpen(false)}>
+                              <Shield className="w-4 h-4 mr-2" />
+                              Admin
+                            </Link>
+                          </Button>
+                        )}
                         <Button variant="ghost" className="w-full justify-center" asChild>
                           <Link to="/profile-settings" onClick={() => setMobileMenuOpen(false)}>
                             <User className="w-4 h-4 mr-2" />
