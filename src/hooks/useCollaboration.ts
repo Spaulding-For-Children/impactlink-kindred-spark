@@ -340,6 +340,17 @@ export function useCreateCollaboration() {
         .select()
         .single();
       if (error) throw error;
+
+      // Send email notification to recipient (fire-and-forget)
+      supabase.functions.invoke("send-collaboration-notification", {
+        body: {
+          collaboration_id: result.id,
+          requester_profile_id: data.requester_id,
+          recipient_profile_id: data.recipient_id,
+          message: data.message || null,
+        },
+      }).catch((err) => console.error("Failed to send collaboration notification:", err));
+
       return result;
     },
     onSuccess: () => {

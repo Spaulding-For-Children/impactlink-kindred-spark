@@ -2,3 +2,6 @@ project_id = "fpfmakgbsrrbwahynfuu"
 
 [functions.send-event-notification]
 verify_jwt = false
+
+[functions.send-collaboration-notification]
+verify_jwt = false
