@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Shield, Users, FileText, Calendar, BookOpen, MessageSquare, HelpCircle, Database } from "lucide-react";
+import { Shield, Users, FileText, Calendar, BookOpen, MessageSquare, HelpCircle, Database, UserPlus } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -14,6 +14,7 @@ import { AdminEvents } from "@/components/admin/AdminEvents";
 import { AdminForumTopics } from "@/components/admin/AdminForumTopics";
 import { AdminResearchQuestions } from "@/components/admin/AdminResearchQuestions";
 import { AdminDataTools } from "@/components/admin/AdminDataTools";
+import { AdminRegistrations } from "@/components/admin/AdminRegistrations";
 
 export default function Admin() {
   const navigate = useNavigate();
@@ -76,8 +77,12 @@ export default function Admin() {
         {/* Admin Tabs */}
         <section className="py-8">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <Tabs defaultValue="submissions" className="space-y-6">
-              <TabsList className="grid grid-cols-2 md:grid-cols-7 gap-2 h-auto p-2 bg-muted/50">
+            <Tabs defaultValue="registrations" className="space-y-6">
+              <TabsList className="grid grid-cols-2 md:grid-cols-8 gap-2 h-auto p-2 bg-muted/50">
+                <TabsTrigger value="registrations" className="flex items-center gap-2 data-[state=active]:bg-background">
+                  <UserPlus className="h-4 w-4" />
+                  <span className="hidden sm:inline">Registrations</span>
+                </TabsTrigger>
                 <TabsTrigger value="submissions" className="flex items-center gap-2 data-[state=active]:bg-background">
                   <FileText className="h-4 w-4" />
                   <span className="hidden sm:inline">Submissions</span>
@@ -107,6 +112,10 @@ export default function Admin() {
                   <span className="hidden sm:inline">Data & Tools</span>
                 </TabsTrigger>
               </TabsList>
+
+              <TabsContent value="registrations">
+                <AdminRegistrations />
+              </TabsContent>
 
               <TabsContent value="submissions">
                 <AdminSubmissions />
