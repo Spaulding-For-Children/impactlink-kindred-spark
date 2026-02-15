@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      analysis_tools: {
+        Row: {
+          access_url: string | null
+          category: string
+          created_at: string
+          description: string
+          documentation_url: string | null
+          featured: boolean | null
+          full_name: string
+          id: string
+          license_type: string | null
+          name: string
+          tags: string[] | null
+          tool_type: string
+          updated_at: string
+        }
+        Insert: {
+          access_url?: string | null
+          category?: string
+          created_at?: string
+          description: string
+          documentation_url?: string | null
+          featured?: boolean | null
+          full_name: string
+          id?: string
+          license_type?: string | null
+          name: string
+          tags?: string[] | null
+          tool_type?: string
+          updated_at?: string
+        }
+        Update: {
+          access_url?: string | null
+          category?: string
+          created_at?: string
+          description?: string
+          documentation_url?: string | null
+          featured?: boolean | null
+          full_name?: string
+          id?: string
+          license_type?: string | null
+          name?: string
+          tags?: string[] | null
+          tool_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       collaborations: {
         Row: {
           created_at: string
@@ -58,6 +106,102 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      datasets: {
+        Row: {
+          access_url: string | null
+          coverage_end: string | null
+          coverage_start: string | null
+          created_at: string
+          data_format: string | null
+          description: string
+          documentation_url: string | null
+          featured: boolean | null
+          id: string
+          regions: string[] | null
+          source_organization: string
+          source_type: string
+          tags: string[] | null
+          title: string
+          topics: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          access_url?: string | null
+          coverage_end?: string | null
+          coverage_start?: string | null
+          created_at?: string
+          data_format?: string | null
+          description: string
+          documentation_url?: string | null
+          featured?: boolean | null
+          id?: string
+          regions?: string[] | null
+          source_organization: string
+          source_type?: string
+          tags?: string[] | null
+          title: string
+          topics?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          access_url?: string | null
+          coverage_end?: string | null
+          coverage_start?: string | null
+          created_at?: string
+          data_format?: string | null
+          description?: string
+          documentation_url?: string | null
+          featured?: boolean | null
+          id?: string
+          regions?: string[] | null
+          source_organization?: string
+          source_type?: string
+          tags?: string[] | null
+          title?: string
+          topics?: string[] | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ethics_resources: {
+        Row: {
+          created_at: string
+          description: string
+          external_url: string | null
+          featured: boolean | null
+          id: string
+          jurisdiction: string | null
+          resource_type: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          external_url?: string | null
+          featured?: boolean | null
+          id?: string
+          jurisdiction?: string | null
+          resource_type?: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          external_url?: string | null
+          featured?: boolean | null
+          id?: string
+          jurisdiction?: string | null
+          resource_type?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       event_registrations: {
         Row: {
