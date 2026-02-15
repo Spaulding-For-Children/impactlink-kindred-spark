@@ -499,6 +499,54 @@ export type Database = {
         }
         Relationships: []
       }
+      registration_requests: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          email: string
+          id: string
+          name: string
+          organization: string
+          organization_type: string
+          password_hash: string
+          phone_number: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          organization: string
+          organization_type: string
+          password_hash: string
+          phone_number: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          organization?: string
+          organization_type?: string
+          password_hash?: string
+          phone_number?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       research_questions: {
         Row: {
           author_id: string
