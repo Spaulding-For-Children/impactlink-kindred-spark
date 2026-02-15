@@ -508,7 +508,6 @@ export type Database = {
           name: string
           organization: string
           organization_type: string
-          password_hash: string
           phone_number: string
           reviewed_at: string | null
           reviewed_by: string | null
@@ -523,7 +522,6 @@ export type Database = {
           name: string
           organization: string
           organization_type: string
-          password_hash: string
           phone_number: string
           reviewed_at?: string | null
           reviewed_by?: string | null
@@ -538,7 +536,6 @@ export type Database = {
           name?: string
           organization?: string
           organization_type?: string
-          password_hash?: string
           phone_number?: string
           reviewed_at?: string | null
           reviewed_by?: string | null
