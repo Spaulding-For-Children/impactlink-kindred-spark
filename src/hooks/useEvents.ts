@@ -160,6 +160,12 @@ export function useRegisterForEvent() {
         .single();
 
       if (error) throw error;
+
+      // Send email notification with .ics calendar invite (fire-and-forget)
+      supabase.functions.invoke("send-event-notification", {
+        body: { event_id: eventId, user_id: user.id },
+      }).catch((err) => console.error("Failed to send event notification email:", err));
+
       return data;
     },
     onSuccess: () => {
