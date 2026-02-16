@@ -1,30 +1,31 @@
 import { motion } from "framer-motion";
 import { Linkedin, Twitter, Youtube, Mail } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const footerLinks = {
   platform: [
-    { name: "Home", href: "#home" },
-    { name: "Directory", href: "#directory" },
-    { name: "Collaboration Portal", href: "#collaboration" },
-    { name: "Data & Tools", href: "#data-tools" },
+    { name: "Home", href: "/" },
+    { name: "Directory", href: "/directory" },
+    { name: "Collaboration Portal", href: "/collaboration" },
+    { name: "Data & Tools", href: "/data-tools" },
   ],
   resources: [
-    { name: "Workshops & Webinars", href: "#resources" },
-    { name: "Toolkits", href: "#resources" },
-    { name: "Reading Lists", href: "#resources" },
-    { name: "IRB Guidance", href: "#data-tools" },
+    { name: "Workshops & Webinars", href: "/resources" },
+    { name: "Toolkits", href: "/resources" },
+    { name: "Reading Lists", href: "/resources" },
+    { name: "IRB Guidance", href: "/data-tools" },
   ],
   community: [
-    { name: "Events Calendar", href: "#events" },
-    { name: "Funding Opportunities", href: "#events" },
-    { name: "Research Showcase", href: "#resources" },
-    { name: "Forums", href: "#collaboration" },
+    { name: "Events Calendar", href: "/events" },
+    { name: "Funding Opportunities", href: "/events" },
+    { name: "Research Showcase", href: "/resources" },
+    { name: "Forums", href: "/collaboration" },
   ],
   support: [
-    { name: "Help Center", href: "#contact" },
-    { name: "Contact Us", href: "#contact" },
-    { name: "FAQs", href: "#contact" },
-    { name: "Privacy Policy", href: "#" },
+    { name: "Help Center", href: "/#contact" },
+    { name: "Contact Us", href: "/#contact" },
+    { name: "FAQs", href: "/#contact" },
+    { name: "Privacy Policy", href: "/#contact" },
   ],
 };
 
@@ -36,6 +37,26 @@ const socialLinks = [
 ];
 
 export const Footer = () => {
+  const navigate = useNavigate();
+
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    if (href.startsWith("/#")) {
+      const sectionId = href.slice(2);
+      if (window.location.pathname === "/") {
+        document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
+      } else {
+        navigate("/");
+        setTimeout(() => {
+          document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
+        }, 300);
+      }
+    } else {
+      navigate(href);
+      window.scrollTo(0, 0);
+    }
+  };
+
   return (
     <footer className="bg-foreground text-primary-foreground">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -43,7 +64,8 @@ export const Footer = () => {
           {/* Brand */}
           <div className="col-span-2">
             <motion.a 
-              href="#home"
+              href="/"
+              onClick={(e) => handleLinkClick(e, "/")}
               className="flex items-center gap-3 mb-6"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -80,8 +102,9 @@ export const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.platform.map((link) => (
                 <li key={link.name}>
-                  <a 
+                   <a 
                     href={link.href}
+                    onClick={(e) => handleLinkClick(e, link.href)}
                     className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors"
                   >
                     {link.name}
@@ -96,8 +119,9 @@ export const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.resources.map((link) => (
                 <li key={link.name}>
-                  <a 
+                   <a 
                     href={link.href}
+                    onClick={(e) => handleLinkClick(e, link.href)}
                     className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors"
                   >
                     {link.name}
@@ -112,8 +136,9 @@ export const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.community.map((link) => (
                 <li key={link.name}>
-                  <a 
+                   <a 
                     href={link.href}
+                    onClick={(e) => handleLinkClick(e, link.href)}
                     className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors"
                   >
                     {link.name}
@@ -128,8 +153,9 @@ export const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.support.map((link) => (
                 <li key={link.name}>
-                  <a 
+                   <a 
                     href={link.href}
+                    onClick={(e) => handleLinkClick(e, link.href)}
                     className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors"
                   >
                     {link.name}
