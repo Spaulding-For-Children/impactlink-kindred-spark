@@ -14,6 +14,7 @@ import {
   useUpsertEthicsResource, useDeleteEthicsResource,
   type Dataset, type AnalysisTool, type EthicsResource,
 } from "@/hooks/useDataTools";
+import { CsvImportDataTools } from "./CsvImportDataTools";
 
 // --- Dataset Form ---
 const DatasetForm = ({ dataset, onClose }: { dataset?: Dataset; onClose: () => void }) => {
@@ -197,15 +198,18 @@ export const AdminDataTools = () => {
         </TabsList>
 
         <TabsContent value="datasets" className="space-y-4">
-          <Dialog open={openDialog === "dataset"} onOpenChange={o => { if (!o) { setOpenDialog(null); setEditDataset(undefined); } }}>
-            <DialogTrigger asChild>
-              <Button onClick={() => { setEditDataset(undefined); setOpenDialog("dataset"); }}><Plus className="h-4 w-4 mr-2" /> Add Dataset</Button>
-            </DialogTrigger>
-            <DialogContent className="max-h-[80vh] overflow-y-auto">
-              <DialogHeader><DialogTitle>{editDataset ? "Edit" : "Add"} Dataset</DialogTitle></DialogHeader>
-              <DatasetForm dataset={editDataset} onClose={() => { setOpenDialog(null); setEditDataset(undefined); }} />
-            </DialogContent>
-          </Dialog>
+          <div className="flex items-center gap-3 flex-wrap">
+            <Dialog open={openDialog === "dataset"} onOpenChange={o => { if (!o) { setOpenDialog(null); setEditDataset(undefined); } }}>
+              <DialogTrigger asChild>
+                <Button onClick={() => { setEditDataset(undefined); setOpenDialog("dataset"); }}><Plus className="h-4 w-4 mr-2" /> Add Dataset</Button>
+              </DialogTrigger>
+              <DialogContent className="max-h-[80vh] overflow-y-auto">
+                <DialogHeader><DialogTitle>{editDataset ? "Edit" : "Add"} Dataset</DialogTitle></DialogHeader>
+                <DatasetForm dataset={editDataset} onClose={() => { setOpenDialog(null); setEditDataset(undefined); }} />
+              </DialogContent>
+            </Dialog>
+            <CsvImportDataTools category="datasets" label="Datasets" />
+          </div>
 
           {loadingDatasets ? <p>Loading...</p> : datasets.map(d => (
             <Card key={d.id}>
@@ -224,15 +228,18 @@ export const AdminDataTools = () => {
         </TabsContent>
 
         <TabsContent value="tools" className="space-y-4">
-          <Dialog open={openDialog === "tool"} onOpenChange={o => { if (!o) { setOpenDialog(null); setEditTool(undefined); } }}>
-            <DialogTrigger asChild>
-              <Button onClick={() => { setEditTool(undefined); setOpenDialog("tool"); }}><Plus className="h-4 w-4 mr-2" /> Add Tool</Button>
-            </DialogTrigger>
-            <DialogContent className="max-h-[80vh] overflow-y-auto">
-              <DialogHeader><DialogTitle>{editTool ? "Edit" : "Add"} Analysis Tool</DialogTitle></DialogHeader>
-              <ToolForm tool={editTool} onClose={() => { setOpenDialog(null); setEditTool(undefined); }} />
-            </DialogContent>
-          </Dialog>
+          <div className="flex items-center gap-3 flex-wrap">
+            <Dialog open={openDialog === "tool"} onOpenChange={o => { if (!o) { setOpenDialog(null); setEditTool(undefined); } }}>
+              <DialogTrigger asChild>
+                <Button onClick={() => { setEditTool(undefined); setOpenDialog("tool"); }}><Plus className="h-4 w-4 mr-2" /> Add Tool</Button>
+              </DialogTrigger>
+              <DialogContent className="max-h-[80vh] overflow-y-auto">
+                <DialogHeader><DialogTitle>{editTool ? "Edit" : "Add"} Analysis Tool</DialogTitle></DialogHeader>
+                <ToolForm tool={editTool} onClose={() => { setOpenDialog(null); setEditTool(undefined); }} />
+              </DialogContent>
+            </Dialog>
+            <CsvImportDataTools category="tools" label="Tools" />
+          </div>
 
           {loadingTools ? <p>Loading...</p> : tools.map(t => (
             <Card key={t.id}>
@@ -251,15 +258,18 @@ export const AdminDataTools = () => {
         </TabsContent>
 
         <TabsContent value="ethics" className="space-y-4">
-          <Dialog open={openDialog === "ethics"} onOpenChange={o => { if (!o) { setOpenDialog(null); setEditEthics(undefined); } }}>
-            <DialogTrigger asChild>
-              <Button onClick={() => { setEditEthics(undefined); setOpenDialog("ethics"); }}><Plus className="h-4 w-4 mr-2" /> Add Ethics Resource</Button>
-            </DialogTrigger>
-            <DialogContent className="max-h-[80vh] overflow-y-auto">
-              <DialogHeader><DialogTitle>{editEthics ? "Edit" : "Add"} Ethics Resource</DialogTitle></DialogHeader>
-              <EthicsForm resource={editEthics} onClose={() => { setOpenDialog(null); setEditEthics(undefined); }} />
-            </DialogContent>
-          </Dialog>
+          <div className="flex items-center gap-3 flex-wrap">
+            <Dialog open={openDialog === "ethics"} onOpenChange={o => { if (!o) { setOpenDialog(null); setEditEthics(undefined); } }}>
+              <DialogTrigger asChild>
+                <Button onClick={() => { setEditEthics(undefined); setOpenDialog("ethics"); }}><Plus className="h-4 w-4 mr-2" /> Add Ethics Resource</Button>
+              </DialogTrigger>
+              <DialogContent className="max-h-[80vh] overflow-y-auto">
+                <DialogHeader><DialogTitle>{editEthics ? "Edit" : "Add"} Ethics Resource</DialogTitle></DialogHeader>
+                <EthicsForm resource={editEthics} onClose={() => { setOpenDialog(null); setEditEthics(undefined); }} />
+              </DialogContent>
+            </Dialog>
+            <CsvImportDataTools category="ethics" label="Ethics Resources" />
+          </div>
 
           {loadingEthics ? <p>Loading...</p> : ethics.map(e => (
             <Card key={e.id}>
