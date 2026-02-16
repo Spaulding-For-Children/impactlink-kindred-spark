@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Search, Users, Database, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import heroBg from "@/assets/hero-bg.jpg";
 
 const actionCards = [
@@ -9,28 +10,33 @@ const actionCards = [
     title: "Explore Research",
     description: "Browse active projects and studies",
     color: "from-navy to-navy-light",
+    href: "/collaboration",
   },
   {
     icon: Users,
     title: "Connect with Agencies",
     description: "Partner with global organizations",
     color: "from-sage to-sage/80",
+    href: "/agencies",
   },
   {
     icon: Database,
     title: "Access Data & Tools",
     description: "Curated datasets and assessments",
     color: "from-amber to-amber-light",
+    href: "/data-tools",
   },
   {
     icon: Lightbulb,
     title: "Submit Your Idea",
     description: "Propose new research initiatives",
     color: "from-navy-light to-navy",
+    href: "/collaboration",
   },
 ];
 
 export const Hero = () => {
+  const navigate = useNavigate();
   return (
     <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
       {/* Background */}
@@ -101,11 +107,11 @@ export const Hero = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
           >
-            <Button variant="hero" size="lg" className="group">
+            <Button variant="hero" size="lg" className="group" onClick={() => navigate("/auth")}>
               Get Started
               <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Button>
-            <Button variant="outline" size="lg">
+            <Button variant="outline" size="lg" onClick={() => navigate("/directory")}>
               Explore Directory
             </Button>
           </motion.div>
@@ -119,14 +125,14 @@ export const Hero = () => {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto"
         >
           {actionCards.map((card, index) => (
-            <motion.a
+            <motion.div
               key={card.title}
-              href="#"
+              onClick={() => navigate(card.href)}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
               whileHover={{ y: -5, scale: 1.02 }}
-              className="group relative p-6 rounded-2xl bg-card border border-border shadow-soft hover:shadow-elevated transition-all duration-300 overflow-hidden"
+              className="group relative p-6 rounded-2xl bg-card border border-border shadow-soft hover:shadow-elevated transition-all duration-300 overflow-hidden cursor-pointer"
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${card.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
               <div className="relative z-10">
@@ -136,7 +142,7 @@ export const Hero = () => {
                 <h3 className="font-semibold text-foreground mb-1">{card.title}</h3>
                 <p className="text-sm text-muted-foreground">{card.description}</p>
               </div>
-            </motion.a>
+            </motion.div>
           ))}
         </motion.div>
       </div>
