@@ -6,24 +6,8 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-
-const navigation = [
-  { name: "Home", href: "/" },
-  { 
-    name: "Directory", 
-    href: "/directory",
-    children: [
-      { name: "All Profiles", href: "/directory" },
-      { name: "Students", href: "/students" },
-      { name: "Researchers", href: "/researchers" },
-      { name: "Agencies", href: "/agencies" },
-    ]
-  },
-  { name: "Collaboration", href: "/collaboration" },
-  { name: "Resources", href: "/resources" },
-  { name: "Events", href: "/events" },
-  { name: "Data & Tools", href: "/data-tools" },
-];
+import { useTranslation } from "react-i18next";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -32,6 +16,25 @@ export const Header = () => {
   const navigate = useNavigate();
   const isHomePage = location.pathname === "/";
   const { user, signOut, loading } = useAuth();
+  const { t } = useTranslation();
+
+  const navigation = [
+    { name: t("nav.home"), href: "/" },
+    { 
+      name: t("nav.directory"), 
+      href: "/directory",
+      children: [
+        { name: t("nav.allProfiles"), href: "/directory" },
+        { name: t("nav.students"), href: "/students" },
+        { name: t("nav.researchers"), href: "/researchers" },
+        { name: t("nav.agencies"), href: "/agencies" },
+      ]
+    },
+    { name: t("nav.collaboration"), href: "/collaboration" },
+    { name: t("nav.resources"), href: "/resources" },
+    { name: t("nav.events"), href: "/events" },
+    { name: t("nav.dataTools"), href: "/data-tools" },
+  ];
 
   // Check if user is admin
   const { data: isAdmin } = useQuery({
@@ -144,6 +147,7 @@ export const Header = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
           >
+            <LanguageSwitcher variant="compact" />
             {!loading && (
               user ? (
                 <>
@@ -151,28 +155,28 @@ export const Header = () => {
                     <Button variant="outline" size="sm" asChild className="border-primary/50 text-primary">
                       <Link to="/admin">
                         <Shield className="w-4 h-4 mr-2" />
-                        Admin
+                        {t("nav.admin")}
                       </Link>
                     </Button>
                   )}
                   <Button variant="ghost" size="sm" asChild>
                     <Link to="/profile-settings">
                       <User className="w-4 h-4 mr-2" />
-                      Profile
+                      {t("nav.profile")}
                     </Link>
                   </Button>
                   <Button variant="outline" size="sm" onClick={handleSignOut}>
                     <LogOut className="w-4 h-4 mr-2" />
-                    Sign Out
+                    {t("nav.signOut")}
                   </Button>
                 </>
               ) : (
                 <>
                   <Button variant="ghost" size="sm" asChild>
-                    <Link to="/auth">Sign In</Link>
+                    <Link to="/auth">{t("nav.signIn")}</Link>
                   </Button>
                   <Button variant="hero" size="sm" asChild>
-                    <Link to="/auth">Get Started</Link>
+                    <Link to="/auth">{t("nav.getStarted")}</Link>
                   </Button>
                 </>
               )
@@ -180,16 +184,19 @@ export const Header = () => {
           </motion.div>
 
           {/* Mobile menu button */}
-          <button
-            className="lg:hidden p-2 rounded-lg hover:bg-muted transition-colors"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? (
-              <X className="h-6 w-6 text-foreground" />
-            ) : (
-              <Menu className="h-6 w-6 text-foreground" />
-            )}
-          </button>
+          <div className="lg:hidden flex items-center gap-2">
+            <LanguageSwitcher variant="compact" />
+            <button
+              className="p-2 rounded-lg hover:bg-muted transition-colors"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? (
+                <X className="h-6 w-6 text-foreground" />
+              ) : (
+                <Menu className="h-6 w-6 text-foreground" />
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
@@ -226,34 +233,10 @@ export const Header = () => {
                 ))}
                 {/* Mobile dropdown items */}
                 <div className="pl-4 space-y-1">
-                  <Link
-                    to="/directory"
-                    className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    All Profiles
-                  </Link>
-                  <Link
-                    to="/students"
-                    className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Students
-                  </Link>
-                  <Link
-                    to="/researchers"
-                    className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Researchers
-                  </Link>
-                  <Link
-                    to="/agencies"
-                    className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Agencies
-                  </Link>
+                  <Link to="/directory" className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors" onClick={() => setMobileMenuOpen(false)}>{t("nav.allProfiles")}</Link>
+                  <Link to="/students" className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors" onClick={() => setMobileMenuOpen(false)}>{t("nav.students")}</Link>
+                  <Link to="/researchers" className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors" onClick={() => setMobileMenuOpen(false)}>{t("nav.researchers")}</Link>
+                  <Link to="/agencies" className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors" onClick={() => setMobileMenuOpen(false)}>{t("nav.agencies")}</Link>
                 </div>
                 <div className="pt-4 flex flex-col gap-2">
                   {!loading && (
@@ -263,28 +246,28 @@ export const Header = () => {
                           <Button variant="outline" className="w-full justify-center border-primary/50 text-primary" asChild>
                             <Link to="/admin" onClick={() => setMobileMenuOpen(false)}>
                               <Shield className="w-4 h-4 mr-2" />
-                              Admin
+                              {t("nav.admin")}
                             </Link>
                           </Button>
                         )}
                         <Button variant="ghost" className="w-full justify-center" asChild>
                           <Link to="/profile-settings" onClick={() => setMobileMenuOpen(false)}>
                             <User className="w-4 h-4 mr-2" />
-                            Profile
+                            {t("nav.profile")}
                           </Link>
                         </Button>
                         <Button variant="outline" className="w-full justify-center" onClick={() => { handleSignOut(); setMobileMenuOpen(false); }}>
                           <LogOut className="w-4 h-4 mr-2" />
-                          Sign Out
+                          {t("nav.signOut")}
                         </Button>
                       </>
                     ) : (
                       <>
                         <Button variant="ghost" className="w-full justify-center" asChild>
-                          <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>Sign In</Link>
+                          <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>{t("nav.signIn")}</Link>
                         </Button>
                         <Button variant="hero" className="w-full justify-center" asChild>
-                          <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>Get Started</Link>
+                          <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>{t("nav.getStarted")}</Link>
                         </Button>
                       </>
                     )

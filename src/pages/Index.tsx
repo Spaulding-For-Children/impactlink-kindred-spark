@@ -8,8 +8,10 @@ import { Events } from "@/components/sections/Events";
 import { Contact } from "@/components/sections/Contact";
 import { Footer } from "@/components/layout/Footer";
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import { useDirection } from "@/hooks/useDirection";
 
 const Index = () => {
+  useDirection();
   return (
     <HelmetProvider>
       <Helmet>
