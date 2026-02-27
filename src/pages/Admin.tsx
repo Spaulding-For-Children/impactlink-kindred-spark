@@ -122,6 +122,10 @@ export default function Admin() {
                   <BookMarked className="h-4 w-4" />
                   <span className="hidden sm:inline">User Guide</span>
                 </TabsTrigger>
+                <TabsTrigger value="ops-guide" className="flex items-center gap-2 data-[state=active]:bg-background">
+                  <Cog className="h-4 w-4" />
+                  <span className="hidden sm:inline">Ops Guide</span>
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="site-settings">
