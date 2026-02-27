@@ -316,8 +316,9 @@ export function AdminOperationalGuide() {
             <p>The platform uses <strong>semantic CSS tokens</strong> defined in <code>index.css</code> and <code>tailwind.config.ts</code>. All colors are HSL-based and support light/dark modes. Components from shadcn/ui are customized with project-specific variants.</p>
           </AccordionContent>
         </AccordionItem>
+        )}
 
-        {/* 7. Database Schema */}
+        {filteredSections.includes("database") && (
         <AccordionItem value="database" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={Database} title="7. Database Schema & Tables" />
