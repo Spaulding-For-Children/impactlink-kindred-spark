@@ -537,8 +537,9 @@ export function AdminOperationalGuide() {
             </ul>
           </AccordionContent>
         </AccordionItem>
+        )}
 
-        {/* 12. Troubleshooting */}
+        {filteredSections.includes("troubleshooting") && (
         <AccordionItem value="troubleshooting" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={Wrench} title="12. Troubleshooting & Common Issues" />
