@@ -81,13 +81,21 @@ export function AdminUserGuide() {
       {/* Introduction */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <BookOpen className="h-5 w-5" />
-            Platform User Guide
-          </CardTitle>
-          <CardDescription>
-            A comprehensive reference for administrators covering every feature, workflow, and best practice on the platform.
-          </CardDescription>
+          <div className="flex items-start justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <BookOpen className="h-5 w-5" />
+                Platform User Guide
+              </CardTitle>
+              <CardDescription className="mt-1.5">
+                A comprehensive reference for administrators covering every feature, workflow, and best practice on the platform.
+              </CardDescription>
+            </div>
+            <Button variant="outline" size="sm" onClick={handlePrint} className="shrink-0 print:hidden">
+              <Printer className="h-4 w-4 mr-2" />
+              Print / Save PDF
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="prose prose-sm max-w-none text-foreground/80">
