@@ -5,6 +5,7 @@ import { Calendar, MapPin, Users, Clock, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 const upcomingEvents = [
   { title: "NASW Annual Conference", date: "March 15-18, 2025", location: "Washington, D.C.", type: "Conference", attendees: 5000 },
