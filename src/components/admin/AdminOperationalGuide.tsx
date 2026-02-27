@@ -504,8 +504,9 @@ export function AdminOperationalGuide() {
             <Warning>Never grant roles through client-side code or store role information in localStorage. Roles must only be managed through the <code>user_roles</code> database table with proper RLS policies.</Warning>
           </AccordionContent>
         </AccordionItem>
+        )}
 
-        {/* 11. Security Architecture */}
+        {filteredSections.includes("security") && (
         <AccordionItem value="security" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={Lock} title="11. Security Architecture" />
