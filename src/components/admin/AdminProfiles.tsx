@@ -29,6 +29,14 @@ export function AdminProfiles() {
     return matchesSearch && matchesType;
   });
 
+  // Reset to page 1 when filters change
+  const totalPages = Math.max(1, Math.ceil(filteredProfiles.length / PROFILES_PER_PAGE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedProfiles = useMemo(() => {
+    const start = (safePage - 1) * PROFILES_PER_PAGE;
+    return filteredProfiles.slice(start, start + PROFILES_PER_PAGE);
+  }, [filteredProfiles, safePage]);
+
   const getTypeIcon = (type: string) => {
     switch (type) {
       case "student": return <GraduationCap className="h-4 w-4" />;
