@@ -15,6 +15,7 @@ import { AdminForumTopics } from "@/components/admin/AdminForumTopics";
 import { AdminResearchQuestions } from "@/components/admin/AdminResearchQuestions";
 import { AdminDataTools } from "@/components/admin/AdminDataTools";
 import { AdminRegistrations } from "@/components/admin/AdminRegistrations";
+import { AdminUserGuide } from "@/components/admin/AdminUserGuide";
 
 export default function Admin() {
   const navigate = useNavigate();
