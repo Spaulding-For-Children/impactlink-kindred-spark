@@ -112,6 +112,10 @@ export default function Admin() {
                   <Database className="h-4 w-4" />
                   <span className="hidden sm:inline">Data & Tools</span>
                 </TabsTrigger>
+                <TabsTrigger value="guide" className="flex items-center gap-2 data-[state=active]:bg-background">
+                  <BookMarked className="h-4 w-4" />
+                  <span className="hidden sm:inline">User Guide</span>
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="registrations">
