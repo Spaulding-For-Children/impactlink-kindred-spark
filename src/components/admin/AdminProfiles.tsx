@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { format } from "date-fns";
-import { Trash2, Users, Search, GraduationCap, Microscope, Building2, Pencil, ChevronLeft, ChevronRight } from "lucide-react";
+import { Trash2, Users, Search, GraduationCap, Microscope, Building2, Pencil, ChevronLeft, ChevronRight, Download } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -103,6 +103,29 @@ export function AdminProfiles() {
     });
   };
 
+  const exportCsv = () => {
+    const headers = ["Name", "Email", "Type", "Location", "Bio", "Interests", "University", "Major", "Year", "Title", "Institution", "Department", "Publications", "Agency Type", "Focus Areas", "Employees", "Founded", "Website", "Created At"];
+    const escape = (val: any) => {
+      const s = String(val ?? "");
+      return s.includes(",") || s.includes('"') || s.includes("\n") ? `"${s.replace(/"/g, '""')}"` : s;
+    };
+    const rows = filteredProfiles.map((p: any) => [
+      p.name, p.email, p.profile_type, p.location, p.bio,
+      (p.interests || []).join("; "), p.university, p.major, p.year,
+      p.title, p.institution, p.department, p.publications,
+      p.agency_type, (p.focus_areas || []).join("; "), p.employees, p.founded, p.website,
+      p.created_at ? format(new Date(p.created_at), "yyyy-MM-dd") : "",
+    ].map(escape).join(","));
+    const csv = [headers.join(","), ...rows].join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `profiles-export-${format(new Date(), "yyyy-MM-dd")}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   if (isLoadingProfiles) {
     return (
       <Card>
@@ -121,6 +144,9 @@ export function AdminProfiles() {
             <Users className="h-5 w-5" />
             Directory Profiles
             <Badge variant="secondary" className="ml-2">{allProfiles.length} total</Badge>
+            <Button variant="outline" size="sm" className="ml-auto flex items-center gap-2" onClick={exportCsv}>
+              <Download className="h-4 w-4" />Export CSV
+            </Button>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
