@@ -24,6 +24,8 @@ export const Events = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const { t } = useTranslation();
+  const { getSetting } = useSiteSettings();
+  const sectionContent = getSetting("events_section", undefined, {});
 
   return (
     <section id="events" className="py-24 bg-muted/30" ref={ref}>
