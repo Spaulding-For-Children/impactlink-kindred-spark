@@ -1,18 +1,23 @@
 import { useState } from "react";
 import { format } from "date-fns";
-import { Trash2, Users, Search, GraduationCap, Microscope, Building2 } from "lucide-react";
+import { Trash2, Users, Search, GraduationCap, Microscope, Building2, Pencil } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useAdmin } from "@/hooks/useAdmin";
 
 export function AdminProfiles() {
-  const { allProfiles, isLoadingProfiles, deleteProfile } = useAdmin();
+  const { allProfiles, isLoadingProfiles, deleteProfile, updateProfile } = useAdmin();
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
+  const [editingProfile, setEditingProfile] = useState<any>(null);
+  const [editForm, setEditForm] = useState<any>({});
 
   const filteredProfiles = allProfiles.filter((profile: any) => {
     const matchesSearch = profile.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -23,15 +28,68 @@ export function AdminProfiles() {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "student":
-        return <GraduationCap className="h-4 w-4" />;
-      case "researcher":
-        return <Microscope className="h-4 w-4" />;
-      case "agency":
-        return <Building2 className="h-4 w-4" />;
-      default:
-        return <Users className="h-4 w-4" />;
+      case "student": return <GraduationCap className="h-4 w-4" />;
+      case "researcher": return <Microscope className="h-4 w-4" />;
+      case "agency": return <Building2 className="h-4 w-4" />;
+      default: return <Users className="h-4 w-4" />;
     }
+  };
+
+  const openEditDialog = (profile: any) => {
+    setEditingProfile(profile);
+    setEditForm({
+      name: profile.name || "",
+      email: profile.email || "",
+      location: profile.location || "",
+      bio: profile.bio || "",
+      interests: profile.interests?.join(", ") || "",
+      university: profile.university || "",
+      major: profile.major || "",
+      year: profile.year || "",
+      title: profile.title || "",
+      institution: profile.institution || "",
+      department: profile.department || "",
+      publications: profile.publications?.toString() || "0",
+      agency_type: profile.agency_type || "",
+      focus_areas: profile.focus_areas?.join(", ") || "",
+      employees: profile.employees || "",
+      founded: profile.founded || "",
+      website: profile.website || "",
+    });
+  };
+
+  const handleSave = () => {
+    if (!editingProfile) return;
+    const type = editingProfile.profile_type;
+    const updates: any = {
+      id: editingProfile.id,
+      name: editForm.name,
+      email: editForm.email,
+      location: editForm.location,
+      bio: editForm.bio,
+      interests: editForm.interests.split(",").map((i: string) => i.trim()).filter(Boolean),
+    };
+
+    if (type === "student") {
+      updates.university = editForm.university;
+      updates.major = editForm.major;
+      updates.year = editForm.year;
+    } else if (type === "researcher") {
+      updates.title = editForm.title;
+      updates.institution = editForm.institution;
+      updates.department = editForm.department;
+      updates.publications = parseInt(editForm.publications) || 0;
+    } else if (type === "agency") {
+      updates.agency_type = editForm.agency_type;
+      updates.focus_areas = editForm.focus_areas.split(",").map((i: string) => i.trim()).filter(Boolean);
+      updates.employees = editForm.employees;
+      updates.founded = editForm.founded;
+      updates.website = editForm.website;
+    }
+
+    updateProfile.mutate(updates, {
+      onSuccess: () => setEditingProfile(null),
+    });
   };
 
   if (isLoadingProfiles) {
@@ -45,92 +103,231 @@ export function AdminProfiles() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Users className="h-5 w-5" />
-          Directory Profiles
-          <Badge variant="secondary" className="ml-2">{allProfiles.length} total</Badge>
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {/* Filters */}
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search by name or email..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-9"
-            />
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Users className="h-5 w-5" />
+            Directory Profiles
+            <Badge variant="secondary" className="ml-2">{allProfiles.length} total</Badge>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input placeholder="Search by name or email..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9" />
+            </div>
+            <Select value={typeFilter} onValueChange={setTypeFilter}>
+              <SelectTrigger className="w-full sm:w-[180px]">
+                <SelectValue placeholder="Filter by type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Types</SelectItem>
+                <SelectItem value="student">Students</SelectItem>
+                <SelectItem value="researcher">Researchers</SelectItem>
+                <SelectItem value="agency">Agencies</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-          <Select value={typeFilter} onValueChange={setTypeFilter}>
-            <SelectTrigger className="w-full sm:w-[180px]">
-              <SelectValue placeholder="Filter by type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
-              <SelectItem value="student">Students</SelectItem>
-              <SelectItem value="researcher">Researchers</SelectItem>
-              <SelectItem value="agency">Agencies</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
 
-        {/* Profiles List */}
-        {filteredProfiles.length === 0 ? (
-          <p className="text-muted-foreground text-center py-8">No profiles found</p>
-        ) : (
-          <div className="space-y-3">
-            {filteredProfiles.map((profile: any) => (
-              <div
-                key={profile.id}
-                className="border rounded-lg p-4 flex items-center justify-between gap-4"
-              >
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-semibold truncate">{profile.name}</h3>
-                    <Badge variant="outline" className="flex items-center gap-1 shrink-0">
-                      {getTypeIcon(profile.profile_type)}
-                      {profile.profile_type}
-                    </Badge>
+          {filteredProfiles.length === 0 ? (
+            <p className="text-muted-foreground text-center py-8">No profiles found</p>
+          ) : (
+            <div className="space-y-3">
+              {filteredProfiles.map((profile: any) => (
+                <div key={profile.id} className="border rounded-lg p-4 flex items-center justify-between gap-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="font-semibold truncate">{profile.name}</h3>
+                      <Badge variant="outline" className="flex items-center gap-1 shrink-0">
+                        {getTypeIcon(profile.profile_type)}
+                        {profile.profile_type}
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground truncate">{profile.email}</p>
+                    <p className="text-xs text-muted-foreground">
+                      Joined {format(new Date(profile.created_at), "MMM d, yyyy")}
+                      {profile.location && ` • ${profile.location}`}
+                    </p>
                   </div>
-                  <p className="text-sm text-muted-foreground truncate">{profile.email}</p>
-                  <p className="text-xs text-muted-foreground">
-                    Joined {format(new Date(profile.created_at), "MMM d, yyyy")}
-                    {profile.location && ` • ${profile.location}`}
-                  </p>
-                </div>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="destructive" size="sm">
-                      <Trash2 className="h-4 w-4" />
+                  <div className="flex items-center gap-2">
+                    <Button variant="outline" size="sm" onClick={() => openEditDialog(profile)}>
+                      <Pencil className="h-4 w-4" />
                     </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Delete Profile</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        Are you sure you want to delete {profile.name}'s profile? This action cannot be undone.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={() => deleteProfile.mutate(profile.id)}
-                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                      >
-                        Delete
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="destructive" size="sm">
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Delete Profile</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to delete {profile.name}'s profile? This action cannot be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => deleteProfile.mutate(profile.id)}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                          >
+                            Delete
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Edit Profile Dialog */}
+      <Dialog open={!!editingProfile} onOpenChange={(open) => !open && setEditingProfile(null)}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              {editingProfile && getTypeIcon(editingProfile.profile_type)}
+              Edit {editingProfile?.profile_type} Profile
+            </DialogTitle>
+            <DialogDescription>Update profile information for {editingProfile?.name}</DialogDescription>
+          </DialogHeader>
+
+          {editingProfile && (
+            <div className="space-y-4">
+              {/* Common fields */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Name</Label>
+                  <Input value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Email</Label>
+                  <Input type="email" value={editForm.email} onChange={(e) => setEditForm({ ...editForm, email: e.target.value })} />
+                </div>
               </div>
-            ))}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+              <div className="space-y-2">
+                <Label>Location</Label>
+                <Input value={editForm.location} onChange={(e) => setEditForm({ ...editForm, location: e.target.value })} />
+              </div>
+              <div className="space-y-2">
+                <Label>Bio</Label>
+                <Textarea value={editForm.bio} onChange={(e) => setEditForm({ ...editForm, bio: e.target.value })} />
+              </div>
+              <div className="space-y-2">
+                <Label>Interests (comma-separated)</Label>
+                <Input value={editForm.interests} onChange={(e) => setEditForm({ ...editForm, interests: e.target.value })} />
+              </div>
+
+              {/* Student-specific fields */}
+              {editingProfile.profile_type === "student" && (
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>University</Label>
+                    <Input value={editForm.university} onChange={(e) => setEditForm({ ...editForm, university: e.target.value })} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Major</Label>
+                    <Input value={editForm.major} onChange={(e) => setEditForm({ ...editForm, major: e.target.value })} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Year</Label>
+                    <Select value={editForm.year} onValueChange={(v) => setEditForm({ ...editForm, year: v })}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Freshman">Freshman</SelectItem>
+                        <SelectItem value="Sophomore">Sophomore</SelectItem>
+                        <SelectItem value="Junior">Junior</SelectItem>
+                        <SelectItem value="Senior">Senior</SelectItem>
+                        <SelectItem value="Graduate">Graduate</SelectItem>
+                        <SelectItem value="PhD">PhD Student</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              )}
+
+              {/* Researcher-specific fields */}
+              {editingProfile.profile_type === "researcher" && (
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Title</Label>
+                    <Input value={editForm.title} onChange={(e) => setEditForm({ ...editForm, title: e.target.value })} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Institution</Label>
+                    <Input value={editForm.institution} onChange={(e) => setEditForm({ ...editForm, institution: e.target.value })} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Department</Label>
+                    <Input value={editForm.department} onChange={(e) => setEditForm({ ...editForm, department: e.target.value })} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Publications</Label>
+                    <Input type="number" value={editForm.publications} onChange={(e) => setEditForm({ ...editForm, publications: e.target.value })} />
+                  </div>
+                </div>
+              )}
+
+              {/* Agency-specific fields */}
+              {editingProfile.profile_type === "agency" && (
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Agency Type</Label>
+                    <Select value={editForm.agency_type} onValueChange={(v) => setEditForm({ ...editForm, agency_type: v })}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="government">Government</SelectItem>
+                        <SelectItem value="nonprofit">Non-Profit</SelectItem>
+                        <SelectItem value="private">Private</SelectItem>
+                        <SelectItem value="academic">Academic</SelectItem>
+                        <SelectItem value="international">International</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Employees</Label>
+                    <Select value={editForm.employees} onValueChange={(v) => setEditForm({ ...editForm, employees: v })}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1-10">1-10</SelectItem>
+                        <SelectItem value="11-50">11-50</SelectItem>
+                        <SelectItem value="51-200">51-200</SelectItem>
+                        <SelectItem value="201-500">201-500</SelectItem>
+                        <SelectItem value="500+">500+</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Focus Areas (comma-separated)</Label>
+                    <Input value={editForm.focus_areas} onChange={(e) => setEditForm({ ...editForm, focus_areas: e.target.value })} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Founded</Label>
+                    <Input value={editForm.founded} onChange={(e) => setEditForm({ ...editForm, founded: e.target.value })} />
+                  </div>
+                  <div className="space-y-2 col-span-2">
+                    <Label>Website</Label>
+                    <Input value={editForm.website} onChange={(e) => setEditForm({ ...editForm, website: e.target.value })} />
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditingProfile(null)}>Cancel</Button>
+            <Button onClick={handleSave} disabled={updateProfile.isPending}>
+              {updateProfile.isPending ? "Saving..." : "Save Changes"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
