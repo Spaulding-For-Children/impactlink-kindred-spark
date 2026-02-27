@@ -282,6 +282,15 @@
     color: black;
   }
 
+  body.printing-guide #ops-guide-content::before {
+    content: "Site Operational Guide";
+    display: block;
+    font-size: 24pt;
+    font-weight: bold;
+    margin-bottom: 8pt;
+    color: black;
+  }
+
   body.printing-guide #user-guide-content::after {
     content: "Generated on " attr(data-date);
     display: block;
