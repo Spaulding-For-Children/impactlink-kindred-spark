@@ -144,6 +144,9 @@ export function AdminProfiles() {
             <Users className="h-5 w-5" />
             Directory Profiles
             <Badge variant="secondary" className="ml-2">{allProfiles.length} total</Badge>
+            <Button variant="outline" size="sm" className="ml-auto flex items-center gap-2" onClick={exportCsv}>
+              <Download className="h-4 w-4" />Export CSV
+            </Button>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
