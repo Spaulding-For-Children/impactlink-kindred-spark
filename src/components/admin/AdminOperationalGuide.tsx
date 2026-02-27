@@ -174,8 +174,9 @@ export function AdminOperationalGuide() {
             <Tip>You can access the admin dashboard by navigating to <code>/admin</code>. Only users with the <strong>admin</strong> role can see this page — others are redirected automatically.</Tip>
           </AccordionContent>
         </AccordionItem>
+        )}
 
-        {/* 3. Content Management */}
+        {filteredSections.includes("content-mgmt") && (
         <AccordionItem value="content-mgmt" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={FileText} title="3. Content Management Controls" />
