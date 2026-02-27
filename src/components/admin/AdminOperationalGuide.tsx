@@ -439,8 +439,9 @@ export function AdminOperationalGuide() {
             <Tip>You can request a security scan at any time through the Lovable editor to check for vulnerable dependencies.</Tip>
           </AccordionContent>
         </AccordionItem>
+        )}
 
-        {/* 10. Roles & Permissions */}
+        {filteredSections.includes("roles-permissions") && (
         <AccordionItem value="roles-permissions" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={Shield} title="10. Roles & Permissions" />
