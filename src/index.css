@@ -223,7 +223,8 @@
     font-size: 11pt;
   }
 
-  body.printing-guide #user-guide-content {
+  body.printing-guide #user-guide-content,
+  body.printing-guide #ops-guide-content {
     max-width: 100% !important;
     padding: 0 !important;
   }
