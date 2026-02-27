@@ -1,7 +1,9 @@
-import { BookOpen, Users, FileText, Calendar, MessageSquare, Database, Shield, Globe, UserPlus, Search, Star, Upload, Download, CheckCircle, AlertTriangle, Info, Lightbulb, Settings, Mail, Phone, Building2, HelpCircle, Bookmark, BarChart3, Lock } from "lucide-react";
+import { useRef } from "react";
+import { BookOpen, Users, FileText, Calendar, MessageSquare, Database, Shield, Globe, UserPlus, Search, Star, Upload, Download, CheckCircle, AlertTriangle, Info, Lightbulb, Settings, Mail, Phone, Building2, HelpCircle, Bookmark, BarChart3, Lock, Printer } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 function Tip({ children }: { children: React.ReactNode }) {
