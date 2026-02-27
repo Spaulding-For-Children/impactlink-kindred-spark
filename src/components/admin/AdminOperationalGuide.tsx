@@ -566,6 +566,5 @@ export function AdminOperationalGuide() {
       </Accordion>
       )}
     </div>
-    </div>
   );
 }
