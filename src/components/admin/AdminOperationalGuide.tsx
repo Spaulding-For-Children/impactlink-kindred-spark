@@ -106,11 +106,10 @@ export function AdminOperationalGuide() {
             <Button variant="link" onClick={() => setSearchQuery("")} className="mt-2">Clear search</Button>
           </CardContent>
         </Card>
-      ) : (
       <Accordion type="multiple" defaultValue={allSections} className="space-y-3">
 
-        {filteredSections.includes("architecture") && <>
         {/* 1. Site Architecture Overview */}
+        {filteredSections.includes("architecture") && (
         <AccordionItem value="architecture" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={Layers} title="1. Site Architecture Overview" />
