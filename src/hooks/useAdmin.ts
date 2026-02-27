@@ -175,6 +175,45 @@ export function useAdmin() {
     },
   });
 
+  // Update profile (admin)
+  const updateProfile = useMutation({
+    mutationFn: async (profile: {
+      id: string;
+      name?: string;
+      email?: string;
+      location?: string;
+      bio?: string;
+      interests?: string[];
+      university?: string;
+      major?: string;
+      year?: string;
+      title?: string;
+      institution?: string;
+      department?: string;
+      publications?: number;
+      agency_type?: string;
+      focus_areas?: string[];
+      employees?: string;
+      founded?: string;
+      website?: string;
+    }) => {
+      const { id, ...updates } = profile;
+      const { error } = await supabase
+        .from("profiles")
+        .update(updates)
+        .eq("id", id);
+      
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["adminProfiles"] });
+      toast.success("Profile updated");
+    },
+    onError: (error) => {
+      toast.error("Failed to update profile: " + error.message);
+    },
+  });
+
   // Create/Update resource
   const upsertResource = useMutation({
     mutationFn: async (resource: {
