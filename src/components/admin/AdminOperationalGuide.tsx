@@ -274,8 +274,9 @@ export function AdminOperationalGuide() {
             <Tip>When deleting a profile, the user's auth account still exists. They can log in but won't have a profile. To fully remove a user, you would also need to delete them from the authentication system.</Tip>
           </AccordionContent>
         </AccordionItem>
+        )}
 
-        {/* 6. Technology Stack */}
+        {filteredSections.includes("tech-stack") && (
         <AccordionItem value="tech-stack" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={Code} title="6. Technology Stack" />
