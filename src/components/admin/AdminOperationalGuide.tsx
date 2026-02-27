@@ -209,8 +209,9 @@ export function AdminOperationalGuide() {
             <p>New submissions arrive as <Badge variant="outline">pending</Badge>. Review the attached file, then approve or reject. Approved submissions become publicly visible; rejected ones are only visible to their author.</p>
           </AccordionContent>
         </AccordionItem>
+        )}
 
-        {/* 4. Layout & Theme Controls */}
+        {filteredSections.includes("layout-theme") && (
         <AccordionItem value="layout-theme" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={Globe} title="4. Layout & Theme Controls" />
