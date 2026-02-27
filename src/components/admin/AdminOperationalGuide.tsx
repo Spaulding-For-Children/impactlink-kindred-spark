@@ -1,7 +1,10 @@
+import { useState, useMemo, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
-import { Server, Shield, Settings, Database, Code, RefreshCw, Users, Lock, Wrench, Globe, Layers, FileText } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Server, Shield, Settings, Database, Code, RefreshCw, Users, Lock, Wrench, Globe, Layers, FileText, Search, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Tip = ({ children }: { children: React.ReactNode }) => (
   <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 my-2 text-sm flex gap-2">
