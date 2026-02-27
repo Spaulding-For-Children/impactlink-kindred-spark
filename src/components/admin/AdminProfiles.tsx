@@ -12,12 +12,15 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useAdmin } from "@/hooks/useAdmin";
 
+const PROFILES_PER_PAGE = 10;
+
 export function AdminProfiles() {
   const { allProfiles, isLoadingProfiles, deleteProfile, updateProfile } = useAdmin();
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [editingProfile, setEditingProfile] = useState<any>(null);
   const [editForm, setEditForm] = useState<any>({});
+  const [currentPage, setCurrentPage] = useState(1);
 
   const filteredProfiles = allProfiles.filter((profile: any) => {
     const matchesSearch = profile.name.toLowerCase().includes(search.toLowerCase()) ||
