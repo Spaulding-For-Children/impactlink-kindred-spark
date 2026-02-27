@@ -145,55 +145,90 @@ export function AdminProfiles() {
           {filteredProfiles.length === 0 ? (
             <p className="text-muted-foreground text-center py-8">No profiles found</p>
           ) : (
-            <div className="space-y-3">
-              {filteredProfiles.map((profile: any) => (
-                <div key={profile.id} className="border rounded-lg p-4 flex items-center justify-between gap-4">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-semibold truncate">{profile.name}</h3>
-                      <Badge variant="outline" className="flex items-center gap-1 shrink-0">
-                        {getTypeIcon(profile.profile_type)}
-                        {profile.profile_type}
-                      </Badge>
+            <>
+              <div className="space-y-3">
+                {paginatedProfiles.map((profile: any) => (
+                  <div key={profile.id} className="border rounded-lg p-4 flex items-center justify-between gap-4">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="font-semibold truncate">{profile.name}</h3>
+                        <Badge variant="outline" className="flex items-center gap-1 shrink-0">
+                          {getTypeIcon(profile.profile_type)}
+                          {profile.profile_type}
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground truncate">{profile.email}</p>
+                      <p className="text-xs text-muted-foreground">
+                        Joined {format(new Date(profile.created_at), "MMM d, yyyy")}
+                        {profile.location && ` • ${profile.location}`}
+                      </p>
                     </div>
-                    <p className="text-sm text-muted-foreground truncate">{profile.email}</p>
-                    <p className="text-xs text-muted-foreground">
-                      Joined {format(new Date(profile.created_at), "MMM d, yyyy")}
-                      {profile.location && ` • ${profile.location}`}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <Button variant="outline" size="sm" onClick={() => openEditDialog(profile)}>
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="destructive" size="sm">
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete Profile</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Are you sure you want to delete {profile.name}'s profile? This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => deleteProfile.mutate(profile.id)}
+                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            >
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
                   </div>
+                ))}
+              </div>
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-between pt-4 border-t">
+                  <p className="text-sm text-muted-foreground">
+                    Showing {(safePage - 1) * PROFILES_PER_PAGE + 1}–{Math.min(safePage * PROFILES_PER_PAGE, filteredProfiles.length)} of {filteredProfiles.length}
+                  </p>
                   <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" onClick={() => openEditDialog(profile)}>
-                      <Pencil className="h-4 w-4" />
+                    <Button variant="outline" size="sm" disabled={safePage <= 1} onClick={() => setCurrentPage(safePage - 1)}>
+                      <ChevronLeft className="h-4 w-4" />
                     </Button>
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button variant="destructive" size="sm">
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Delete Profile</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Are you sure you want to delete {profile.name}'s profile? This action cannot be undone.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={() => deleteProfile.mutate(profile.id)}
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                          >
-                            Delete
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                      .filter(p => p === 1 || p === totalPages || Math.abs(p - safePage) <= 1)
+                      .reduce<(number | "ellipsis")[]>((acc, p, idx, arr) => {
+                        if (idx > 0 && p - (arr[idx - 1] as number) > 1) acc.push("ellipsis");
+                        acc.push(p);
+                        return acc;
+                      }, [])
+                      .map((p, i) =>
+                        p === "ellipsis" ? (
+                          <span key={`e${i}`} className="px-1 text-muted-foreground">…</span>
+                        ) : (
+                          <Button key={p} variant={p === safePage ? "default" : "outline"} size="sm" className="min-w-[36px]" onClick={() => setCurrentPage(p)}>
+                            {p}
+                          </Button>
+                        )
+                      )}
+                    <Button variant="outline" size="sm" disabled={safePage >= totalPages} onClick={() => setCurrentPage(safePage + 1)}>
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           )}
         </CardContent>
       </Card>
