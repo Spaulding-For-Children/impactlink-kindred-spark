@@ -27,13 +27,34 @@ const SectionHeader = ({ icon: Icon, title }: { icon: React.ElementType; title: 
   </div>
 );
 
-const allSections = [
-  "architecture", "admin-controls", "content-mgmt", "layout-theme",
-  "user-mgmt", "tech-stack", "database", "edge-functions",
-  "updates", "roles-permissions", "security", "troubleshooting"
-];
+const sectionSearchData: Record<string, { title: string; keywords: string }> = {
+  architecture: { title: "Site Architecture Overview", keywords: "spa single page application react router cdn rls row level security request flow pages routes auth directory collaboration resources events data tools admin authentication invite only jwt" },
+  "admin-controls": { title: "Admin Controls Overview", keywords: "tabs dashboard site settings registrations submissions profiles directory resources events forums research questions data tools user guide moderator" },
+  "content-mgmt": { title: "Content Management Controls", keywords: "hero section badge title tagline description cta button resources add edit delete events workshop webinar conference networking training featured datasets analysis tools ethics csv import submissions moderation approve reject" },
+  "layout-theme": { title: "Layout & Theme Controls", keywords: "section order reorder hide show visibility toggle hero directory collaboration data tools resources events contact theme colors hsl primary secondary accent fonts google fonts display body" },
+  "user-mgmt": { title: "User & Registration Management", keywords: "registration workflow approve reject account email resend password reset profile search filter edit delete export csv directory" },
+  "tech-stack": { title: "Technology Stack", keywords: "react typescript vite tailwind css shadcn ui react router tanstack react query framer motion i18next recharts lucide postgresql database authentication edge functions deno storage resend design system hsl tokens" },
+  database: { title: "Database Schema & Tables", keywords: "profiles user roles registration requests resources research submissions events event registrations forum topics forum posts forum replies research questions collaborations datasets analysis tools ethics resources resource bookmarks site settings has_role get_partner_matches storage buckets" },
+  "edge-functions": { title: "Backend Functions", keywords: "edge functions process registration send event notification send collaboration notification send registration notification resend api key service role key jwt secrets deno server side" },
+  updates: { title: "Software Updates & Maintenance", keywords: "dependency management npm bun react vite typescript eslint radix shadcn supabase tanstack update frequency security patches database migrations edge function deploy monitoring checklist" },
+  "roles-permissions": { title: "Roles & Permissions", keywords: "admin moderator user role has_role security definer rls policy permission matrix create edit delete profile submit research post forum register events collaboration approve registrations site settings manage roles" },
+  security: { title: "Security Architecture", keywords: "row level security rls jwt tokens authentication invite only password reset anon key service role key tls encryption storage bucket api keys secrets environment variables" },
+  troubleshooting: { title: "Troubleshooting & Common Issues", keywords: "email not sending resend api key admin dashboard not loading user roles data not appearing rls policy csv import header mismatch site settings cache refresh registration stuck edge function error missing profiles query limit 1000" },
+};
+
+const allSections = Object.keys(sectionSearchData);
 
 export function AdminOperationalGuide() {
+  const [searchQuery, setSearchQuery] = useState("");
+  
+  const filteredSections = useMemo(() => {
+    if (!searchQuery.trim()) return allSections;
+    const q = searchQuery.toLowerCase();
+    return allSections.filter((id) => {
+      const { title, keywords } = sectionSearchData[id];
+      return title.toLowerCase().includes(q) || keywords.includes(q);
+    });
+  }, [searchQuery]);
   return (
     <div className="space-y-6">
       <Card>
