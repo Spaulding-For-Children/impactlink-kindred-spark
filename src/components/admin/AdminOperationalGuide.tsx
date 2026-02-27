@@ -245,8 +245,9 @@ export function AdminOperationalGuide() {
             <Warning>After changing theme colors or fonts, they take effect only if the front-end code is wired to read from the <code>site_settings</code> table and apply them as CSS variables. Currently, the theme settings are stored but may require code updates to apply dynamically at runtime.</Warning>
           </AccordionContent>
         </AccordionItem>
+        )}
 
-        {/* 5. User & Registration Management */}
+        {filteredSections.includes("user-mgmt") && (
         <AccordionItem value="user-mgmt" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={Users} title="5. User & Registration Management" />
