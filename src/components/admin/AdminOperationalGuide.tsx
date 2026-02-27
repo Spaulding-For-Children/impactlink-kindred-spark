@@ -71,9 +71,42 @@ export function AdminOperationalGuide() {
           <p className="text-sm text-muted-foreground mt-3">
             This guide covers how the website works, what you can control, the technology behind the platform, maintenance procedures, and the complete roles & permissions model.
           </p>
+          <div className="relative mt-4">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search topics (e.g. RLS, registration, theme, edge functions...)"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 pr-9"
+            />
+            {searchQuery && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 p-0"
+                onClick={() => setSearchQuery("")}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
+          {searchQuery && (
+            <p className="text-xs text-muted-foreground mt-2">
+              Showing {filteredSections.length} of {allSections.length} sections
+            </p>
+          )}
         </CardContent>
       </Card>
 
+      {filteredSections.length === 0 ? (
+        <Card>
+          <CardContent className="py-12 text-center">
+            <Search className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
+            <p className="text-muted-foreground">No sections match "<strong>{searchQuery}</strong>"</p>
+            <Button variant="link" onClick={() => setSearchQuery("")} className="mt-2">Clear search</Button>
+          </CardContent>
+        </Card>
+      ) : (
       <Accordion type="multiple" defaultValue={allSections} className="space-y-3">
 
         {/* 1. Site Architecture Overview */}
