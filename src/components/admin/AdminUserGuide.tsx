@@ -150,7 +150,7 @@ export function AdminUserGuide() {
       </Card>
 
       {/* Sections */}
-      <Accordion type="multiple" className="space-y-3">
+      <Accordion type="multiple" defaultValue={allSections} className="space-y-3 print-expand-all">
 
         {/* 1. Registration & User Onboarding */}
         <AccordionItem value="registration" className="border rounded-lg px-4">
