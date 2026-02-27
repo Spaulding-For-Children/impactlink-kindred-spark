@@ -413,7 +413,7 @@ export function useAdmin() {
     updateSubmissionStatus,
     deleteSubmission,
     deleteProfile,
-    upsertResource,
+    updateProfile,
     deleteResource,
     upsertEvent,
     deleteEvent,
