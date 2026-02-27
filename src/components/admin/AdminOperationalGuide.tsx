@@ -360,8 +360,9 @@ export function AdminOperationalGuide() {
             <p><code>research-uploads</code> — Public bucket for research submission file attachments (PDFs, documents).</p>
           </AccordionContent>
         </AccordionItem>
+        )}
 
-        {/* 8. Edge Functions */}
+        {filteredSections.includes("edge-functions") && (
         <AccordionItem value="edge-functions" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={Server} title="8. Backend Functions" />
