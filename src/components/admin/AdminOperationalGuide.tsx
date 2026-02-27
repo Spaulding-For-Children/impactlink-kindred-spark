@@ -560,8 +560,11 @@ export function AdminOperationalGuide() {
             </table>
           </AccordionContent>
         </AccordionItem>
+        )}
 
       </Accordion>
+      )}
+    </div>
     </div>
   );
 }
