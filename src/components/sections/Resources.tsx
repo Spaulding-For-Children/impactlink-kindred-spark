@@ -11,6 +11,8 @@ export const Resources = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const { t } = useTranslation();
+  const { getSetting } = useSiteSettings();
+  const sectionContent = getSetting("resources_section", undefined, {});
 
   const resources = [
     { icon: Video, title: t("resources.workshops"), description: t("resources.workshopsDesc"), items: [t("resources.workshopsI1"), t("resources.workshopsI2"), t("resources.workshopsI3")] },
