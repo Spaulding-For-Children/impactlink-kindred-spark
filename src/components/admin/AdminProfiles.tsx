@@ -103,6 +103,29 @@ export function AdminProfiles() {
     });
   };
 
+  const exportCsv = () => {
+    const headers = ["Name", "Email", "Type", "Location", "Bio", "Interests", "University", "Major", "Year", "Title", "Institution", "Department", "Publications", "Agency Type", "Focus Areas", "Employees", "Founded", "Website", "Created At"];
+    const escape = (val: any) => {
+      const s = String(val ?? "");
+      return s.includes(",") || s.includes('"') || s.includes("\n") ? `"${s.replace(/"/g, '""')}"` : s;
+    };
+    const rows = filteredProfiles.map((p: any) => [
+      p.name, p.email, p.profile_type, p.location, p.bio,
+      (p.interests || []).join("; "), p.university, p.major, p.year,
+      p.title, p.institution, p.department, p.publications,
+      p.agency_type, (p.focus_areas || []).join("; "), p.employees, p.founded, p.website,
+      p.created_at ? format(new Date(p.created_at), "yyyy-MM-dd") : "",
+    ].map(escape).join(","));
+    const csv = [headers.join(","), ...rows].join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `profiles-export-${format(new Date(), "yyyy-MM-dd")}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   if (isLoadingProfiles) {
     return (
       <Card>
