@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { format } from "date-fns";
-import { Trash2, Users, Search, GraduationCap, Microscope, Building2, Pencil, ChevronLeft, ChevronRight } from "lucide-react";
+import { Trash2, Users, Search, GraduationCap, Microscope, Building2, Pencil, ChevronLeft, ChevronRight, Download } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
