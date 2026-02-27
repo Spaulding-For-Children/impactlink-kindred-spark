@@ -389,8 +389,9 @@ export function AdminOperationalGuide() {
             <Warning>Edge functions use the service role key which bypasses RLS. Never expose this key in client-side code. It is only available server-side in edge functions.</Warning>
           </AccordionContent>
         </AccordionItem>
+        )}
 
-        {/* 9. Software Updates & Maintenance */}
+        {filteredSections.includes("updates") && (
         <AccordionItem value="updates" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={RefreshCw} title="9. Software Updates & Maintenance" />
