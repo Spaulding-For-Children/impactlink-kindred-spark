@@ -10,6 +10,8 @@ export const Collaboration = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const { t } = useTranslation();
+  const { getSetting } = useSiteSettings();
+  const sectionContent = getSetting("collaboration_section", undefined, {});
 
   const features = [
     { icon: MessageSquare, title: t("collaboration.postBrowse"), description: t("collaboration.postBrowseDesc") },
