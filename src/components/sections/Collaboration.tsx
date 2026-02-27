@@ -37,10 +37,10 @@ export const Collaboration = () => {
           <motion.div initial={{ opacity: 0, x: -40 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.6 }}>
             <span className="inline-block px-4 py-1.5 rounded-full bg-sage/10 text-sage text-sm font-medium mb-4">{t("collaboration.badge")}</span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-foreground mb-6">
-              {t("collaboration.title")}
+              {sectionContent.title || t("collaboration.title")}
               <span className="block text-sage">{t("collaboration.titleHighlight")}</span>
             </h2>
-            <p className="text-lg text-muted-foreground mb-8">{t("collaboration.description")}</p>
+            <p className="text-lg text-muted-foreground mb-8">{sectionContent.description || t("collaboration.description")}</p>
             <div className="space-y-6 mb-8">
               {features.map((feature, index) => (
                 <motion.div key={feature.title} initial={{ opacity: 0, x: -20 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }} className="flex gap-4">

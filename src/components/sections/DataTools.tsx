@@ -39,8 +39,8 @@ export const DataTools = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6 }} className="text-center max-w-3xl mx-auto mb-16">
           <span className="inline-block px-4 py-1.5 rounded-full bg-amber/10 text-amber text-sm font-medium mb-4">{t("dataTools.badge")}</span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-foreground mb-6">{t("dataTools.title")}</h2>
-          <p className="text-lg text-muted-foreground">{t("dataTools.description")}</p>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-foreground mb-6">{sectionContent.title || t("dataTools.title")}</h2>
+          <p className="text-lg text-muted-foreground">{sectionContent.description || t("dataTools.description")}</p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
