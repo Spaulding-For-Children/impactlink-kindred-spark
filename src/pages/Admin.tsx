@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Shield, Users, FileText, Calendar, BookOpen, MessageSquare, HelpCircle, Database, UserPlus, BookMarked } from "lucide-react";
+import { Shield, Users, FileText, Calendar, BookOpen, MessageSquare, HelpCircle, Database, UserPlus, BookMarked, Settings } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -16,6 +16,7 @@ import { AdminResearchQuestions } from "@/components/admin/AdminResearchQuestion
 import { AdminDataTools } from "@/components/admin/AdminDataTools";
 import { AdminRegistrations } from "@/components/admin/AdminRegistrations";
 import { AdminUserGuide } from "@/components/admin/AdminUserGuide";
+import { AdminSiteSettings } from "@/components/admin/AdminSiteSettings";
 
 export default function Admin() {
   const navigate = useNavigate();
