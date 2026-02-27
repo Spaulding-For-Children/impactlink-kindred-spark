@@ -1,7 +1,9 @@
-import { BookOpen, Users, FileText, Calendar, MessageSquare, Database, Shield, Globe, UserPlus, Search, Star, Upload, Download, CheckCircle, AlertTriangle, Info, Lightbulb, Settings, Mail, Phone, Building2, HelpCircle, Bookmark, BarChart3, Lock } from "lucide-react";
+import { useRef } from "react";
+import { BookOpen, Users, FileText, Calendar, MessageSquare, Database, Shield, Globe, UserPlus, Search, Star, Upload, Download, CheckCircle, AlertTriangle, Info, Lightbulb, Settings, Mail, Phone, Building2, HelpCircle, Bookmark, BarChart3, Lock, Printer } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 function Tip({ children }: { children: React.ReactNode }) {
@@ -56,18 +58,44 @@ function SectionHeader({ icon: Icon, title, description }: { icon: React.Element
 }
 
 export function AdminUserGuide() {
+  const guideRef = useRef<HTMLDivElement>(null);
+
+  const handlePrint = () => {
+    // Add print class to body to trigger print styles
+    document.body.classList.add("printing-guide");
+    window.print();
+    // Remove after print dialog closes
+    window.addEventListener("afterprint", () => {
+      document.body.classList.remove("printing-guide");
+    }, { once: true });
+  };
+
+  // All accordion values for the print-expanded version
+  const allSections = [
+    "registration", "profiles", "submissions", "resources",
+    "events", "forums", "research-questions", "data-tools", "i18n", "security"
+  ];
+
   return (
-    <div className="space-y-6 max-w-4xl">
+    <div className="space-y-6 max-w-4xl" ref={guideRef} id="user-guide-content">
       {/* Introduction */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <BookOpen className="h-5 w-5" />
-            Platform User Guide
-          </CardTitle>
-          <CardDescription>
-            A comprehensive reference for administrators covering every feature, workflow, and best practice on the platform.
-          </CardDescription>
+          <div className="flex items-start justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <BookOpen className="h-5 w-5" />
+                Platform User Guide
+              </CardTitle>
+              <CardDescription className="mt-1.5">
+                A comprehensive reference for administrators covering every feature, workflow, and best practice on the platform.
+              </CardDescription>
+            </div>
+            <Button variant="outline" size="sm" onClick={handlePrint} className="shrink-0 print:hidden">
+              <Printer className="h-4 w-4 mr-2" />
+              Print / Save PDF
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="prose prose-sm max-w-none text-foreground/80">
@@ -122,7 +150,7 @@ export function AdminUserGuide() {
       </Card>
 
       {/* Sections */}
-      <Accordion type="multiple" className="space-y-3">
+      <Accordion type="multiple" defaultValue={allSections} className="space-y-3 print-expand-all">
 
         {/* 1. Registration & User Onboarding */}
         <AccordionItem value="registration" className="border rounded-lg px-4">

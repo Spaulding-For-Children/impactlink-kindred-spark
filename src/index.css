@@ -203,6 +203,91 @@
     to {
       opacity: 1;
       transform: scale(1);
-    }
+  }
+}
+
+/* Print styles for User Guide PDF export */
+@media print {
+  /* Hide everything except the guide */
+  body.printing-guide header,
+  body.printing-guide footer,
+  body.printing-guide nav,
+  body.printing-guide .print\\:hidden {
+    display: none !important;
+  }
+
+  body.printing-guide {
+    background: white !important;
+    color: black !important;
+    font-size: 11pt;
+  }
+
+  body.printing-guide #user-guide-content {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  /* Expand all accordion items */
+  body.printing-guide [data-state="closed"] > [data-radix-collapsible-content] {
+    display: block !important;
+    height: auto !important;
+  }
+
+  body.printing-guide [data-state] {
+    border: 1px solid #e5e7eb !important;
+  }
+
+  /* Remove shadows and simplify cards */
+  body.printing-guide .shadow-sm,
+  body.printing-guide .shadow-soft,
+  body.printing-guide .shadow-elevated {
+    box-shadow: none !important;
+  }
+
+  /* Prevent page breaks inside sections */
+  body.printing-guide [data-radix-collapsible-content] {
+    break-inside: avoid;
+  }
+
+  body.printing-guide .border {
+    border-color: #e5e7eb !important;
+  }
+
+  /* Ensure badges print with background */
+  body.printing-guide .badge,
+  body.printing-guide [class*="Badge"] {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Hide the tabs navigation */
+  body.printing-guide [role="tablist"] {
+    display: none !important;
+  }
+
+  /* Hide hero section */
+  body.printing-guide section.py-12 {
+    display: none !important;
+  }
+
+  /* Print header */
+  body.printing-guide #user-guide-content::before {
+    content: "Platform User Guide";
+    display: block;
+    font-size: 24pt;
+    font-weight: bold;
+    margin-bottom: 8pt;
+    color: black;
+  }
+
+  body.printing-guide #user-guide-content::after {
+    content: "Generated on " attr(data-date);
+    display: block;
+    font-size: 9pt;
+    color: #666;
+    margin-top: 24pt;
+    text-align: center;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 8pt;
   }
 }
