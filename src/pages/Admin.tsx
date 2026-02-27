@@ -123,6 +123,10 @@ export default function Admin() {
                 </TabsTrigger>
               </TabsList>
 
+              <TabsContent value="site-settings">
+                <AdminSiteSettings />
+              </TabsContent>
+
               <TabsContent value="registrations">
                 <AdminRegistrations />
               </TabsContent>
