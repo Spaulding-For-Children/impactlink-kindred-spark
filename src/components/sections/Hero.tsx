@@ -3,11 +3,15 @@ import { ArrowRight, Search, Users, Database, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 import heroBg from "@/assets/hero-bg.jpg";
 
 export const Hero = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { getSetting } = useSiteSettings();
+
+  const hero = getSetting("hero", undefined, {});
 
   const actionCards = [
     { icon: Search, title: t("hero.exploreResearch"), description: t("hero.exploreResearchDesc"), color: "from-navy to-navy-light", href: "/collaboration" },
@@ -29,7 +33,7 @@ export const Hero = () => {
         <div className="max-w-4xl mx-auto text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sage-light border border-sage/20 mb-8">
             <span className="w-2 h-2 rounded-full bg-sage animate-pulse" />
-            <span className="text-sm font-medium text-sage">{t("hero.badge")}</span>
+            <span className="text-sm font-medium text-sage">{hero.badge || t("hero.badge")}</span>
           </motion.div>
 
           <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-foreground leading-tight mb-6">
@@ -39,20 +43,20 @@ export const Hero = () => {
           </motion.h1>
 
           <motion.p initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="text-xl md:text-2xl font-display italic text-muted-foreground mb-6">
-            {t("hero.tagline")}
+            {hero.tagline || t("hero.tagline")}
           </motion.p>
 
           <motion.p initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }} className="text-lg text-muted-foreground max-w-2xl mx-auto mb-10">
-            {t("hero.description")}
+            {hero.description || t("hero.description")}
           </motion.p>
 
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }} className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
             <Button variant="hero" size="lg" className="group" onClick={() => navigate("/auth")}>
-              {t("hero.getStarted")}
+              {hero.ctaPrimary || t("hero.getStarted")}
               <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Button>
             <Button variant="outline" size="lg" onClick={() => navigate("/directory")}>
-              {t("hero.exploreDirectory")}
+              {hero.ctaSecondary || t("hero.exploreDirectory")}
             </Button>
           </motion.div>
         </div>
