@@ -5,6 +5,7 @@ import { Video, BookOpen, FileText, GraduationCap, FlaskConical, Building, Globe
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 export const Resources = () => {
   const ref = useRef(null);
