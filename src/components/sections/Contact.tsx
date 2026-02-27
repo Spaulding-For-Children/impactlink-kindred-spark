@@ -13,6 +13,8 @@ export const Contact = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const { t } = useTranslation();
+  const { getSetting } = useSiteSettings();
+  const sectionContent = getSetting("contact_section", undefined, {});
 
   const faqs = [
     { question: t("contact.faq1q"), answer: t("contact.faq1a") },
