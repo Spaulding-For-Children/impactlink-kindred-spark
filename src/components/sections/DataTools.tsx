@@ -24,6 +24,8 @@ export const DataTools = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const { t } = useTranslation();
+  const { getSetting } = useSiteSettings();
+  const sectionContent = getSetting("datatools_section", undefined, {});
 
   const ethicsItems = [
     { icon: Scale, title: t("dataTools.usStateIrb"), desc: t("dataTools.usStateIrbDesc") },
