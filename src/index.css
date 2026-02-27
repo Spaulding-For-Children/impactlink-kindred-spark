@@ -291,7 +291,8 @@
     color: black;
   }
 
-  body.printing-guide #user-guide-content::after {
+  body.printing-guide #user-guide-content::after,
+  body.printing-guide #ops-guide-content::after {
     content: "Generated on " attr(data-date);
     display: block;
     font-size: 9pt;
