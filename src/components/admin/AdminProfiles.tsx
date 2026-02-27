@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { format } from "date-fns";
-import { Trash2, Users, Search, GraduationCap, Microscope, Building2, Pencil } from "lucide-react";
+import { Trash2, Users, Search, GraduationCap, Microscope, Building2, Pencil, ChevronLeft, ChevronRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,12 +12,15 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useAdmin } from "@/hooks/useAdmin";
 
+const PROFILES_PER_PAGE = 10;
+
 export function AdminProfiles() {
   const { allProfiles, isLoadingProfiles, deleteProfile, updateProfile } = useAdmin();
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [editingProfile, setEditingProfile] = useState<any>(null);
   const [editForm, setEditForm] = useState<any>({});
+  const [currentPage, setCurrentPage] = useState(1);
 
   const filteredProfiles = allProfiles.filter((profile: any) => {
     const matchesSearch = profile.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -25,6 +28,14 @@ export function AdminProfiles() {
     const matchesType = typeFilter === "all" || profile.profile_type === typeFilter;
     return matchesSearch && matchesType;
   });
+
+  // Reset to page 1 when filters change
+  const totalPages = Math.max(1, Math.ceil(filteredProfiles.length / PROFILES_PER_PAGE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedProfiles = useMemo(() => {
+    const start = (safePage - 1) * PROFILES_PER_PAGE;
+    return filteredProfiles.slice(start, start + PROFILES_PER_PAGE);
+  }, [filteredProfiles, safePage]);
 
   const getTypeIcon = (type: string) => {
     switch (type) {
@@ -116,9 +127,9 @@ export function AdminProfiles() {
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search by name or email..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9" />
+              <Input placeholder="Search by name or email..." value={search} onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }} className="pl-9" />
             </div>
-            <Select value={typeFilter} onValueChange={setTypeFilter}>
+            <Select value={typeFilter} onValueChange={(v) => { setTypeFilter(v); setCurrentPage(1); }}>
               <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="Filter by type" />
               </SelectTrigger>
@@ -134,55 +145,90 @@ export function AdminProfiles() {
           {filteredProfiles.length === 0 ? (
             <p className="text-muted-foreground text-center py-8">No profiles found</p>
           ) : (
-            <div className="space-y-3">
-              {filteredProfiles.map((profile: any) => (
-                <div key={profile.id} className="border rounded-lg p-4 flex items-center justify-between gap-4">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-semibold truncate">{profile.name}</h3>
-                      <Badge variant="outline" className="flex items-center gap-1 shrink-0">
-                        {getTypeIcon(profile.profile_type)}
-                        {profile.profile_type}
-                      </Badge>
+            <>
+              <div className="space-y-3">
+                {paginatedProfiles.map((profile: any) => (
+                  <div key={profile.id} className="border rounded-lg p-4 flex items-center justify-between gap-4">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="font-semibold truncate">{profile.name}</h3>
+                        <Badge variant="outline" className="flex items-center gap-1 shrink-0">
+                          {getTypeIcon(profile.profile_type)}
+                          {profile.profile_type}
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground truncate">{profile.email}</p>
+                      <p className="text-xs text-muted-foreground">
+                        Joined {format(new Date(profile.created_at), "MMM d, yyyy")}
+                        {profile.location && ` • ${profile.location}`}
+                      </p>
                     </div>
-                    <p className="text-sm text-muted-foreground truncate">{profile.email}</p>
-                    <p className="text-xs text-muted-foreground">
-                      Joined {format(new Date(profile.created_at), "MMM d, yyyy")}
-                      {profile.location && ` • ${profile.location}`}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <Button variant="outline" size="sm" onClick={() => openEditDialog(profile)}>
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="destructive" size="sm">
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete Profile</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Are you sure you want to delete {profile.name}'s profile? This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => deleteProfile.mutate(profile.id)}
+                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            >
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
                   </div>
+                ))}
+              </div>
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-between pt-4 border-t">
+                  <p className="text-sm text-muted-foreground">
+                    Showing {(safePage - 1) * PROFILES_PER_PAGE + 1}–{Math.min(safePage * PROFILES_PER_PAGE, filteredProfiles.length)} of {filteredProfiles.length}
+                  </p>
                   <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" onClick={() => openEditDialog(profile)}>
-                      <Pencil className="h-4 w-4" />
+                    <Button variant="outline" size="sm" disabled={safePage <= 1} onClick={() => setCurrentPage(safePage - 1)}>
+                      <ChevronLeft className="h-4 w-4" />
                     </Button>
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button variant="destructive" size="sm">
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Delete Profile</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Are you sure you want to delete {profile.name}'s profile? This action cannot be undone.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={() => deleteProfile.mutate(profile.id)}
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                          >
-                            Delete
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                      .filter(p => p === 1 || p === totalPages || Math.abs(p - safePage) <= 1)
+                      .reduce<(number | "ellipsis")[]>((acc, p, idx, arr) => {
+                        if (idx > 0 && p - (arr[idx - 1] as number) > 1) acc.push("ellipsis");
+                        acc.push(p);
+                        return acc;
+                      }, [])
+                      .map((p, i) =>
+                        p === "ellipsis" ? (
+                          <span key={`e${i}`} className="px-1 text-muted-foreground">…</span>
+                        ) : (
+                          <Button key={p} variant={p === safePage ? "default" : "outline"} size="sm" className="min-w-[36px]" onClick={() => setCurrentPage(p)}>
+                            {p}
+                          </Button>
+                        )
+                      )}
+                    <Button variant="outline" size="sm" disabled={safePage >= totalPages} onClick={() => setCurrentPage(safePage + 1)}>
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           )}
         </CardContent>
       </Card>
