@@ -5,6 +5,7 @@ import { GraduationCap, Microscope, Building2, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 export const Directory = () => {
   const ref = useRef(null);
