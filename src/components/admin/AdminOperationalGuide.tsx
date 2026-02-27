@@ -1,7 +1,10 @@
+import { useState, useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
-import { Server, Shield, Settings, Database, Code, RefreshCw, Users, Lock, Wrench, Globe, Layers, FileText } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Server, Shield, Settings, Database, Code, RefreshCw, Users, Lock, Wrench, Globe, Layers, FileText, Search, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Tip = ({ children }: { children: React.ReactNode }) => (
   <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 my-2 text-sm flex gap-2">
@@ -24,13 +27,34 @@ const SectionHeader = ({ icon: Icon, title }: { icon: React.ElementType; title: 
   </div>
 );
 
-const allSections = [
-  "architecture", "admin-controls", "content-mgmt", "layout-theme",
-  "user-mgmt", "tech-stack", "database", "edge-functions",
-  "updates", "roles-permissions", "security", "troubleshooting"
-];
+const sectionSearchData: Record<string, { title: string; keywords: string }> = {
+  architecture: { title: "Site Architecture Overview", keywords: "spa single page application react router cdn rls row level security request flow pages routes auth directory collaboration resources events data tools admin authentication invite only jwt" },
+  "admin-controls": { title: "Admin Controls Overview", keywords: "tabs dashboard site settings registrations submissions profiles directory resources events forums research questions data tools user guide moderator" },
+  "content-mgmt": { title: "Content Management Controls", keywords: "hero section badge title tagline description cta button resources add edit delete events workshop webinar conference networking training featured datasets analysis tools ethics csv import submissions moderation approve reject" },
+  "layout-theme": { title: "Layout & Theme Controls", keywords: "section order reorder hide show visibility toggle hero directory collaboration data tools resources events contact theme colors hsl primary secondary accent fonts google fonts display body" },
+  "user-mgmt": { title: "User & Registration Management", keywords: "registration workflow approve reject account email resend password reset profile search filter edit delete export csv directory" },
+  "tech-stack": { title: "Technology Stack", keywords: "react typescript vite tailwind css shadcn ui react router tanstack react query framer motion i18next recharts lucide postgresql database authentication edge functions deno storage resend design system hsl tokens" },
+  database: { title: "Database Schema & Tables", keywords: "profiles user roles registration requests resources research submissions events event registrations forum topics forum posts forum replies research questions collaborations datasets analysis tools ethics resources resource bookmarks site settings has_role get_partner_matches storage buckets" },
+  "edge-functions": { title: "Backend Functions", keywords: "edge functions process registration send event notification send collaboration notification send registration notification resend api key service role key jwt secrets deno server side" },
+  updates: { title: "Software Updates & Maintenance", keywords: "dependency management npm bun react vite typescript eslint radix shadcn supabase tanstack update frequency security patches database migrations edge function deploy monitoring checklist" },
+  "roles-permissions": { title: "Roles & Permissions", keywords: "admin moderator user role has_role security definer rls policy permission matrix create edit delete profile submit research post forum register events collaboration approve registrations site settings manage roles" },
+  security: { title: "Security Architecture", keywords: "row level security rls jwt tokens authentication invite only password reset anon key service role key tls encryption storage bucket api keys secrets environment variables" },
+  troubleshooting: { title: "Troubleshooting & Common Issues", keywords: "email not sending resend api key admin dashboard not loading user roles data not appearing rls policy csv import header mismatch site settings cache refresh registration stuck edge function error missing profiles query limit 1000" },
+};
+
+const allSections = Object.keys(sectionSearchData);
 
 export function AdminOperationalGuide() {
+  const [searchQuery, setSearchQuery] = useState("");
+  
+  const filteredSections = useMemo(() => {
+    if (!searchQuery.trim()) return allSections;
+    const q = searchQuery.toLowerCase();
+    return allSections.filter((id) => {
+      const { title, keywords } = sectionSearchData[id];
+      return title.toLowerCase().includes(q) || keywords.includes(q);
+    });
+  }, [searchQuery]);
   return (
     <div className="space-y-6">
       <Card>
@@ -47,12 +71,46 @@ export function AdminOperationalGuide() {
           <p className="text-sm text-muted-foreground mt-3">
             This guide covers how the website works, what you can control, the technology behind the platform, maintenance procedures, and the complete roles & permissions model.
           </p>
+          <div className="relative mt-4">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search topics (e.g. RLS, registration, theme, edge functions...)"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 pr-9"
+            />
+            {searchQuery && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 p-0"
+                onClick={() => setSearchQuery("")}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
+          {searchQuery && (
+            <p className="text-xs text-muted-foreground mt-2">
+              Showing {filteredSections.length} of {allSections.length} sections
+            </p>
+          )}
         </CardContent>
       </Card>
 
+      {filteredSections.length === 0 ? (
+        <Card>
+          <CardContent className="py-12 text-center">
+            <Search className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
+            <p className="text-muted-foreground">No sections match "<strong>{searchQuery}</strong>"</p>
+            <Button variant="link" onClick={() => setSearchQuery("")} className="mt-2">Clear search</Button>
+          </CardContent>
+        </Card>
+      ) : (
       <Accordion type="multiple" defaultValue={allSections} className="space-y-3">
 
         {/* 1. Site Architecture Overview */}
+        {filteredSections.includes("architecture") && (
         <AccordionItem value="architecture" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={Layers} title="1. Site Architecture Overview" />
@@ -88,8 +146,9 @@ export function AdminOperationalGuide() {
             <p>Registration is <strong>invite-only</strong>. Users submit a registration request → an admin reviews and approves/rejects → upon approval, the system creates an account and emails a password-reset link. There is no public sign-up.</p>
           </AccordionContent>
         </AccordionItem>
+        )}
 
-        {/* 2. Admin Controls Overview */}
+        {filteredSections.includes("admin-controls") && (
         <AccordionItem value="admin-controls" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={Settings} title="2. Admin Controls Overview" />
@@ -116,8 +175,9 @@ export function AdminOperationalGuide() {
             <Tip>You can access the admin dashboard by navigating to <code>/admin</code>. Only users with the <strong>admin</strong> role can see this page — others are redirected automatically.</Tip>
           </AccordionContent>
         </AccordionItem>
+        )}
 
-        {/* 3. Content Management */}
+        {filteredSections.includes("content-mgmt") && (
         <AccordionItem value="content-mgmt" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={FileText} title="3. Content Management Controls" />
@@ -150,8 +210,9 @@ export function AdminOperationalGuide() {
             <p>New submissions arrive as <Badge variant="outline">pending</Badge>. Review the attached file, then approve or reject. Approved submissions become publicly visible; rejected ones are only visible to their author.</p>
           </AccordionContent>
         </AccordionItem>
+        )}
 
-        {/* 4. Layout & Theme Controls */}
+        {filteredSections.includes("layout-theme") && (
         <AccordionItem value="layout-theme" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={Globe} title="4. Layout & Theme Controls" />
@@ -185,8 +246,9 @@ export function AdminOperationalGuide() {
             <Warning>After changing theme colors or fonts, they take effect only if the front-end code is wired to read from the <code>site_settings</code> table and apply them as CSS variables. Currently, the theme settings are stored but may require code updates to apply dynamically at runtime.</Warning>
           </AccordionContent>
         </AccordionItem>
+        )}
 
-        {/* 5. User & Registration Management */}
+        {filteredSections.includes("user-mgmt") && (
         <AccordionItem value="user-mgmt" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={Users} title="5. User & Registration Management" />
@@ -213,8 +275,9 @@ export function AdminOperationalGuide() {
             <Tip>When deleting a profile, the user's auth account still exists. They can log in but won't have a profile. To fully remove a user, you would also need to delete them from the authentication system.</Tip>
           </AccordionContent>
         </AccordionItem>
+        )}
 
-        {/* 6. Technology Stack */}
+        {filteredSections.includes("tech-stack") && (
         <AccordionItem value="tech-stack" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={Code} title="6. Technology Stack" />
@@ -254,8 +317,9 @@ export function AdminOperationalGuide() {
             <p>The platform uses <strong>semantic CSS tokens</strong> defined in <code>index.css</code> and <code>tailwind.config.ts</code>. All colors are HSL-based and support light/dark modes. Components from shadcn/ui are customized with project-specific variants.</p>
           </AccordionContent>
         </AccordionItem>
+        )}
 
-        {/* 7. Database Schema */}
+        {filteredSections.includes("database") && (
         <AccordionItem value="database" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={Database} title="7. Database Schema & Tables" />
@@ -297,8 +361,9 @@ export function AdminOperationalGuide() {
             <p><code>research-uploads</code> — Public bucket for research submission file attachments (PDFs, documents).</p>
           </AccordionContent>
         </AccordionItem>
+        )}
 
-        {/* 8. Edge Functions */}
+        {filteredSections.includes("edge-functions") && (
         <AccordionItem value="edge-functions" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={Server} title="8. Backend Functions" />
@@ -325,8 +390,9 @@ export function AdminOperationalGuide() {
             <Warning>Edge functions use the service role key which bypasses RLS. Never expose this key in client-side code. It is only available server-side in edge functions.</Warning>
           </AccordionContent>
         </AccordionItem>
+        )}
 
-        {/* 9. Software Updates & Maintenance */}
+        {filteredSections.includes("updates") && (
         <AccordionItem value="updates" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={RefreshCw} title="9. Software Updates & Maintenance" />
@@ -374,8 +440,9 @@ export function AdminOperationalGuide() {
             <Tip>You can request a security scan at any time through the Lovable editor to check for vulnerable dependencies.</Tip>
           </AccordionContent>
         </AccordionItem>
+        )}
 
-        {/* 10. Roles & Permissions */}
+        {filteredSections.includes("roles-permissions") && (
         <AccordionItem value="roles-permissions" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={Shield} title="10. Roles & Permissions" />
@@ -438,8 +505,9 @@ export function AdminOperationalGuide() {
             <Warning>Never grant roles through client-side code or store role information in localStorage. Roles must only be managed through the <code>user_roles</code> database table with proper RLS policies.</Warning>
           </AccordionContent>
         </AccordionItem>
+        )}
 
-        {/* 11. Security Architecture */}
+        {filteredSections.includes("security") && (
         <AccordionItem value="security" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={Lock} title="11. Security Architecture" />
@@ -470,8 +538,9 @@ export function AdminOperationalGuide() {
             </ul>
           </AccordionContent>
         </AccordionItem>
+        )}
 
-        {/* 12. Troubleshooting */}
+        {filteredSections.includes("troubleshooting") && (
         <AccordionItem value="troubleshooting" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={Wrench} title="12. Troubleshooting & Common Issues" />
@@ -492,8 +561,10 @@ export function AdminOperationalGuide() {
             </table>
           </AccordionContent>
         </AccordionItem>
+        )}
 
       </Accordion>
+      )}
     </div>
   );
 }
