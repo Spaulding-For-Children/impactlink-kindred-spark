@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { Database, FileText, Scale, Shield, TrendingUp, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 const dataSources = [
   { name: "AFCARS", org: "U.S. Federal Data" },
