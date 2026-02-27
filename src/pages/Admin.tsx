@@ -149,6 +149,10 @@ export default function Admin() {
               <TabsContent value="datatools">
                 <AdminDataTools />
               </TabsContent>
+
+              <TabsContent value="guide">
+                <AdminUserGuide />
+              </TabsContent>
             </Tabs>
           </div>
         </section>
