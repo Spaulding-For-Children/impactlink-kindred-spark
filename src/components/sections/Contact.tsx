@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useTranslation } from "react-i18next";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 export const Contact = () => {
   const ref = useRef(null);
