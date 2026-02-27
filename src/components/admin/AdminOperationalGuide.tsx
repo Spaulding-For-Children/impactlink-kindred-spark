@@ -145,8 +145,9 @@ export function AdminOperationalGuide() {
             <p>Registration is <strong>invite-only</strong>. Users submit a registration request → an admin reviews and approves/rejects → upon approval, the system creates an account and emails a password-reset link. There is no public sign-up.</p>
           </AccordionContent>
         </AccordionItem>
+        )}
 
-        {/* 2. Admin Controls Overview */}
+        {filteredSections.includes("admin-controls") && (
         <AccordionItem value="admin-controls" className="border rounded-xl px-4">
           <AccordionTrigger>
             <SectionHeader icon={Settings} title="2. Admin Controls Overview" />
