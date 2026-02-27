@@ -11,6 +11,8 @@ export const Directory = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const { t } = useTranslation();
+  const { getSetting } = useSiteSettings();
+  const sectionContent = getSetting("directory_section", undefined, {});
 
   const profiles = [
     {
