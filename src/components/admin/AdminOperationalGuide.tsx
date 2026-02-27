@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Server, Shield, Settings, Database, Code, RefreshCw, Users, Lock, Wrench, Globe, Layers, FileText, Search, X } from "lucide-react";
+import { Server, Shield, Settings, Database, Code, RefreshCw, Users, Lock, Wrench, Globe, Layers, FileText, Search, X, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Tip = ({ children }: { children: React.ReactNode }) => (
@@ -55,18 +55,33 @@ export function AdminOperationalGuide() {
       return title.toLowerCase().includes(q) || keywords.includes(q);
     });
   }, [searchQuery]);
+
+  const handlePrint = () => {
+    document.body.classList.add("printing-guide");
+    window.print();
+    window.addEventListener("afterprint", () => {
+      document.body.classList.remove("printing-guide");
+    }, { once: true });
+  };
+
   return (
-    <div className="space-y-6">
+    <div id="ops-guide-content" data-date={new Date().toLocaleDateString()} className="space-y-6">
       <Card>
         <CardContent className="pt-6">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-              <Wrench className="h-6 w-6 text-primary" />
+          <div className="flex items-center justify-between gap-3 mb-2">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                <Wrench className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-display font-bold text-foreground">Site Operational Guide</h2>
+                <p className="text-muted-foreground text-sm">Technical reference for platform administrators</p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-2xl font-display font-bold text-foreground">Site Operational Guide</h2>
-              <p className="text-muted-foreground text-sm">Technical reference for platform administrators</p>
-            </div>
+            <Button variant="outline" size="sm" onClick={handlePrint} className="shrink-0 print:hidden">
+              <Printer className="h-4 w-4 mr-2" />
+              Print / Save PDF
+            </Button>
           </div>
           <p className="text-sm text-muted-foreground mt-3">
             This guide covers how the website works, what you can control, the technology behind the platform, maintenance procedures, and the complete roles & permissions model.
