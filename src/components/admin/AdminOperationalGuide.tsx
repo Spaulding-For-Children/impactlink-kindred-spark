@@ -109,6 +109,7 @@ export function AdminOperationalGuide() {
       ) : (
       <Accordion type="multiple" defaultValue={allSections} className="space-y-3">
 
+        {filteredSections.includes("architecture") && <>
         {/* 1. Site Architecture Overview */}
         <AccordionItem value="architecture" className="border rounded-xl px-4">
           <AccordionTrigger>
