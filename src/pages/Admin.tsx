@@ -17,6 +17,7 @@ import { AdminDataTools } from "@/components/admin/AdminDataTools";
 import { AdminRegistrations } from "@/components/admin/AdminRegistrations";
 import { AdminUserGuide } from "@/components/admin/AdminUserGuide";
 import { AdminSiteSettings } from "@/components/admin/AdminSiteSettings";
+import { AdminOperationalGuide } from "@/components/admin/AdminOperationalGuide";
 
 export default function Admin() {
   const navigate = useNavigate();
