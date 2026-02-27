@@ -5,11 +5,14 @@ import { Video, BookOpen, FileText, GraduationCap, FlaskConical, Building, Globe
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 export const Resources = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const { t } = useTranslation();
+  const { getSetting } = useSiteSettings();
+  const sectionContent = getSetting("resources_section", undefined, {});
 
   const resources = [
     { icon: Video, title: t("resources.workshops"), description: t("resources.workshopsDesc"), items: [t("resources.workshopsI1"), t("resources.workshopsI2"), t("resources.workshopsI3")] },
@@ -29,8 +32,8 @@ export const Resources = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6 }} className="text-center max-w-3xl mx-auto mb-16">
           <span className="inline-block px-4 py-1.5 rounded-full bg-navy/10 text-navy text-sm font-medium mb-4">{t("resources.badge")}</span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-foreground mb-6">{t("resources.title")}</h2>
-          <p className="text-lg text-muted-foreground">{t("resources.description")}</p>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-foreground mb-6">{sectionContent.title || t("resources.title")}</h2>
+          <p className="text-lg text-muted-foreground">{sectionContent.description || t("resources.description")}</p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">

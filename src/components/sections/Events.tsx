@@ -5,6 +5,7 @@ import { Calendar, MapPin, Users, Clock, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 const upcomingEvents = [
   { title: "NASW Annual Conference", date: "March 15-18, 2025", location: "Washington, D.C.", type: "Conference", attendees: 5000 },
@@ -23,6 +24,8 @@ export const Events = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const { t } = useTranslation();
+  const { getSetting } = useSiteSettings();
+  const sectionContent = getSetting("events_section", undefined, {});
 
   return (
     <section id="events" className="py-24 bg-muted/30" ref={ref}>
@@ -30,7 +33,7 @@ export const Events = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           <motion.div initial={{ opacity: 0, x: -40 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.6 }}>
             <span className="inline-block px-4 py-1.5 rounded-full bg-amber/10 text-amber text-sm font-medium mb-4">{t("events.calendarBadge")}</span>
-            <h2 className="text-3xl sm:text-4xl font-display font-bold text-foreground mb-6">{t("events.upcomingEvents")}</h2>
+            <h2 className="text-3xl sm:text-4xl font-display font-bold text-foreground mb-6">{sectionContent.title || t("events.upcomingEvents")}</h2>
             <p className="text-muted-foreground mb-8">{t("events.upcomingEventsDesc")}</p>
             <div className="space-y-4">
               {upcomingEvents.map((event, index) => (

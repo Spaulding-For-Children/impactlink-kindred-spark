@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Shield, Users, FileText, Calendar, BookOpen, MessageSquare, HelpCircle, Database, UserPlus, BookMarked } from "lucide-react";
+import { Shield, Users, FileText, Calendar, BookOpen, MessageSquare, HelpCircle, Database, UserPlus, BookMarked, Settings } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -16,6 +16,7 @@ import { AdminResearchQuestions } from "@/components/admin/AdminResearchQuestion
 import { AdminDataTools } from "@/components/admin/AdminDataTools";
 import { AdminRegistrations } from "@/components/admin/AdminRegistrations";
 import { AdminUserGuide } from "@/components/admin/AdminUserGuide";
+import { AdminSiteSettings } from "@/components/admin/AdminSiteSettings";
 
 export default function Admin() {
   const navigate = useNavigate();
@@ -78,8 +79,12 @@ export default function Admin() {
         {/* Admin Tabs */}
         <section className="py-8">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <Tabs defaultValue="registrations" className="space-y-6">
-              <TabsList className="grid grid-cols-2 md:grid-cols-9 gap-2 h-auto p-2 bg-muted/50">
+            <Tabs defaultValue="site-settings" className="space-y-6">
+              <TabsList className="grid grid-cols-2 md:grid-cols-10 gap-2 h-auto p-2 bg-muted/50">
+                <TabsTrigger value="site-settings" className="flex items-center gap-2 data-[state=active]:bg-background">
+                  <Settings className="h-4 w-4" />
+                  <span className="hidden sm:inline">Site</span>
+                </TabsTrigger>
                 <TabsTrigger value="registrations" className="flex items-center gap-2 data-[state=active]:bg-background">
                   <UserPlus className="h-4 w-4" />
                   <span className="hidden sm:inline">Registrations</span>
@@ -117,6 +122,10 @@ export default function Admin() {
                   <span className="hidden sm:inline">User Guide</span>
                 </TabsTrigger>
               </TabsList>
+
+              <TabsContent value="site-settings">
+                <AdminSiteSettings />
+              </TabsContent>
 
               <TabsContent value="registrations">
                 <AdminRegistrations />

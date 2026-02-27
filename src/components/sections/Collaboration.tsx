@@ -4,11 +4,14 @@ import { useRef } from "react";
 import { MessageSquare, Sparkles, Users2, Globe2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 export const Collaboration = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const { t } = useTranslation();
+  const { getSetting } = useSiteSettings();
+  const sectionContent = getSetting("collaboration_section", undefined, {});
 
   const features = [
     { icon: MessageSquare, title: t("collaboration.postBrowse"), description: t("collaboration.postBrowseDesc") },
@@ -34,10 +37,10 @@ export const Collaboration = () => {
           <motion.div initial={{ opacity: 0, x: -40 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.6 }}>
             <span className="inline-block px-4 py-1.5 rounded-full bg-sage/10 text-sage text-sm font-medium mb-4">{t("collaboration.badge")}</span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-foreground mb-6">
-              {t("collaboration.title")}
+              {sectionContent.title || t("collaboration.title")}
               <span className="block text-sage">{t("collaboration.titleHighlight")}</span>
             </h2>
-            <p className="text-lg text-muted-foreground mb-8">{t("collaboration.description")}</p>
+            <p className="text-lg text-muted-foreground mb-8">{sectionContent.description || t("collaboration.description")}</p>
             <div className="space-y-6 mb-8">
               {features.map((feature, index) => (
                 <motion.div key={feature.title} initial={{ opacity: 0, x: -20 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }} className="flex gap-4">
