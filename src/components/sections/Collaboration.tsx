@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { MessageSquare, Sparkles, Users2, Globe2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 export const Collaboration = () => {
   const ref = useRef(null);
