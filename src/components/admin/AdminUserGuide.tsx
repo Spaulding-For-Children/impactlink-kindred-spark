@@ -58,8 +58,26 @@ function SectionHeader({ icon: Icon, title, description }: { icon: React.Element
 }
 
 export function AdminUserGuide() {
+  const guideRef = useRef<HTMLDivElement>(null);
+
+  const handlePrint = () => {
+    // Add print class to body to trigger print styles
+    document.body.classList.add("printing-guide");
+    window.print();
+    // Remove after print dialog closes
+    window.addEventListener("afterprint", () => {
+      document.body.classList.remove("printing-guide");
+    }, { once: true });
+  };
+
+  // All accordion values for the print-expanded version
+  const allSections = [
+    "registration", "profiles", "submissions", "resources",
+    "events", "forums", "research-questions", "data-tools", "i18n", "security"
+  ];
+
   return (
-    <div className="space-y-6 max-w-4xl">
+    <div className="space-y-6 max-w-4xl" ref={guideRef} id="user-guide-content">
       {/* Introduction */}
       <Card>
         <CardHeader>
