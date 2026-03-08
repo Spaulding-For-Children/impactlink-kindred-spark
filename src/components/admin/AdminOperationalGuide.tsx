@@ -491,7 +491,7 @@ export function AdminOperationalGuide() {
         )}
 
         {filteredSections.includes("roles-permissions") && (
-        <AccordionItem value="roles-permissions" className="border rounded-xl px-4">
+        <AccordionItem value="roles-permissions" id="og-roles-permissions" className="border rounded-xl px-4 scroll-mt-24">
           <AccordionTrigger>
             <SectionHeader icon={Shield} title="10. Roles & Permissions" />
           </AccordionTrigger>
