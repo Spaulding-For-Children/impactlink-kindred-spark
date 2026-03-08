@@ -197,7 +197,7 @@ export function AdminOperationalGuide() {
         )}
 
         {filteredSections.includes("admin-controls") && (
-        <AccordionItem value="admin-controls" className="border rounded-xl px-4">
+        <AccordionItem value="admin-controls" id="og-admin-controls" className="border rounded-xl px-4 scroll-mt-24">
           <AccordionTrigger>
             <SectionHeader icon={Settings} title="2. Admin Controls Overview" />
           </AccordionTrigger>
