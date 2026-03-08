@@ -146,31 +146,35 @@ export function AdminUserGuide() {
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Table of Contents</CardTitle>
-          <CardDescription>Click any section in the accordion below to expand it. All sections are open by default.</CardDescription>
+          <CardDescription>Click a section to jump directly to it.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
             {[
-              { icon: Zap, label: "1. Getting Started" },
-              { icon: Navigation, label: "2. Platform Navigation & Layout" },
-              { icon: Settings, label: "3. Site Settings (Content, Theme, Layout)" },
-              { icon: UserPlus, label: "4. Registration & User Onboarding" },
-              { icon: Users, label: "5. User Profiles & Directory" },
-              { icon: FileText, label: "6. Research Submissions" },
-              { icon: BookOpen, label: "7. Resources & Learning" },
-              { icon: Calendar, label: "8. Events Management" },
-              { icon: MessageSquare, label: "9. Forums & Collaboration" },
-              { icon: HelpCircle, label: "10. Research Questions" },
-              { icon: Database, label: "11. Data & Tools Repository" },
-              { icon: FileDown, label: "12. CSV Import & Export Operations" },
-              { icon: Globe, label: "13. Internationalization (i18n)" },
-              { icon: Shield, label: "14. Security & Access Control" },
-              { icon: RefreshCw, label: "15. Troubleshooting & FAQ" },
-            ].map(({ icon: Icon, label }) => (
-              <div key={label} className="flex items-center gap-2 p-2 rounded hover:bg-muted/50 transition-colors">
+              { icon: Zap, label: "1. Getting Started", id: "getting-started" },
+              { icon: Navigation, label: "2. Platform Navigation & Layout", id: "navigation" },
+              { icon: Settings, label: "3. Site Settings (Content, Theme, Layout)", id: "site-settings" },
+              { icon: UserPlus, label: "4. Registration & User Onboarding", id: "registration" },
+              { icon: Users, label: "5. User Profiles & Directory", id: "profiles" },
+              { icon: FileText, label: "6. Research Submissions", id: "submissions" },
+              { icon: BookOpen, label: "7. Resources & Learning", id: "resources" },
+              { icon: Calendar, label: "8. Events Management", id: "events" },
+              { icon: MessageSquare, label: "9. Forums & Collaboration", id: "forums" },
+              { icon: HelpCircle, label: "10. Research Questions", id: "research-questions" },
+              { icon: Database, label: "11. Data & Tools Repository", id: "data-tools" },
+              { icon: FileDown, label: "12. CSV Import & Export Operations", id: "csv-operations" },
+              { icon: Globe, label: "13. Internationalization (i18n)", id: "i18n" },
+              { icon: Shield, label: "14. Security & Access Control", id: "security" },
+              { icon: RefreshCw, label: "15. Troubleshooting & FAQ", id: "troubleshooting" },
+            ].map(({ icon: Icon, label, id }) => (
+              <button
+                key={label}
+                onClick={() => document.getElementById(`ug-${id}`)?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                className="flex items-center gap-2 p-2 rounded hover:bg-muted/50 transition-colors text-left w-full cursor-pointer"
+              >
                 <Icon className="h-4 w-4 text-muted-foreground" />
-                <span className="text-foreground/80">{label}</span>
-              </div>
+                <span className="text-foreground/80 hover:text-primary transition-colors">{label}</span>
+              </button>
             ))}
           </div>
         </CardContent>
@@ -180,7 +184,7 @@ export function AdminUserGuide() {
       <Accordion type="multiple" defaultValue={allSections} className="space-y-3 print-expand-all">
 
         {/* 1. Getting Started */}
-        <AccordionItem value="getting-started" className="border rounded-lg px-4">
+        <AccordionItem value="getting-started" id="ug-getting-started" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={Zap} title="1. Getting Started" description="First-time setup and orientation for new administrators" />
           </AccordionTrigger>
