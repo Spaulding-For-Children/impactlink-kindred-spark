@@ -236,7 +236,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 2. Platform Navigation & Layout */}
-        <AccordionItem value="navigation" className="border rounded-lg px-4">
+        <AccordionItem value="navigation" id="ug-navigation" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={Navigation} title="2. Platform Navigation & Layout" description="Understanding the header, footer, page structure, and responsive behavior" />
           </AccordionTrigger>
