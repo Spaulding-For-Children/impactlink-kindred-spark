@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Server, Shield, Settings, Database, Code, RefreshCw, Users, Lock, Wrench, Globe, Layers, FileText, Search, X, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BackToTopButton } from "./BackToTopButton";
+import { GuideSidebar } from "./GuideSidebar";
+import type { GuideSidebarSection } from "./GuideSidebar";
 
 const Tip = ({ children }: { children: React.ReactNode }) => (
   <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 my-2 text-sm flex gap-2">
