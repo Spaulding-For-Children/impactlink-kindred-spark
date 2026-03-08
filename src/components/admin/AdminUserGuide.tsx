@@ -567,7 +567,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 5. User Profiles & Directory */}
-        <AccordionItem value="profiles" className="border rounded-lg px-4">
+        <AccordionItem value="profiles" id="ug-profiles" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={Users} title="5. User Profiles & Directory" description="Managing the member directory, profile types, search, editing, and CSV export" />
           </AccordionTrigger>
