@@ -1278,7 +1278,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 13. Internationalization */}
-        <AccordionItem value="i18n" className="border rounded-lg px-4">
+        <AccordionItem value="i18n" id="ug-i18n" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={Globe} title="13. Internationalization (i18n)" description="Multi-language support, RTL layout, and translation management" />
           </AccordionTrigger>
