@@ -441,7 +441,7 @@ export function AdminOperationalGuide() {
         )}
 
         {filteredSections.includes("updates") && (
-        <AccordionItem value="updates" className="border rounded-xl px-4">
+        <AccordionItem value="updates" id="og-updates" className="border rounded-xl px-4 scroll-mt-24">
           <AccordionTrigger>
             <SectionHeader icon={RefreshCw} title="9. Software Updates & Maintenance" />
           </AccordionTrigger>
