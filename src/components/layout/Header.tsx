@@ -176,7 +176,7 @@ export const Header = () => {
                     </Button>
                   )}
                   <Button variant="ghost" size="sm" asChild>
-                    <Link to="/profile-settings">
+                    <Link to="/profile-settings" data-tutorial="profile-menu">
                       <User className="w-4 h-4 mr-2" />
                       {t("nav.profile")}
                     </Link>
