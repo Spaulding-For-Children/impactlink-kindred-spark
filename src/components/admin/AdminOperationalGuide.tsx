@@ -326,7 +326,7 @@ export function AdminOperationalGuide() {
         )}
 
         {filteredSections.includes("tech-stack") && (
-        <AccordionItem value="tech-stack" className="border rounded-xl px-4">
+        <AccordionItem value="tech-stack" id="og-tech-stack" className="border rounded-xl px-4 scroll-mt-24">
           <AccordionTrigger>
             <SectionHeader icon={Code} title="6. Technology Stack" />
           </AccordionTrigger>
