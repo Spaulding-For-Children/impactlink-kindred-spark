@@ -52,6 +52,23 @@ export const Header = () => {
     enabled: !!user,
   });
 
+  // Function to get tutorial data attribute based on href
+  const getTutorialAttribute = (href: string): Record<string, string> => {
+    const tutorialMap: Record<string, string> = {
+      '/directory': 'directory-nav',
+      '/collaboration': 'collaboration-nav',
+      '/resources': 'resources-nav',
+      '/events': 'events-nav',
+      '/data-tools': 'data-tools-nav',
+    };
+    
+    const tutorialId = tutorialMap[href];
+    return tutorialId ? { 'data-tutorial': tutorialId } : {};
+  };
+    },
+    enabled: !!user,
+  });
+
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
