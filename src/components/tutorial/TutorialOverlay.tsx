@@ -195,7 +195,7 @@ export const TutorialOverlay: React.FC = () => {
                     onClick={skipTutorial}
                     className="flex items-center gap-1 text-muted-foreground"
                   >
-                    <Skip className="h-3 w-3" />
+                    <SkipForward className="h-3 w-3" />
                     Skip Tutorial
                   </Button>
                 )}
