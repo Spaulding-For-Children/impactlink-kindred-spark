@@ -1614,6 +1614,7 @@ export function AdminUserGuide() {
           </ul>
         </CardContent>
       </Card>
+      <BackToTopButton scrollContainerId="user-guide-content" />
     </div>
   );
 }

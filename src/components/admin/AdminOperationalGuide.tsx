@@ -614,6 +614,7 @@ export function AdminOperationalGuide() {
 
       </Accordion>
       )}
+      <BackToTopButton scrollContainerId="ops-guide-content" />
     </div>
   );
 }
