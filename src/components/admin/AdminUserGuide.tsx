@@ -1352,7 +1352,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 14. Security & Access Control */}
-        <AccordionItem value="security" className="border rounded-lg px-4">
+        <AccordionItem value="security" id="ug-security" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={Shield} title="14. Security & Access Control" description="Roles, permissions, data protection, and authentication" />
           </AccordionTrigger>
