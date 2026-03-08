@@ -52,6 +52,20 @@ export const Header = () => {
     enabled: !!user,
   });
 
+  // Function to get tutorial data attribute based on href
+  const getTutorialAttribute = (href: string): Record<string, string> => {
+    const tutorialMap: Record<string, string> = {
+      '/directory': 'directory-nav',
+      '/collaboration': 'collaboration-nav',
+      '/resources': 'resources-nav',
+      '/events': 'events-nav',
+      '/data-tools': 'data-tools-nav',
+    };
+    
+    const tutorialId = tutorialMap[href];
+    return tutorialId ? { 'data-tutorial': tutorialId } : {};
+  };
+
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
@@ -100,6 +114,7 @@ export const Header = () => {
                   <Link
                     to={item.href}
                     className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-muted"
+                    {...getTutorialAttribute(item.href)}
                   >
                     {item.name}
                   </Link>
@@ -108,6 +123,7 @@ export const Header = () => {
                     href={item.href.startsWith("#") && !isHomePage ? `/${item.href}` : item.href}
                     onClick={() => handleNavClick(item.href)}
                     className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-muted"
+                    {...getTutorialAttribute(item.href)}
                   >
                     {item.name}
                     {item.children && <ChevronDown className="h-4 w-4" />}
@@ -160,7 +176,7 @@ export const Header = () => {
                     </Button>
                   )}
                   <Button variant="ghost" size="sm" asChild>
-                    <Link to="/profile-settings">
+                    <Link to="/profile-settings" data-tutorial="profile-menu">
                       <User className="w-4 h-4 mr-2" />
                       {t("nav.profile")}
                     </Link>
