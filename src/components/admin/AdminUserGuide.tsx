@@ -699,7 +699,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 6. Research Submissions */}
-        <AccordionItem value="submissions" className="border rounded-lg px-4">
+        <AccordionItem value="submissions" id="ug-submissions" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={FileText} title="6. Research Submissions" description="Reviewing, moderating, and managing user-submitted research content" />
           </AccordionTrigger>
