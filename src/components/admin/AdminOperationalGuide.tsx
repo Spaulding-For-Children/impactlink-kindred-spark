@@ -412,7 +412,7 @@ export function AdminOperationalGuide() {
         )}
 
         {filteredSections.includes("edge-functions") && (
-        <AccordionItem value="edge-functions" className="border rounded-xl px-4">
+        <AccordionItem value="edge-functions" id="og-edge-functions" className="border rounded-xl px-4 scroll-mt-24">
           <AccordionTrigger>
             <SectionHeader icon={Server} title="8. Backend Functions" />
           </AccordionTrigger>
