@@ -1100,7 +1100,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 11. Data & Tools */}
-        <AccordionItem value="data-tools" className="border rounded-lg px-4">
+        <AccordionItem value="data-tools" id="ug-data-tools" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={Database} title="11. Data & Tools Repository" description="Managing datasets, analysis tools, and ethics resources with manual and bulk import options" />
           </AccordionTrigger>
