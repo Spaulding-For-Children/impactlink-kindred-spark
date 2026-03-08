@@ -1046,7 +1046,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 10. Research Questions */}
-        <AccordionItem value="research-questions" className="border rounded-lg px-4">
+        <AccordionItem value="research-questions" id="ug-research-questions" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={HelpCircle} title="10. Research Questions" description="Overseeing community-posted research questions and their lifecycle" />
           </AccordionTrigger>
