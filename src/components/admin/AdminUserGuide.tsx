@@ -864,7 +864,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 8. Events Management */}
-        <AccordionItem value="events" className="border rounded-lg px-4">
+        <AccordionItem value="events" id="ug-events" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={Calendar} title="8. Events Management" description="Creating, editing, managing, and tracking platform events and registrations" />
           </AccordionTrigger>
