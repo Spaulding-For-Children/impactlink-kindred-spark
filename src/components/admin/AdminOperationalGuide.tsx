@@ -297,7 +297,7 @@ export function AdminOperationalGuide() {
         )}
 
         {filteredSections.includes("user-mgmt") && (
-        <AccordionItem value="user-mgmt" className="border rounded-xl px-4">
+        <AccordionItem value="user-mgmt" id="og-user-mgmt" className="border rounded-xl px-4 scroll-mt-24">
           <AccordionTrigger>
             <SectionHeader icon={Users} title="5. User & Registration Management" />
           </AccordionTrigger>
