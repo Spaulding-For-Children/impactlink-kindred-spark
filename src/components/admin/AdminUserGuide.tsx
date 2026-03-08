@@ -1184,7 +1184,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 12. CSV Import & Export Operations */}
-        <AccordionItem value="csv-operations" className="border rounded-lg px-4">
+        <AccordionItem value="csv-operations" id="ug-csv-operations" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={FileDown} title="12. CSV Import & Export Operations" description="Bulk data management: importing data via CSV and exporting profiles and content" />
           </AccordionTrigger>
