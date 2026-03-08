@@ -312,7 +312,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 3. Site Settings */}
-        <AccordionItem value="site-settings" className="border rounded-lg px-4">
+        <AccordionItem value="site-settings" id="ug-site-settings" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={Settings} title="3. Site Settings (Content, Theme, Layout)" description="Customizing homepage content, visual theme, and section arrangement" />
           </AccordionTrigger>
