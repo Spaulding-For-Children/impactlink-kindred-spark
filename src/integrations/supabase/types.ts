@@ -441,6 +441,7 @@ export type Database = {
           profile_type: Database["public"]["Enums"]["profile_type"]
           publications: number | null
           title: string | null
+          tutorial_completed: boolean | null
           university: string | null
           updated_at: string
           user_id: string
@@ -466,6 +467,7 @@ export type Database = {
           profile_type: Database["public"]["Enums"]["profile_type"]
           publications?: number | null
           title?: string | null
+          tutorial_completed?: boolean | null
           university?: string | null
           updated_at?: string
           user_id: string
@@ -491,6 +493,7 @@ export type Database = {
           profile_type?: Database["public"]["Enums"]["profile_type"]
           publications?: number | null
           title?: string | null
+          tutorial_completed?: boolean | null
           university?: string | null
           updated_at?: string
           user_id?: string
