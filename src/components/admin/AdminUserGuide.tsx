@@ -777,7 +777,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 7. Resources & Learning */}
-        <AccordionItem value="resources" className="border rounded-lg px-4">
+        <AccordionItem value="resources" id="ug-resources" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={BookOpen} title="7. Resources & Learning" description="Managing workshops, toolkits, reading lists, bookmarks, and educational content" />
           </AccordionTrigger>
