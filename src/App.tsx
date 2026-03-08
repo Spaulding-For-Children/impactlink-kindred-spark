@@ -32,34 +32,37 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/create-profile" element={<CreateProfile />} />
-            <Route path="/profile-settings" element={<ProfileSettings />} />
-            <Route path="/profile/:id" element={<ProfileDetail />} />
-            <Route path="/directory" element={<Directory />} />
-            <Route path="/collaboration" element={<Collaboration />} />
-            <Route path="/resources" element={<Resources />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/data-tools" element={<DataTools />} />
-            <Route path="/update-password" element={<UpdatePassword />} />
-            <Route path="/students" element={<Students />} />
-            <Route path="/students/:id" element={<StudentProfile />} />
-            <Route path="/researchers" element={<Researchers />} />
-            <Route path="/researchers/:id" element={<ResearcherProfile />} />
-            <Route path="/agencies" element={<Agencies />} />
-            <Route path="/agencies/:id" element={<AgencyProfile />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+      <TutorialProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/create-profile" element={<CreateProfile />} />
+              <Route path="/profile-settings" element={<ProfileSettings />} />
+              <Route path="/profile/:id" element={<ProfileDetail />} />
+              <Route path="/directory" element={<Directory />} />
+              <Route path="/collaboration" element={<Collaboration />} />
+              <Route path="/resources" element={<Resources />} />
+              <Route path="/events" element={<Events />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/data-tools" element={<DataTools />} />
+              <Route path="/update-password" element={<UpdatePassword />} />
+              <Route path="/students" element={<Students />} />
+              <Route path="/students/:id" element={<StudentProfile />} />
+              <Route path="/researchers" element={<Researchers />} />
+              <Route path="/researchers/:id" element={<ResearcherProfile />} />
+              <Route path="/agencies" element={<Agencies />} />
+              <Route path="/agencies/:id" element={<AgencyProfile />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+          <TutorialOverlay />
+        </TooltipProvider>
+      </TutorialProvider>
     </AuthProvider>
   </QueryClientProvider>
 );
