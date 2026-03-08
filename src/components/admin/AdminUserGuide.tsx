@@ -1430,7 +1430,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 15. Troubleshooting & FAQ */}
-        <AccordionItem value="troubleshooting" className="border rounded-lg px-4">
+        <AccordionItem value="troubleshooting" id="ug-troubleshooting" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={RefreshCw} title="15. Troubleshooting & FAQ" description="Common issues, solutions, and frequently asked questions" />
           </AccordionTrigger>
