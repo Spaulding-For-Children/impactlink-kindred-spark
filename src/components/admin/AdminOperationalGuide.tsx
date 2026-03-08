@@ -368,7 +368,7 @@ export function AdminOperationalGuide() {
         )}
 
         {filteredSections.includes("database") && (
-        <AccordionItem value="database" className="border rounded-xl px-4">
+        <AccordionItem value="database" id="og-database" className="border rounded-xl px-4 scroll-mt-24">
           <AccordionTrigger>
             <SectionHeader icon={Database} title="7. Database Schema & Tables" />
           </AccordionTrigger>
