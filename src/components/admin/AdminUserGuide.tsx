@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { BackToTopButton } from "./BackToTopButton";
+import { GuideSidebar } from "./GuideSidebar";
+import type { GuideSidebarSection } from "./GuideSidebar";
 
 function Tip({ children }: { children: React.ReactNode }) {
   return (
@@ -93,8 +95,28 @@ export function AdminUserGuide() {
     "data-tools", "csv-operations", "i18n", "security", "troubleshooting"
   ];
 
+  const sidebarSections: GuideSidebarSection[] = [
+    { id: "getting-started", label: "1. Getting Started", icon: Zap },
+    { id: "navigation", label: "2. Navigation & Layout", icon: Navigation },
+    { id: "site-settings", label: "3. Site Settings", icon: Settings },
+    { id: "registration", label: "4. Registration", icon: UserPlus },
+    { id: "profiles", label: "5. Profiles & Directory", icon: Users },
+    { id: "submissions", label: "6. Submissions", icon: FileText },
+    { id: "resources", label: "7. Resources", icon: BookOpen },
+    { id: "events", label: "8. Events", icon: Calendar },
+    { id: "forums", label: "9. Forums & Collab", icon: MessageSquare },
+    { id: "research-questions", label: "10. Research Q's", icon: HelpCircle },
+    { id: "data-tools", label: "11. Data & Tools", icon: Database },
+    { id: "csv-operations", label: "12. CSV Import/Export", icon: FileDown },
+    { id: "i18n", label: "13. Internationalization", icon: Globe },
+    { id: "security", label: "14. Security", icon: Shield },
+    { id: "troubleshooting", label: "15. Troubleshooting", icon: RefreshCw },
+  ];
+
   return (
-    <div className="space-y-6 max-w-4xl" ref={guideRef} id="user-guide-content">
+    <div className="flex gap-6 items-start">
+      <GuideSidebar sections={sidebarSections} idPrefix="ug-" />
+      <div className="space-y-6 flex-1 min-w-0" ref={guideRef} id="user-guide-content">
       {/* Introduction */}
       <Card>
         <CardHeader>
@@ -1615,6 +1637,7 @@ export function AdminUserGuide() {
         </CardContent>
       </Card>
       <BackToTopButton scrollContainerId="user-guide-content" />
+    </div>
     </div>
   );
 }

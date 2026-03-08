@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Server, Shield, Settings, Database, Code, RefreshCw, Users, Lock, Wrench, Globe, Layers, FileText, Search, X, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BackToTopButton } from "./BackToTopButton";
+import { GuideSidebar } from "./GuideSidebar";
+import type { GuideSidebarSection } from "./GuideSidebar";
 
 const Tip = ({ children }: { children: React.ReactNode }) => (
   <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 my-2 text-sm flex gap-2">
@@ -65,9 +67,26 @@ export function AdminOperationalGuide() {
     }, { once: true });
   };
 
+  const sidebarSections: GuideSidebarSection[] = [
+    { id: "architecture", label: "1. Architecture Overview", icon: Layers },
+    { id: "admin-controls", label: "2. Admin Controls", icon: Settings },
+    { id: "content-mgmt", label: "3. Content Management", icon: FileText },
+    { id: "layout-theme", label: "4. Layout & Theme", icon: Globe },
+    { id: "user-mgmt", label: "5. User Management", icon: Users },
+    { id: "tech-stack", label: "6. Technology Stack", icon: Code },
+    { id: "database", label: "7. Database Schema", icon: Database },
+    { id: "edge-functions", label: "8. Backend Functions", icon: Server },
+    { id: "updates", label: "9. Updates & Maint.", icon: RefreshCw },
+    { id: "roles-permissions", label: "10. Roles & Perms", icon: Shield },
+    { id: "security", label: "11. Security", icon: Lock },
+    { id: "troubleshooting", label: "12. Troubleshooting", icon: Wrench },
+  ];
+
   return (
-    <div id="ops-guide-content" data-date={new Date().toLocaleDateString()} className="space-y-6">
-      <Card>
+    <div className="flex gap-6 items-start">
+      <GuideSidebar sections={sidebarSections} idPrefix="og-" />
+      <div id="ops-guide-content" data-date={new Date().toLocaleDateString()} className="space-y-6 flex-1 min-w-0">
+        <Card>
         <CardContent className="pt-6">
           <div className="flex items-center justify-between gap-3 mb-2">
             <div className="flex items-center gap-3">
@@ -615,6 +634,7 @@ export function AdminOperationalGuide() {
       </Accordion>
       )}
       <BackToTopButton scrollContainerId="ops-guide-content" />
+    </div>
     </div>
   );
 }
