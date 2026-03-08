@@ -3,7 +3,7 @@ import { useTutorial } from '@/contexts/TutorialContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { X, ChevronLeft, ChevronRight, Skip } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, SkipForward } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface TargetRect {
