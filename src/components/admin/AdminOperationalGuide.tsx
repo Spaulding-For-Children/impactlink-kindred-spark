@@ -261,7 +261,7 @@ export function AdminOperationalGuide() {
         )}
 
         {filteredSections.includes("layout-theme") && (
-        <AccordionItem value="layout-theme" className="border rounded-xl px-4">
+        <AccordionItem value="layout-theme" id="og-layout-theme" className="border rounded-xl px-4 scroll-mt-24">
           <AccordionTrigger>
             <SectionHeader icon={Globe} title="4. Layout & Theme Controls" />
           </AccordionTrigger>
