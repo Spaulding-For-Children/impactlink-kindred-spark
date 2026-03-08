@@ -146,31 +146,35 @@ export function AdminUserGuide() {
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Table of Contents</CardTitle>
-          <CardDescription>Click any section in the accordion below to expand it. All sections are open by default.</CardDescription>
+          <CardDescription>Click a section to jump directly to it.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
             {[
-              { icon: Zap, label: "1. Getting Started" },
-              { icon: Navigation, label: "2. Platform Navigation & Layout" },
-              { icon: Settings, label: "3. Site Settings (Content, Theme, Layout)" },
-              { icon: UserPlus, label: "4. Registration & User Onboarding" },
-              { icon: Users, label: "5. User Profiles & Directory" },
-              { icon: FileText, label: "6. Research Submissions" },
-              { icon: BookOpen, label: "7. Resources & Learning" },
-              { icon: Calendar, label: "8. Events Management" },
-              { icon: MessageSquare, label: "9. Forums & Collaboration" },
-              { icon: HelpCircle, label: "10. Research Questions" },
-              { icon: Database, label: "11. Data & Tools Repository" },
-              { icon: FileDown, label: "12. CSV Import & Export Operations" },
-              { icon: Globe, label: "13. Internationalization (i18n)" },
-              { icon: Shield, label: "14. Security & Access Control" },
-              { icon: RefreshCw, label: "15. Troubleshooting & FAQ" },
-            ].map(({ icon: Icon, label }) => (
-              <div key={label} className="flex items-center gap-2 p-2 rounded hover:bg-muted/50 transition-colors">
+              { icon: Zap, label: "1. Getting Started", id: "getting-started" },
+              { icon: Navigation, label: "2. Platform Navigation & Layout", id: "navigation" },
+              { icon: Settings, label: "3. Site Settings (Content, Theme, Layout)", id: "site-settings" },
+              { icon: UserPlus, label: "4. Registration & User Onboarding", id: "registration" },
+              { icon: Users, label: "5. User Profiles & Directory", id: "profiles" },
+              { icon: FileText, label: "6. Research Submissions", id: "submissions" },
+              { icon: BookOpen, label: "7. Resources & Learning", id: "resources" },
+              { icon: Calendar, label: "8. Events Management", id: "events" },
+              { icon: MessageSquare, label: "9. Forums & Collaboration", id: "forums" },
+              { icon: HelpCircle, label: "10. Research Questions", id: "research-questions" },
+              { icon: Database, label: "11. Data & Tools Repository", id: "data-tools" },
+              { icon: FileDown, label: "12. CSV Import & Export Operations", id: "csv-operations" },
+              { icon: Globe, label: "13. Internationalization (i18n)", id: "i18n" },
+              { icon: Shield, label: "14. Security & Access Control", id: "security" },
+              { icon: RefreshCw, label: "15. Troubleshooting & FAQ", id: "troubleshooting" },
+            ].map(({ icon: Icon, label, id }) => (
+              <button
+                key={label}
+                onClick={() => document.getElementById(`ug-${id}`)?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                className="flex items-center gap-2 p-2 rounded hover:bg-muted/50 transition-colors text-left w-full cursor-pointer"
+              >
                 <Icon className="h-4 w-4 text-muted-foreground" />
-                <span className="text-foreground/80">{label}</span>
-              </div>
+                <span className="text-foreground/80 hover:text-primary transition-colors">{label}</span>
+              </button>
             ))}
           </div>
         </CardContent>
@@ -180,7 +184,7 @@ export function AdminUserGuide() {
       <Accordion type="multiple" defaultValue={allSections} className="space-y-3 print-expand-all">
 
         {/* 1. Getting Started */}
-        <AccordionItem value="getting-started" className="border rounded-lg px-4">
+        <AccordionItem value="getting-started" id="ug-getting-started" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={Zap} title="1. Getting Started" description="First-time setup and orientation for new administrators" />
           </AccordionTrigger>
@@ -232,7 +236,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 2. Platform Navigation & Layout */}
-        <AccordionItem value="navigation" className="border rounded-lg px-4">
+        <AccordionItem value="navigation" id="ug-navigation" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={Navigation} title="2. Platform Navigation & Layout" description="Understanding the header, footer, page structure, and responsive behavior" />
           </AccordionTrigger>
@@ -308,7 +312,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 3. Site Settings */}
-        <AccordionItem value="site-settings" className="border rounded-lg px-4">
+        <AccordionItem value="site-settings" id="ug-site-settings" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={Settings} title="3. Site Settings (Content, Theme, Layout)" description="Customizing homepage content, visual theme, and section arrangement" />
           </AccordionTrigger>
@@ -462,7 +466,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 4. Registration & User Onboarding */}
-        <AccordionItem value="registration" className="border rounded-lg px-4">
+        <AccordionItem value="registration" id="ug-registration" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={UserPlus} title="4. Registration & User Onboarding" description="Managing new user sign-ups, the approval workflow, and the complete onboarding process" />
           </AccordionTrigger>
@@ -563,7 +567,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 5. User Profiles & Directory */}
-        <AccordionItem value="profiles" className="border rounded-lg px-4">
+        <AccordionItem value="profiles" id="ug-profiles" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={Users} title="5. User Profiles & Directory" description="Managing the member directory, profile types, search, editing, and CSV export" />
           </AccordionTrigger>
@@ -695,7 +699,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 6. Research Submissions */}
-        <AccordionItem value="submissions" className="border rounded-lg px-4">
+        <AccordionItem value="submissions" id="ug-submissions" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={FileText} title="6. Research Submissions" description="Reviewing, moderating, and managing user-submitted research content" />
           </AccordionTrigger>
@@ -773,7 +777,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 7. Resources & Learning */}
-        <AccordionItem value="resources" className="border rounded-lg px-4">
+        <AccordionItem value="resources" id="ug-resources" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={BookOpen} title="7. Resources & Learning" description="Managing workshops, toolkits, reading lists, bookmarks, and educational content" />
           </AccordionTrigger>
@@ -860,7 +864,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 8. Events Management */}
-        <AccordionItem value="events" className="border rounded-lg px-4">
+        <AccordionItem value="events" id="ug-events" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={Calendar} title="8. Events Management" description="Creating, editing, managing, and tracking platform events and registrations" />
           </AccordionTrigger>
@@ -941,7 +945,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 9. Forums & Collaboration */}
-        <AccordionItem value="forums" className="border rounded-lg px-4">
+        <AccordionItem value="forums" id="ug-forums" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={MessageSquare} title="9. Forums & Collaboration" description="Managing forum topics, discussion posts, partner matching, and the collaboration portal" />
           </AccordionTrigger>
@@ -1042,7 +1046,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 10. Research Questions */}
-        <AccordionItem value="research-questions" className="border rounded-lg px-4">
+        <AccordionItem value="research-questions" id="ug-research-questions" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={HelpCircle} title="10. Research Questions" description="Overseeing community-posted research questions and their lifecycle" />
           </AccordionTrigger>
@@ -1096,7 +1100,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 11. Data & Tools */}
-        <AccordionItem value="data-tools" className="border rounded-lg px-4">
+        <AccordionItem value="data-tools" id="ug-data-tools" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={Database} title="11. Data & Tools Repository" description="Managing datasets, analysis tools, and ethics resources with manual and bulk import options" />
           </AccordionTrigger>
@@ -1180,7 +1184,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 12. CSV Import & Export Operations */}
-        <AccordionItem value="csv-operations" className="border rounded-lg px-4">
+        <AccordionItem value="csv-operations" id="ug-csv-operations" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={FileDown} title="12. CSV Import & Export Operations" description="Bulk data management: importing data via CSV and exporting profiles and content" />
           </AccordionTrigger>
@@ -1274,7 +1278,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 13. Internationalization */}
-        <AccordionItem value="i18n" className="border rounded-lg px-4">
+        <AccordionItem value="i18n" id="ug-i18n" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={Globe} title="13. Internationalization (i18n)" description="Multi-language support, RTL layout, and translation management" />
           </AccordionTrigger>
@@ -1348,7 +1352,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 14. Security & Access Control */}
-        <AccordionItem value="security" className="border rounded-lg px-4">
+        <AccordionItem value="security" id="ug-security" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={Shield} title="14. Security & Access Control" description="Roles, permissions, data protection, and authentication" />
           </AccordionTrigger>
@@ -1426,7 +1430,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 15. Troubleshooting & FAQ */}
-        <AccordionItem value="troubleshooting" className="border rounded-lg px-4">
+        <AccordionItem value="troubleshooting" id="ug-troubleshooting" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={RefreshCw} title="15. Troubleshooting & FAQ" description="Common issues, solutions, and frequently asked questions" />
           </AccordionTrigger>

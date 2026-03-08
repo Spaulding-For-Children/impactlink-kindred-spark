@@ -113,6 +113,39 @@ export function AdminOperationalGuide() {
         </CardContent>
       </Card>
 
+      {/* Table of Contents */}
+      <Card>
+        <CardContent className="pt-6">
+          <h3 className="font-semibold text-foreground mb-1">Table of Contents</h3>
+          <p className="text-xs text-muted-foreground mb-3">Click a section to jump directly to it.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1 text-sm">
+            {[
+              { icon: Layers, label: "1. Site Architecture Overview", id: "architecture" },
+              { icon: Settings, label: "2. Admin Controls Overview", id: "admin-controls" },
+              { icon: FileText, label: "3. Content Management", id: "content-mgmt" },
+              { icon: Globe, label: "4. Layout & Theme Controls", id: "layout-theme" },
+              { icon: Users, label: "5. User & Registration Mgmt", id: "user-mgmt" },
+              { icon: Code, label: "6. Technology Stack", id: "tech-stack" },
+              { icon: Database, label: "7. Database Schema & Tables", id: "database" },
+              { icon: Server, label: "8. Backend Functions", id: "edge-functions" },
+              { icon: RefreshCw, label: "9. Updates & Maintenance", id: "updates" },
+              { icon: Shield, label: "10. Roles & Permissions", id: "roles-permissions" },
+              { icon: Lock, label: "11. Security Architecture", id: "security" },
+              { icon: Wrench, label: "12. Troubleshooting", id: "troubleshooting" },
+            ].map(({ icon: Icon, label, id }) => (
+              <button
+                key={id}
+                onClick={() => document.getElementById(`og-${id}`)?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                className="flex items-center gap-2 p-2 rounded hover:bg-muted/50 transition-colors text-left w-full cursor-pointer"
+              >
+                <Icon className="h-4 w-4 text-muted-foreground shrink-0" />
+                <span className="text-foreground/80 hover:text-primary transition-colors">{label}</span>
+              </button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
       {filteredSections.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
@@ -126,7 +159,7 @@ export function AdminOperationalGuide() {
 
         {/* 1. Site Architecture Overview */}
         {filteredSections.includes("architecture") && (
-        <AccordionItem value="architecture" className="border rounded-xl px-4">
+        <AccordionItem value="architecture" id="og-architecture" className="border rounded-xl px-4 scroll-mt-24">
           <AccordionTrigger>
             <SectionHeader icon={Layers} title="1. Site Architecture Overview" />
           </AccordionTrigger>
@@ -164,7 +197,7 @@ export function AdminOperationalGuide() {
         )}
 
         {filteredSections.includes("admin-controls") && (
-        <AccordionItem value="admin-controls" className="border rounded-xl px-4">
+        <AccordionItem value="admin-controls" id="og-admin-controls" className="border rounded-xl px-4 scroll-mt-24">
           <AccordionTrigger>
             <SectionHeader icon={Settings} title="2. Admin Controls Overview" />
           </AccordionTrigger>
@@ -193,7 +226,7 @@ export function AdminOperationalGuide() {
         )}
 
         {filteredSections.includes("content-mgmt") && (
-        <AccordionItem value="content-mgmt" className="border rounded-xl px-4">
+        <AccordionItem value="content-mgmt" id="og-content-mgmt" className="border rounded-xl px-4 scroll-mt-24">
           <AccordionTrigger>
             <SectionHeader icon={FileText} title="3. Content Management Controls" />
           </AccordionTrigger>
@@ -228,7 +261,7 @@ export function AdminOperationalGuide() {
         )}
 
         {filteredSections.includes("layout-theme") && (
-        <AccordionItem value="layout-theme" className="border rounded-xl px-4">
+        <AccordionItem value="layout-theme" id="og-layout-theme" className="border rounded-xl px-4 scroll-mt-24">
           <AccordionTrigger>
             <SectionHeader icon={Globe} title="4. Layout & Theme Controls" />
           </AccordionTrigger>
@@ -264,7 +297,7 @@ export function AdminOperationalGuide() {
         )}
 
         {filteredSections.includes("user-mgmt") && (
-        <AccordionItem value="user-mgmt" className="border rounded-xl px-4">
+        <AccordionItem value="user-mgmt" id="og-user-mgmt" className="border rounded-xl px-4 scroll-mt-24">
           <AccordionTrigger>
             <SectionHeader icon={Users} title="5. User & Registration Management" />
           </AccordionTrigger>
@@ -293,7 +326,7 @@ export function AdminOperationalGuide() {
         )}
 
         {filteredSections.includes("tech-stack") && (
-        <AccordionItem value="tech-stack" className="border rounded-xl px-4">
+        <AccordionItem value="tech-stack" id="og-tech-stack" className="border rounded-xl px-4 scroll-mt-24">
           <AccordionTrigger>
             <SectionHeader icon={Code} title="6. Technology Stack" />
           </AccordionTrigger>
@@ -335,7 +368,7 @@ export function AdminOperationalGuide() {
         )}
 
         {filteredSections.includes("database") && (
-        <AccordionItem value="database" className="border rounded-xl px-4">
+        <AccordionItem value="database" id="og-database" className="border rounded-xl px-4 scroll-mt-24">
           <AccordionTrigger>
             <SectionHeader icon={Database} title="7. Database Schema & Tables" />
           </AccordionTrigger>
@@ -379,7 +412,7 @@ export function AdminOperationalGuide() {
         )}
 
         {filteredSections.includes("edge-functions") && (
-        <AccordionItem value="edge-functions" className="border rounded-xl px-4">
+        <AccordionItem value="edge-functions" id="og-edge-functions" className="border rounded-xl px-4 scroll-mt-24">
           <AccordionTrigger>
             <SectionHeader icon={Server} title="8. Backend Functions" />
           </AccordionTrigger>
@@ -408,7 +441,7 @@ export function AdminOperationalGuide() {
         )}
 
         {filteredSections.includes("updates") && (
-        <AccordionItem value="updates" className="border rounded-xl px-4">
+        <AccordionItem value="updates" id="og-updates" className="border rounded-xl px-4 scroll-mt-24">
           <AccordionTrigger>
             <SectionHeader icon={RefreshCw} title="9. Software Updates & Maintenance" />
           </AccordionTrigger>
@@ -458,7 +491,7 @@ export function AdminOperationalGuide() {
         )}
 
         {filteredSections.includes("roles-permissions") && (
-        <AccordionItem value="roles-permissions" className="border rounded-xl px-4">
+        <AccordionItem value="roles-permissions" id="og-roles-permissions" className="border rounded-xl px-4 scroll-mt-24">
           <AccordionTrigger>
             <SectionHeader icon={Shield} title="10. Roles & Permissions" />
           </AccordionTrigger>
@@ -523,7 +556,7 @@ export function AdminOperationalGuide() {
         )}
 
         {filteredSections.includes("security") && (
-        <AccordionItem value="security" className="border rounded-xl px-4">
+        <AccordionItem value="security" id="og-security" className="border rounded-xl px-4 scroll-mt-24">
           <AccordionTrigger>
             <SectionHeader icon={Lock} title="11. Security Architecture" />
           </AccordionTrigger>
@@ -556,7 +589,7 @@ export function AdminOperationalGuide() {
         )}
 
         {filteredSections.includes("troubleshooting") && (
-        <AccordionItem value="troubleshooting" className="border rounded-xl px-4">
+        <AccordionItem value="troubleshooting" id="og-troubleshooting" className="border rounded-xl px-4 scroll-mt-24">
           <AccordionTrigger>
             <SectionHeader icon={Wrench} title="12. Troubleshooting & Common Issues" />
           </AccordionTrigger>
