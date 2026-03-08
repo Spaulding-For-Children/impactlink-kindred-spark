@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { BackToTopButton } from "./BackToTopButton";
+import { GuideSidebar } from "./GuideSidebar";
+import type { GuideSidebarSection } from "./GuideSidebar";
 
 function Tip({ children }: { children: React.ReactNode }) {
   return (
