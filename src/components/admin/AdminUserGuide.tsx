@@ -5,6 +5,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { BackToTopButton } from "./BackToTopButton";
 
 function Tip({ children }: { children: React.ReactNode }) {
   return (
@@ -1613,6 +1614,7 @@ export function AdminUserGuide() {
           </ul>
         </CardContent>
       </Card>
+      <BackToTopButton scrollContainerId="user-guide-content" />
     </div>
   );
 }
