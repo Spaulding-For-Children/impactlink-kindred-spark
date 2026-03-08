@@ -1638,5 +1638,6 @@ export function AdminUserGuide() {
       </Card>
       <BackToTopButton scrollContainerId="user-guide-content" />
     </div>
+    </div>
   );
 }
