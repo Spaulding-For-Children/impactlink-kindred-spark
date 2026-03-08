@@ -556,7 +556,7 @@ export function AdminOperationalGuide() {
         )}
 
         {filteredSections.includes("security") && (
-        <AccordionItem value="security" className="border rounded-xl px-4">
+        <AccordionItem value="security" id="og-security" className="border rounded-xl px-4 scroll-mt-24">
           <AccordionTrigger>
             <SectionHeader icon={Lock} title="11. Security Architecture" />
           </AccordionTrigger>
