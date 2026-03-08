@@ -65,9 +65,6 @@ export const Header = () => {
     const tutorialId = tutorialMap[href];
     return tutorialId ? { 'data-tutorial': tutorialId } : {};
   };
-    },
-    enabled: !!user,
-  });
 
   const handleSignOut = async () => {
     await signOut();
