@@ -226,7 +226,7 @@ export function AdminOperationalGuide() {
         )}
 
         {filteredSections.includes("content-mgmt") && (
-        <AccordionItem value="content-mgmt" className="border rounded-xl px-4">
+        <AccordionItem value="content-mgmt" id="og-content-mgmt" className="border rounded-xl px-4 scroll-mt-24">
           <AccordionTrigger>
             <SectionHeader icon={FileText} title="3. Content Management Controls" />
           </AccordionTrigger>
