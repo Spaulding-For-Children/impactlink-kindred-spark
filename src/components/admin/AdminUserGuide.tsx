@@ -945,7 +945,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 9. Forums & Collaboration */}
-        <AccordionItem value="forums" className="border rounded-lg px-4">
+        <AccordionItem value="forums" id="ug-forums" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={MessageSquare} title="9. Forums & Collaboration" description="Managing forum topics, discussion posts, partner matching, and the collaboration portal" />
           </AccordionTrigger>
