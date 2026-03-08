@@ -466,7 +466,7 @@ export function AdminUserGuide() {
         </AccordionItem>
 
         {/* 4. Registration & User Onboarding */}
-        <AccordionItem value="registration" className="border rounded-lg px-4">
+        <AccordionItem value="registration" id="ug-registration" className="border rounded-lg px-4 scroll-mt-24">
           <AccordionTrigger className="hover:no-underline">
             <SectionHeader icon={UserPlus} title="4. Registration & User Onboarding" description="Managing new user sign-ups, the approval workflow, and the complete onboarding process" />
           </AccordionTrigger>
