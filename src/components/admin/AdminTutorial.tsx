@@ -12,6 +12,11 @@ import { useTutorial } from '@/contexts/TutorialContext';
 import { tutorialSteps } from '@/config/tutorialSteps';
 import { useToast } from '@/hooks/use-toast';
 
+interface TutorialSettings {
+  enabled: boolean;
+  autoTrigger: boolean;
+}
+
 export function AdminTutorial() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
