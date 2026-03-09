@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Shield, Users, FileText, Calendar, BookOpen, MessageSquare, HelpCircle, Database, UserPlus, BookMarked, Settings, Cog } from "lucide-react";
+import { Shield, Users, FileText, Calendar, BookOpen, MessageSquare, HelpCircle, Database, UserPlus, BookMarked, Settings, Cog, Play } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -18,6 +18,7 @@ import { AdminRegistrations } from "@/components/admin/AdminRegistrations";
 import { AdminUserGuide } from "@/components/admin/AdminUserGuide";
 import { AdminSiteSettings } from "@/components/admin/AdminSiteSettings";
 import { AdminOperationalGuide } from "@/components/admin/AdminOperationalGuide";
+import { AdminTutorial } from "@/components/admin/AdminTutorial";
 
 export default function Admin() {
   const navigate = useNavigate();
@@ -81,7 +82,7 @@ export default function Admin() {
         <section className="py-8">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <Tabs defaultValue="site-settings" className="space-y-6">
-              <TabsList className="grid grid-cols-2 md:grid-cols-11 gap-2 h-auto p-2 bg-muted/50">
+              <TabsList className="grid grid-cols-2 md:grid-cols-12 gap-2 h-auto p-2 bg-muted/50">
                 <TabsTrigger value="site-settings" className="flex items-center gap-2 data-[state=active]:bg-background">
                   <Settings className="h-4 w-4" />
                   <span className="hidden sm:inline">Site</span>
@@ -125,6 +126,10 @@ export default function Admin() {
                 <TabsTrigger value="ops-guide" className="flex items-center gap-2 data-[state=active]:bg-background">
                   <Cog className="h-4 w-4" />
                   <span className="hidden sm:inline">Ops Guide</span>
+                </TabsTrigger>
+                <TabsTrigger value="tutorial" className="flex items-center gap-2 data-[state=active]:bg-background">
+                  <Play className="h-4 w-4" />
+                  <span className="hidden sm:inline">Tutorial</span>
                 </TabsTrigger>
               </TabsList>
 
@@ -170,6 +175,10 @@ export default function Admin() {
 
               <TabsContent value="ops-guide">
                 <AdminOperationalGuide />
+              </TabsContent>
+
+              <TabsContent value="tutorial">
+                <AdminTutorial />
               </TabsContent>
             </Tabs>
           </div>
