@@ -26,7 +26,7 @@ export function AdminTutorial() {
   // Fetch tutorial settings
   const { data: tutorialSettings, isLoading } = useQuery({
     queryKey: ['tutorialSettings'],
-    queryFn: async () => {
+    queryFn: async (): Promise<TutorialSettings> => {
       const { data, error } = await supabase
         .from('site_settings')
         .select('value')
@@ -37,7 +37,9 @@ export function AdminTutorial() {
         throw error;
       }
 
-      return data?.value || { enabled: true, autoTrigger: true };
+      // Cast the JSON value to our expected type with fallback defaults
+      const settings = data?.value as TutorialSettings | null;
+      return settings || { enabled: true, autoTrigger: true };
     }
   });
 
