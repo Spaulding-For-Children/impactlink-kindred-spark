@@ -38,8 +38,14 @@ export function AdminTutorial() {
       }
 
       // Cast the JSON value to our expected type with fallback defaults
-      const settings = data?.value as TutorialSettings | null;
-      return settings || { enabled: true, autoTrigger: true };
+      if (data?.value && typeof data.value === 'object' && data.value !== null) {
+        const settings = data.value as any;
+        return {
+          enabled: typeof settings.enabled === 'boolean' ? settings.enabled : true,
+          autoTrigger: typeof settings.autoTrigger === 'boolean' ? settings.autoTrigger : true
+        };
+      }
+      return { enabled: true, autoTrigger: true };
     }
   });
 
