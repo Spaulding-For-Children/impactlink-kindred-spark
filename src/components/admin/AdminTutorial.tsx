@@ -132,9 +132,10 @@ export function AdminTutorial() {
     }
   });
 
-  const handleSettingChange = async (key: string, value: boolean) => {
+  const handleSettingChange = async (key: keyof TutorialSettings, value: boolean) => {
     setIsUpdating(true);
-    const newSettings = { ...tutorialSettings, [key]: value };
+    const currentSettings: TutorialSettings = tutorialSettings || { enabled: true, autoTrigger: true };
+    const newSettings = { ...currentSettings, [key]: value };
     await updateSettings.mutateAsync(newSettings);
     setIsUpdating(false);
   };
