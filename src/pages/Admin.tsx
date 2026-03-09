@@ -176,6 +176,10 @@ export default function Admin() {
               <TabsContent value="ops-guide">
                 <AdminOperationalGuide />
               </TabsContent>
+
+              <TabsContent value="tutorial">
+                <AdminTutorial />
+              </TabsContent>
             </Tabs>
           </div>
         </section>

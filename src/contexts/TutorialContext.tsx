@@ -37,6 +37,22 @@ export const TutorialProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
     const checkTutorialStatus = async () => {
       try {
+        // First check if tutorial is enabled globally
+        const { data: tutorialSettings } = await supabase
+          .from('site_settings')
+          .select('value')
+          .eq('key', 'tutorial_settings')
+          .maybeSingle();
+
+        const settings = tutorialSettings?.value as any;
+        const tutorialEnabled = settings?.enabled !== false; // Default to true if not set
+        const autoTrigger = settings?.autoTrigger !== false; // Default to true if not set
+
+        if (!tutorialEnabled || !autoTrigger) {
+          setIsLoading(false);
+          return;
+        }
+
         const { data: profile, error } = await supabase
           .from('profiles')
           .select('tutorial_completed')
