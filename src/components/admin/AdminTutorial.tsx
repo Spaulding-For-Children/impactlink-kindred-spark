@@ -74,7 +74,7 @@ export function AdminTutorial() {
 
   // Update tutorial settings
   const updateSettings = useMutation({
-    mutationFn: async (newSettings: any) => {
+    mutationFn: async (newSettings: TutorialSettings) => {
       const { error } = await supabase
         .from('site_settings')
         .upsert({
