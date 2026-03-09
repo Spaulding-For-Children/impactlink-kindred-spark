@@ -200,7 +200,7 @@ export function AdminTutorial() {
             </div>
             <Switch
               id="tutorial-enabled"
-              checked={tutorialSettings?.enabled || false}
+              checked={tutorialSettings?.enabled ?? false}
               onCheckedChange={(checked) => handleSettingChange('enabled', checked)}
               disabled={isUpdating}
             />
