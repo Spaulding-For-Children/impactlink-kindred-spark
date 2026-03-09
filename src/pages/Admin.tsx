@@ -127,6 +127,10 @@ export default function Admin() {
                   <Cog className="h-4 w-4" />
                   <span className="hidden sm:inline">Ops Guide</span>
                 </TabsTrigger>
+                <TabsTrigger value="tutorial" className="flex items-center gap-2 data-[state=active]:bg-background">
+                  <Play className="h-4 w-4" />
+                  <span className="hidden sm:inline">Tutorial</span>
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="site-settings">
