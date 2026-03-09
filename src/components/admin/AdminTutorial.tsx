@@ -83,11 +83,11 @@ export function AdminTutorial() {
     mutationFn: async (newSettings: TutorialSettings) => {
       const { error } = await supabase
         .from('site_settings')
-        .upsert({
+        .upsert([{
           key: 'tutorial_settings',
-          value: newSettings,
+          value: newSettings as any,
           updated_by: (await supabase.auth.getUser()).data.user?.id
-        }, {
+        }], {
           onConflict: 'key'
         });
 
