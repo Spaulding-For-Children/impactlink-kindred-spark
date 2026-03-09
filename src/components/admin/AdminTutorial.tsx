@@ -218,7 +218,7 @@ export function AdminTutorial() {
             </div>
             <Switch
               id="tutorial-auto"
-              checked={tutorialSettings?.autoTrigger || false}
+              checked={tutorialSettings?.autoTrigger ?? false}
               onCheckedChange={(checked) => handleSettingChange('autoTrigger', checked)}
               disabled={isUpdating || !tutorialSettings?.enabled}
             />
