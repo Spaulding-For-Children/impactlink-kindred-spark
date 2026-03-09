@@ -259,26 +259,26 @@ export function AdminTutorial() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="text-center p-4 rounded-lg bg-muted/50">
-              <div className="text-2xl font-bold text-primary">
+            <div className="text-center p-4 rounded-lg bg-secondary/50">
+              <div className="text-2xl font-bold text-foreground">
                 {tutorialStats?.totalUsers || 0}
               </div>
               <div className="text-sm text-muted-foreground">Total Users</div>
             </div>
-            <div className="text-center p-4 rounded-lg bg-muted/50">
+            <div className="text-center p-4 rounded-lg bg-secondary/50">
               <div className="text-2xl font-bold text-green-600">
                 {tutorialStats?.completedUsers || 0}
               </div>
               <div className="text-sm text-muted-foreground">Completed</div>
             </div>
-            <div className="text-center p-4 rounded-lg bg-muted/50">
+            <div className="text-center p-4 rounded-lg bg-secondary/50">
               <div className="text-2xl font-bold text-amber-600">
                 {tutorialStats?.pendingUsers || 0}
               </div>
               <div className="text-sm text-muted-foreground">Pending</div>
             </div>
-            <div className="text-center p-4 rounded-lg bg-muted/50">
-              <div className="text-2xl font-bold text-blue-600">
+            <div className="text-center p-4 rounded-lg bg-secondary/50">
+              <div className="text-2xl font-bold text-primary">
                 {tutorialStats?.completionRate || 0}%
               </div>
               <div className="text-sm text-muted-foreground">Completion Rate</div>
