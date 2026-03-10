@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useAuth } from './AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-import { tutorialSteps, TutorialStep, getNextStep, getPreviousStep } from '@/config/tutorialSteps';
+import { tutorialSteps as defaultTutorialSteps, TutorialStep, getNextStep as getDefaultNextStep, getPreviousStep as getDefaultPreviousStep } from '@/config/tutorialSteps';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 
 interface TutorialContextType {
   isActive: boolean;
