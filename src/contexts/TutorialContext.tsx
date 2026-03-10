@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useAuth } from './AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-import { tutorialSteps, TutorialStep, getNextStep, getPreviousStep } from '@/config/tutorialSteps';
+import { tutorialSteps as defaultTutorialSteps, TutorialStep, getNextStep as getDefaultNextStep, getPreviousStep as getDefaultPreviousStep } from '@/config/tutorialSteps';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 
 interface TutorialContextType {
   isActive: boolean;
@@ -28,6 +29,42 @@ export const TutorialProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Fetch customized step overrides
+  const { data: stepOverrides } = useQuery({
+    queryKey: ['tutorialStepsCustomized'],
+    queryFn: async (): Promise<Record<string, { title: string; content: string }>> => {
+      const { data, error } = await supabase
+        .from('site_settings')
+        .select('value')
+        .eq('key', 'tutorial_step_overrides')
+        .maybeSingle();
+      if (error && error.code !== 'PGRST116') throw error;
+      if (data?.value && typeof data.value === 'object' && data.value !== null) {
+        return data.value as Record<string, { title: string; content: string }>;
+      }
+      return {};
+    }
+  });
+
+  // Merge default steps with overrides
+  const tutorialSteps: TutorialStep[] = defaultTutorialSteps.map(step => ({
+    ...step,
+    ...(stepOverrides?.[step.id] ? {
+      title: stepOverrides[step.id].title,
+      content: stepOverrides[step.id].content,
+    } : {})
+  }));
+
+  const getNextStep = (currentId: string): TutorialStep | undefined => {
+    const idx = tutorialSteps.findIndex(s => s.id === currentId);
+    return idx < tutorialSteps.length - 1 ? tutorialSteps[idx + 1] : undefined;
+  };
+
+  const getPreviousStep = (currentId: string): TutorialStep | undefined => {
+    const idx = tutorialSteps.findIndex(s => s.id === currentId);
+    return idx > 0 ? tutorialSteps[idx - 1] : undefined;
+  };
+
   // Check if user needs tutorial on auth state change
   useEffect(() => {
     if (!user) {
@@ -37,7 +74,6 @@ export const TutorialProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
     const checkTutorialStatus = async () => {
       try {
-        // First check if tutorial is enabled globally
         const { data: tutorialSettings } = await supabase
           .from('site_settings')
           .select('value')
@@ -45,8 +81,8 @@ export const TutorialProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           .maybeSingle();
 
         const settings = tutorialSettings?.value as any;
-        const tutorialEnabled = settings?.enabled !== false; // Default to true if not set
-        const autoTrigger = settings?.autoTrigger !== false; // Default to true if not set
+        const tutorialEnabled = settings?.enabled !== false;
+        const autoTrigger = settings?.autoTrigger !== false;
 
         if (!tutorialEnabled || !autoTrigger) {
           setIsLoading(false);
@@ -65,11 +101,10 @@ export const TutorialProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           return;
         }
 
-        // Auto-start tutorial if not completed and not on auth pages
         if (!profile?.tutorial_completed && !location.pathname.includes('/auth') && !location.pathname.includes('/create-profile')) {
           setTimeout(() => {
             startTutorial();
-          }, 1000); // Small delay to ensure page is fully loaded
+          }, 1000);
         }
         
         setIsLoading(false);
@@ -86,7 +121,7 @@ export const TutorialProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setCurrentStep(tutorialSteps[0]);
     setCurrentStepIndex(0);
     setIsActive(true);
-  }, []);
+  }, [tutorialSteps]);
 
   const nextStep = useCallback(() => {
     if (!currentStep) return;

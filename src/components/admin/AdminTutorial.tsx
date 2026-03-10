@@ -9,8 +9,9 @@ import { Separator } from '@/components/ui/separator';
 import { Play, Settings, Users, Eye, RotateCcw } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useTutorial } from '@/contexts/TutorialContext';
-import { tutorialSteps } from '@/config/tutorialSteps';
+import { tutorialSteps as defaultTutorialSteps, TutorialStep } from '@/config/tutorialSteps';
 import { useToast } from '@/hooks/use-toast';
+import { AdminTutorialStepEditor } from './AdminTutorialStepEditor';
 
 interface TutorialSettings {
   enabled: boolean;
@@ -22,6 +23,55 @@ export function AdminTutorial() {
   const queryClient = useQueryClient();
   const { startTutorial, isActive } = useTutorial();
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isSavingStep, setIsSavingStep] = useState(false);
+
+  // Fetch customized step overrides
+  const { data: stepOverrides } = useQuery({
+    queryKey: ['tutorialStepOverrides'],
+    queryFn: async (): Promise<Record<string, { title: string; content: string }>> => {
+      const { data, error } = await supabase
+        .from('site_settings')
+        .select('value')
+        .eq('key', 'tutorial_step_overrides')
+        .maybeSingle();
+      if (error && error.code !== 'PGRST116') throw error;
+      if (data?.value && typeof data.value === 'object' && data.value !== null) {
+        return data.value as Record<string, { title: string; content: string }>;
+      }
+      return {};
+    }
+  });
+
+  // Merge default steps with overrides
+  const mergedSteps: TutorialStep[] = defaultTutorialSteps.map(step => ({
+    ...step,
+    ...(stepOverrides?.[step.id] ? {
+      title: stepOverrides[step.id].title,
+      content: stepOverrides[step.id].content,
+    } : {})
+  }));
+
+  const handleSaveStep = async (stepId: string, title: string, content: string) => {
+    setIsSavingStep(true);
+    try {
+      const newOverrides = { ...(stepOverrides || {}), [stepId]: { title, content } };
+      const { error } = await supabase
+        .from('site_settings')
+        .upsert([{
+          key: 'tutorial_step_overrides',
+          value: newOverrides as any,
+          updated_by: (await supabase.auth.getUser()).data.user?.id
+        }], { onConflict: 'key' });
+      if (error) throw error;
+      queryClient.invalidateQueries({ queryKey: ['tutorialStepOverrides'] });
+      queryClient.invalidateQueries({ queryKey: ['tutorialStepsCustomized'] });
+      toast({ title: 'Step Updated', description: `"${title}" has been saved.` });
+    } catch (error) {
+      console.error('Error saving step:', error);
+      toast({ title: 'Error', description: 'Failed to save step changes.', variant: 'destructive' });
+    }
+    setIsSavingStep(false);
+  };
 
   // Fetch tutorial settings
   const { data: tutorialSettings, isLoading } = useQuery({
@@ -293,44 +343,12 @@ export function AdminTutorial() {
         </CardContent>
       </Card>
 
-      {/* Tutorial Overview */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Tutorial Steps Overview</CardTitle>
-          <CardDescription>
-            Current tutorial contains {tutorialSteps.length} steps covering all major platform features
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-3">
-            {tutorialSteps.map((step, index) => (
-              <div key={step.id} className="flex items-center justify-between p-3 rounded-lg border">
-                <div className="flex items-center gap-3">
-                  <Badge variant="outline">{index + 1}</Badge>
-                  <div>
-                    <div className="font-medium">{step.title}</div>
-                    <div className="text-sm text-muted-foreground">
-                      {step.content.substring(0, 100)}...
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  {step.target && (
-                    <Badge variant="secondary" className="text-xs">
-                      Interactive
-                    </Badge>
-                  )}
-                  {step.route && (
-                    <Badge variant="outline" className="text-xs">
-                      Navigation
-                    </Badge>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      {/* Tutorial Steps Editor */}
+      <AdminTutorialStepEditor
+        steps={mergedSteps}
+        onSaveStep={handleSaveStep}
+        isSaving={isSavingStep}
+      />
 
       {/* Advanced Actions */}
       <Card>
