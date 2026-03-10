@@ -23,6 +23,55 @@ export function AdminTutorial() {
   const queryClient = useQueryClient();
   const { startTutorial, isActive } = useTutorial();
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isSavingStep, setIsSavingStep] = useState(false);
+
+  // Fetch customized step overrides
+  const { data: stepOverrides } = useQuery({
+    queryKey: ['tutorialStepOverrides'],
+    queryFn: async (): Promise<Record<string, { title: string; content: string }>> => {
+      const { data, error } = await supabase
+        .from('site_settings')
+        .select('value')
+        .eq('key', 'tutorial_step_overrides')
+        .maybeSingle();
+      if (error && error.code !== 'PGRST116') throw error;
+      if (data?.value && typeof data.value === 'object' && data.value !== null) {
+        return data.value as Record<string, { title: string; content: string }>;
+      }
+      return {};
+    }
+  });
+
+  // Merge default steps with overrides
+  const mergedSteps: TutorialStep[] = defaultTutorialSteps.map(step => ({
+    ...step,
+    ...(stepOverrides?.[step.id] ? {
+      title: stepOverrides[step.id].title,
+      content: stepOverrides[step.id].content,
+    } : {})
+  }));
+
+  const handleSaveStep = async (stepId: string, title: string, content: string) => {
+    setIsSavingStep(true);
+    try {
+      const newOverrides = { ...(stepOverrides || {}), [stepId]: { title, content } };
+      const { error } = await supabase
+        .from('site_settings')
+        .upsert([{
+          key: 'tutorial_step_overrides',
+          value: newOverrides as any,
+          updated_by: (await supabase.auth.getUser()).data.user?.id
+        }], { onConflict: 'key' });
+      if (error) throw error;
+      queryClient.invalidateQueries({ queryKey: ['tutorialStepOverrides'] });
+      queryClient.invalidateQueries({ queryKey: ['tutorialStepsCustomized'] });
+      toast({ title: 'Step Updated', description: `"${title}" has been saved.` });
+    } catch (error) {
+      console.error('Error saving step:', error);
+      toast({ title: 'Error', description: 'Failed to save step changes.', variant: 'destructive' });
+    }
+    setIsSavingStep(false);
+  };
 
   // Fetch tutorial settings
   const { data: tutorialSettings, isLoading } = useQuery({
