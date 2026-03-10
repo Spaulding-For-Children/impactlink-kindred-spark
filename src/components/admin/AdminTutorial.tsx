@@ -9,8 +9,9 @@ import { Separator } from '@/components/ui/separator';
 import { Play, Settings, Users, Eye, RotateCcw } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useTutorial } from '@/contexts/TutorialContext';
-import { tutorialSteps } from '@/config/tutorialSteps';
+import { tutorialSteps as defaultTutorialSteps, TutorialStep } from '@/config/tutorialSteps';
 import { useToast } from '@/hooks/use-toast';
+import { AdminTutorialStepEditor } from './AdminTutorialStepEditor';
 
 interface TutorialSettings {
   enabled: boolean;
