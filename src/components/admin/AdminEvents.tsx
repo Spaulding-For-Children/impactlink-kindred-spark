@@ -235,6 +235,7 @@ export function AdminEvents() {
             </form>
           </DialogContent>
         </Dialog>
+        </div>
       </CardHeader>
       <CardContent>
         {allEvents.length === 0 ? (
