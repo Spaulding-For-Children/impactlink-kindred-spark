@@ -1,6 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { format } from "date-fns";
-import { Trash2, Users, Search, GraduationCap, Microscope, Building2, Pencil, ChevronLeft, ChevronRight, Download } from "lucide-react";
+import { Trash2, Users, Search, GraduationCap, Microscope, Building2, Pencil, ChevronLeft, ChevronRight, Download, CheckSquare } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,16 +12,24 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useAdmin } from "@/hooks/useAdmin";
 import { CsvImportProfiles } from "./CsvImportProfiles";
+import { supabase } from "@/integrations/supabase/client";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const PROFILES_PER_PAGE = 10;
 
 export function AdminProfiles() {
   const { allProfiles, isLoadingProfiles, deleteProfile, updateProfile } = useAdmin();
+  const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [editingProfile, setEditingProfile] = useState<any>(null);
   const [editForm, setEditForm] = useState<any>({});
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
+  const [bulkDeleting, setBulkDeleting] = useState(false);
 
   const filteredProfiles = allProfiles.filter((profile: any) => {
     const matchesSearch = profile.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -37,6 +45,39 @@ export function AdminProfiles() {
     const start = (safePage - 1) * PROFILES_PER_PAGE;
     return filteredProfiles.slice(start, start + PROFILES_PER_PAGE);
   }, [filteredProfiles, safePage]);
+
+  const toggleSelect = useCallback((id: string) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  }, []);
+
+  const toggleSelectAll = useCallback(() => {
+    const pageIds = paginatedProfiles.map((p: any) => p.id);
+    const allSelected = pageIds.length > 0 && pageIds.every((id: string) => selectedIds.has(id));
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      pageIds.forEach((id: string) => allSelected ? next.delete(id) : next.add(id));
+      return next;
+    });
+  }, [paginatedProfiles, selectedIds]);
+
+  const handleBulkDelete = async () => {
+    setBulkDeleting(true);
+    const ids = Array.from(selectedIds);
+    const { error } = await supabase.from("profiles").delete().in("id", ids);
+    setBulkDeleting(false);
+    if (error) {
+      toast.error("Bulk delete failed: " + error.message);
+      return;
+    }
+    toast.success(`${ids.length} profile(s) deleted`);
+    setSelectedIds(new Set());
+    setBulkDeleteOpen(false);
+    queryClient.invalidateQueries({ queryKey: ["admin-profiles"] });
+  };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
@@ -176,9 +217,43 @@ export function AdminProfiles() {
             <p className="text-muted-foreground text-center py-8">No profiles found</p>
           ) : (
             <>
+              {/* Bulk actions bar */}
+              <div className="flex items-center gap-3 py-2 px-1">
+                <Checkbox
+                  checked={paginatedProfiles.length > 0 && paginatedProfiles.every((p: any) => selectedIds.has(p.id))}
+                  onCheckedChange={toggleSelectAll}
+                  aria-label="Select all on page"
+                />
+                <span className="text-sm text-muted-foreground">
+                  {selectedIds.size > 0 ? `${selectedIds.size} selected` : "Select all"}
+                </span>
+                {selectedIds.size > 0 && (
+                  <>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      className="ml-auto flex items-center gap-1"
+                      onClick={() => setBulkDeleteOpen(true)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      Delete {selectedIds.size}
+                    </Button>
+                    <Button variant="ghost" size="sm" onClick={() => setSelectedIds(new Set())}>
+                      Clear
+                    </Button>
+                  </>
+                )}
+              </div>
+
               <div className="space-y-3">
                 {paginatedProfiles.map((profile: any) => (
-                  <div key={profile.id} className="border rounded-lg p-4 flex items-center justify-between gap-4">
+                  <div key={profile.id} className={`border rounded-lg p-4 flex items-center justify-between gap-4 ${selectedIds.has(profile.id) ? 'bg-muted/50 border-primary/30' : ''}`}>
+                    <Checkbox
+                      checked={selectedIds.has(profile.id)}
+                      onCheckedChange={() => toggleSelect(profile.id)}
+                      aria-label={`Select ${profile.name}`}
+                      className="shrink-0"
+                    />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
                         <h3 className="font-semibold truncate">{profile.name}</h3>
@@ -404,6 +479,28 @@ export function AdminProfiles() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Bulk Delete Confirmation */}
+      <AlertDialog open={bulkDeleteOpen} onOpenChange={setBulkDeleteOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete {selectedIds.size} Profile{selectedIds.size !== 1 ? 's' : ''}?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete {selectedIds.size} selected profile{selectedIds.size !== 1 ? 's' : ''}. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={bulkDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleBulkDelete}
+              disabled={bulkDeleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {bulkDeleting ? "Deleting..." : `Delete ${selectedIds.size} Profile${selectedIds.size !== 1 ? 's' : ''}`}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }
