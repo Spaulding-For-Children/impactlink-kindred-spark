@@ -679,10 +679,38 @@ export function AdminRoleGuides() {
                       </div>
                     </AccordionTrigger>
                     <AccordionContent className="text-sm text-muted-foreground space-y-2 pl-9">
-                      <div className="flex justify-end">
-                        <Button variant="ghost" size="sm" onClick={() => handleEditStep(ri, si)}>
-                          <Pencil className="w-3.5 h-3.5 mr-1" /> Edit Step
+                      <div className="flex justify-end gap-1 flex-wrap">
+                        <Button variant="ghost" size="sm" onClick={() => handleMoveStep(ri, si, 'up')} disabled={si === 0}>
+                          <ArrowUp className="w-3.5 h-3.5" />
                         </Button>
+                        <Button variant="ghost" size="sm" onClick={() => handleMoveStep(ri, si, 'down')} disabled={si === guide.steps.length - 1}>
+                          <ArrowDown className="w-3.5 h-3.5" />
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => handleDuplicateStep(ri, si)}>
+                          <Copy className="w-3.5 h-3.5" />
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => handleEditStep(ri, si)}>
+                          <Pencil className="w-3.5 h-3.5 mr-1" /> Edit
+                        </Button>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive">
+                              <Trash2 className="w-3.5 h-3.5 mr-1" /> Remove
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Remove Step</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Are you sure you want to remove "{step.title}"? This action cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => handleRemoveStep(ri, si)}>Remove</AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                       </div>
                       <p><strong>What:</strong> {step.what}</p>
                       <p><strong>Why:</strong> {step.why}</p>
@@ -702,6 +730,11 @@ export function AdminRoleGuides() {
                   </AccordionItem>
                 ))}
               </Accordion>
+
+              {/* Add Step Button */}
+              <Button variant="outline" className="w-full" onClick={() => handleAddStep(ri)}>
+                <Plus className="w-4 h-4 mr-2" /> Add New Step
+              </Button>
             </TabsContent>
           );
         })}
