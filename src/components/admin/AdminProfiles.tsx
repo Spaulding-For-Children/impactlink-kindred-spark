@@ -141,13 +141,16 @@ export function AdminProfiles() {
     <>
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 flex-wrap">
             <Users className="h-5 w-5" />
             Directory Profiles
             <Badge variant="secondary" className="ml-2">{allProfiles.length} total</Badge>
-            <Button variant="outline" size="sm" className="ml-auto flex items-center gap-2" onClick={exportCsv}>
-              <Download className="h-4 w-4" />Export CSV
-            </Button>
+            <div className="ml-auto flex items-center gap-2 flex-wrap">
+              <CsvImportProfiles />
+              <Button variant="outline" size="sm" className="flex items-center gap-2" onClick={exportCsv}>
+                <Download className="h-4 w-4" />Export CSV
+              </Button>
+            </div>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
