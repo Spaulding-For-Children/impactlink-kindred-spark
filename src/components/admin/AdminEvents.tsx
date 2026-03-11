@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useAdmin } from "@/hooks/useAdmin";
+import { CsvImportEvents } from "./CsvImportEvents";
 
 interface EventForm {
   id?: string;
@@ -89,13 +90,15 @@ export function AdminEvents() {
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
+      <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-2">
         <CardTitle className="flex items-center gap-2">
           <Calendar className="h-5 w-5" />
           Events
           <Badge variant="secondary" className="ml-2">{allEvents.length} events</Badge>
         </CardTitle>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <div className="flex items-center gap-2 flex-wrap">
+          <CsvImportEvents />
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button onClick={() => setForm(emptyForm)}>
               <Plus className="h-4 w-4 mr-2" />
@@ -232,6 +235,7 @@ export function AdminEvents() {
             </form>
           </DialogContent>
         </Dialog>
+        </div>
       </CardHeader>
       <CardContent>
         {allEvents.length === 0 ? (
