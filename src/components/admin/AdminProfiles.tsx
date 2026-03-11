@@ -26,44 +26,6 @@ export function AdminProfiles() {
   const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
   const [bulkDeleting, setBulkDeleting] = useState(false);
 
-  const toggleSelect = useCallback((id: string) => {
-    setSelectedIds(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id); else next.add(id);
-      return next;
-    });
-  }, []);
-
-  const toggleSelectAll = useCallback(() => {
-    const pageIds = paginatedProfiles.map((p: any) => p.id);
-    const allSelected = pageIds.every((id: string) => selectedIds.has(id));
-    setSelectedIds(prev => {
-      const next = new Set(prev);
-      pageIds.forEach((id: string) => allSelected ? next.delete(id) : next.add(id));
-      return next;
-    });
-  }, [paginatedProfiles, selectedIds]);
-
-  const handleBulkDelete = async () => {
-    setBulkDeleting(true);
-    const ids = Array.from(selectedIds);
-    const { error } = await (await import("@/integrations/supabase/client")).supabase
-      .from("profiles")
-      .delete()
-      .in("id", ids);
-    setBulkDeleting(false);
-    if (error) {
-      (await import("sonner")).toast.error("Bulk delete failed: " + error.message);
-      return;
-    }
-    (await import("sonner")).toast.success(`${ids.length} profiles deleted`);
-    setSelectedIds(new Set());
-    setBulkDeleteOpen(false);
-    (await import("@tanstack/react-query")).useQueryClient
-    // Invalidate via the existing hook's queryClient
-    deleteProfile.mutate(ids[0], { onSuccess: () => {} }); // trigger invalidation hack
-  };
-
   const filteredProfiles = allProfiles.filter((profile: any) => {
     const matchesSearch = profile.name.toLowerCase().includes(search.toLowerCase()) ||
       profile.email.toLowerCase().includes(search.toLowerCase());
