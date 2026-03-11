@@ -41,6 +41,39 @@ export function AdminProfiles() {
     return filteredProfiles.slice(start, start + PROFILES_PER_PAGE);
   }, [filteredProfiles, safePage]);
 
+  const toggleSelect = useCallback((id: string) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  }, []);
+
+  const toggleSelectAll = useCallback(() => {
+    const pageIds = paginatedProfiles.map((p: any) => p.id);
+    const allSelected = pageIds.length > 0 && pageIds.every((id: string) => selectedIds.has(id));
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      pageIds.forEach((id: string) => allSelected ? next.delete(id) : next.add(id));
+      return next;
+    });
+  }, [paginatedProfiles, selectedIds]);
+
+  const handleBulkDelete = async () => {
+    setBulkDeleting(true);
+    const ids = Array.from(selectedIds);
+    const { error } = await supabase.from("profiles").delete().in("id", ids);
+    setBulkDeleting(false);
+    if (error) {
+      toast.error("Bulk delete failed: " + error.message);
+      return;
+    }
+    toast.success(`${ids.length} profile(s) deleted`);
+    setSelectedIds(new Set());
+    setBulkDeleteOpen(false);
+    queryClient.invalidateQueries({ queryKey: ["admin-profiles"] });
+  };
+
   const getTypeIcon = (type: string) => {
     switch (type) {
       case "student": return <GraduationCap className="h-4 w-4" />;
