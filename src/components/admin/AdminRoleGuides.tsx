@@ -12,8 +12,9 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import {
   GraduationCap, Microscope, Building2, BookOpen, Download, Pencil, RotateCcw,
-  Lightbulb, AlertCircle, RefreshCw, Users, FileDown
+  Lightbulb, AlertCircle, RefreshCw, Users, FileDown, Plus, Trash2, ArrowUp, ArrowDown, Copy
 } from 'lucide-react';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 
 // ─── Types ───
 
