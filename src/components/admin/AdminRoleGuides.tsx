@@ -540,6 +540,61 @@ export function AdminRoleGuides() {
     await saveGuides(defaultGuides);
   };
 
+  const handleAddStep = async (roleIndex: number) => {
+    const newStep: GuideStep = {
+      id: `${guides[roleIndex].role[0]}${Date.now()}`,
+      title: 'New Step',
+      what: '',
+      why: '',
+      howToComplete: '',
+      crossRoleNote: '',
+      tip: '',
+      howToUpdate: '',
+    };
+    const updated = [...guides];
+    updated[roleIndex] = {
+      ...updated[roleIndex],
+      steps: [...updated[roleIndex].steps, newStep],
+    };
+    await saveGuides(updated);
+    // Open edit dialog for the new step
+    setEditForm({ ...newStep });
+    setEditDialog({ roleIndex, stepIndex: updated[roleIndex].steps.length - 1 });
+  };
+
+  const handleDuplicateStep = async (roleIndex: number, stepIndex: number) => {
+    const original = guides[roleIndex].steps[stepIndex];
+    const duplicated: GuideStep = {
+      ...original,
+      id: `${guides[roleIndex].role[0]}${Date.now()}`,
+      title: `${original.title} (Copy)`,
+    };
+    const updated = [...guides];
+    const newSteps = [...updated[roleIndex].steps];
+    newSteps.splice(stepIndex + 1, 0, duplicated);
+    updated[roleIndex] = { ...updated[roleIndex], steps: newSteps };
+    await saveGuides(updated);
+  };
+
+  const handleRemoveStep = async (roleIndex: number, stepIndex: number) => {
+    const updated = [...guides];
+    updated[roleIndex] = {
+      ...updated[roleIndex],
+      steps: updated[roleIndex].steps.filter((_, i) => i !== stepIndex),
+    };
+    await saveGuides(updated);
+  };
+
+  const handleMoveStep = async (roleIndex: number, stepIndex: number, direction: 'up' | 'down') => {
+    const newIndex = direction === 'up' ? stepIndex - 1 : stepIndex + 1;
+    if (newIndex < 0 || newIndex >= guides[roleIndex].steps.length) return;
+    const updated = [...guides];
+    const newSteps = [...updated[roleIndex].steps];
+    [newSteps[stepIndex], newSteps[newIndex]] = [newSteps[newIndex], newSteps[stepIndex]];
+    updated[roleIndex] = { ...updated[roleIndex], steps: newSteps };
+    await saveGuides(updated);
+  };
+
   const roleIcons = [GraduationCap, Microscope, Building2];
   const roleLabels = ['Student', 'Researcher', 'Agency'];
 
