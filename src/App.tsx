@@ -23,7 +23,7 @@ import Resources from "./pages/Resources";
 import Events from "./pages/Events";
 import Admin from "./pages/Admin";
 import DataTools from "./pages/DataTools";
-import UserGuide from "./pages/UserGuide";
+
 import UpdatePassword from "./pages/UpdatePassword";
 import NotFound from "./pages/NotFound";
 
@@ -49,7 +49,7 @@ const App = () => (
               <Route path="/events" element={<Events />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/data-tools" element={<DataTools />} />
-              <Route path="/user-guide" element={<UserGuide />} />
+              
               <Route path="/update-password" element={<UpdatePassword />} />
               <Route path="/students" element={<Students />} />
               <Route path="/students/:id" element={<StudentProfile />} />
