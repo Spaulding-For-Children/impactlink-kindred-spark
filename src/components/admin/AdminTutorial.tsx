@@ -369,7 +369,9 @@ export function AdminTutorial() {
       <AdminTutorialStepEditor
         steps={mergedSteps}
         onSaveStep={handleSaveStep}
+        onResetStep={handleResetStep}
         isSaving={isSavingStep}
+        overrides={stepOverrides}
       />
 
       {/* Advanced Actions */}
