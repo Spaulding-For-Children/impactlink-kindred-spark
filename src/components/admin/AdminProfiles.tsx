@@ -21,6 +21,7 @@ const PROFILES_PER_PAGE = 10;
 
 export function AdminProfiles() {
   const { allProfiles, isLoadingProfiles, deleteProfile, updateProfile } = useAdmin();
+  const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [editingProfile, setEditingProfile] = useState<any>(null);
