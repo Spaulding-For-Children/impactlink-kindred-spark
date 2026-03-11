@@ -4,16 +4,18 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Pencil, Check, X } from 'lucide-react';
-import { TutorialStep } from '@/config/tutorialSteps';
+import { Pencil, Check, X, RotateCcw } from 'lucide-react';
+import { TutorialStep, tutorialSteps as defaultSteps } from '@/config/tutorialSteps';
 
 interface AdminTutorialStepEditorProps {
   steps: TutorialStep[];
   onSaveStep: (stepId: string, title: string, content: string) => Promise<void>;
+  onResetStep: (stepId: string) => Promise<void>;
   isSaving: boolean;
+  overrides?: Record<string, { title: string; content: string }>;
 }
 
-export function AdminTutorialStepEditor({ steps, onSaveStep, isSaving }: AdminTutorialStepEditorProps) {
+export function AdminTutorialStepEditor({ steps, onSaveStep, onResetStep, isSaving, overrides }: AdminTutorialStepEditorProps) {
   const [editingStepId, setEditingStepId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState('');
   const [editContent, setEditContent] = useState('');
@@ -88,6 +90,14 @@ export function AdminTutorialStepEditor({ steps, onSaveStep, isSaving }: AdminTu
                   <div className="flex items-center gap-2 ml-2 shrink-0">
                     {step.target && <Badge variant="secondary" className="text-xs">Interactive</Badge>}
                     {step.route && <Badge variant="outline" className="text-xs">Navigation</Badge>}
+                    {overrides?.[step.id] && (
+                      <Badge variant="destructive" className="text-xs">Customized</Badge>
+                    )}
+                    {overrides?.[step.id] && (
+                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => onResetStep(step.id)} disabled={isSaving} title="Reset to default">
+                        <RotateCcw className="h-3.5 w-3.5" />
+                      </Button>
+                    )}
                     <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleStartEdit(step)}>
                       <Pencil className="h-3.5 w-3.5" />
                     </Button>
