@@ -12,8 +12,9 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import {
   GraduationCap, Microscope, Building2, BookOpen, Download, Pencil, RotateCcw,
-  Lightbulb, AlertCircle, RefreshCw, Users, FileDown
+  Lightbulb, AlertCircle, RefreshCw, Users, FileDown, Plus, Trash2, ArrowUp, ArrowDown, Copy
 } from 'lucide-react';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 
 // ─── Types ───
 
@@ -539,6 +540,61 @@ export function AdminRoleGuides() {
     await saveGuides(defaultGuides);
   };
 
+  const handleAddStep = async (roleIndex: number) => {
+    const newStep: GuideStep = {
+      id: `${guides[roleIndex].role[0]}${Date.now()}`,
+      title: 'New Step',
+      what: '',
+      why: '',
+      howToComplete: '',
+      crossRoleNote: '',
+      tip: '',
+      howToUpdate: '',
+    };
+    const updated = [...guides];
+    updated[roleIndex] = {
+      ...updated[roleIndex],
+      steps: [...updated[roleIndex].steps, newStep],
+    };
+    await saveGuides(updated);
+    // Open edit dialog for the new step
+    setEditForm({ ...newStep });
+    setEditDialog({ roleIndex, stepIndex: updated[roleIndex].steps.length - 1 });
+  };
+
+  const handleDuplicateStep = async (roleIndex: number, stepIndex: number) => {
+    const original = guides[roleIndex].steps[stepIndex];
+    const duplicated: GuideStep = {
+      ...original,
+      id: `${guides[roleIndex].role[0]}${Date.now()}`,
+      title: `${original.title} (Copy)`,
+    };
+    const updated = [...guides];
+    const newSteps = [...updated[roleIndex].steps];
+    newSteps.splice(stepIndex + 1, 0, duplicated);
+    updated[roleIndex] = { ...updated[roleIndex], steps: newSteps };
+    await saveGuides(updated);
+  };
+
+  const handleRemoveStep = async (roleIndex: number, stepIndex: number) => {
+    const updated = [...guides];
+    updated[roleIndex] = {
+      ...updated[roleIndex],
+      steps: updated[roleIndex].steps.filter((_, i) => i !== stepIndex),
+    };
+    await saveGuides(updated);
+  };
+
+  const handleMoveStep = async (roleIndex: number, stepIndex: number, direction: 'up' | 'down') => {
+    const newIndex = direction === 'up' ? stepIndex - 1 : stepIndex + 1;
+    if (newIndex < 0 || newIndex >= guides[roleIndex].steps.length) return;
+    const updated = [...guides];
+    const newSteps = [...updated[roleIndex].steps];
+    [newSteps[stepIndex], newSteps[newIndex]] = [newSteps[newIndex], newSteps[stepIndex]];
+    updated[roleIndex] = { ...updated[roleIndex], steps: newSteps };
+    await saveGuides(updated);
+  };
+
   const roleIcons = [GraduationCap, Microscope, Building2];
   const roleLabels = ['Student', 'Researcher', 'Agency'];
 
@@ -623,10 +679,38 @@ export function AdminRoleGuides() {
                       </div>
                     </AccordionTrigger>
                     <AccordionContent className="text-sm text-muted-foreground space-y-2 pl-9">
-                      <div className="flex justify-end">
-                        <Button variant="ghost" size="sm" onClick={() => handleEditStep(ri, si)}>
-                          <Pencil className="w-3.5 h-3.5 mr-1" /> Edit Step
+                      <div className="flex justify-end gap-1 flex-wrap">
+                        <Button variant="ghost" size="sm" onClick={() => handleMoveStep(ri, si, 'up')} disabled={si === 0}>
+                          <ArrowUp className="w-3.5 h-3.5" />
                         </Button>
+                        <Button variant="ghost" size="sm" onClick={() => handleMoveStep(ri, si, 'down')} disabled={si === guide.steps.length - 1}>
+                          <ArrowDown className="w-3.5 h-3.5" />
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => handleDuplicateStep(ri, si)}>
+                          <Copy className="w-3.5 h-3.5" />
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => handleEditStep(ri, si)}>
+                          <Pencil className="w-3.5 h-3.5 mr-1" /> Edit
+                        </Button>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive">
+                              <Trash2 className="w-3.5 h-3.5 mr-1" /> Remove
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Remove Step</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Are you sure you want to remove "{step.title}"? This action cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => handleRemoveStep(ri, si)}>Remove</AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                       </div>
                       <p><strong>What:</strong> {step.what}</p>
                       <p><strong>Why:</strong> {step.why}</p>
@@ -646,6 +730,11 @@ export function AdminRoleGuides() {
                   </AccordionItem>
                 ))}
               </Accordion>
+
+              {/* Add Step Button */}
+              <Button variant="outline" className="w-full" onClick={() => handleAddStep(ri)}>
+                <Plus className="w-4 h-4 mr-2" /> Add New Step
+              </Button>
             </TabsContent>
           );
         })}
