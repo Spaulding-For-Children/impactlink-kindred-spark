@@ -73,6 +73,28 @@ export function AdminTutorial() {
     setIsSavingStep(false);
   };
 
+  const handleResetStep = async (stepId: string) => {
+    setIsSavingStep(true);
+    try {
+      const newOverrides = { ...(stepOverrides || {}) };
+      delete newOverrides[stepId];
+      const { error } = await supabase
+        .from('site_settings')
+        .upsert([{
+          key: 'tutorial_step_overrides',
+          value: newOverrides as any,
+          updated_at: new Date().toISOString()
+        }], { onConflict: 'key' });
+      if (error) throw error;
+      queryClient.invalidateQueries({ queryKey: ['tutorialStepOverrides'] });
+      queryClient.invalidateQueries({ queryKey: ['tutorialStepsCustomized'] });
+      toast({ title: 'Step Reset', description: 'Step restored to default content.' });
+    } catch (error) {
+      toast({ title: 'Error', description: 'Failed to reset step.', variant: 'destructive' });
+    }
+    setIsSavingStep(false);
+  };
+
   // Fetch tutorial settings
   const { data: tutorialSettings, isLoading } = useQuery({
     queryKey: ['tutorialSettings'],
