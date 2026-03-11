@@ -217,9 +217,43 @@ export function AdminProfiles() {
             <p className="text-muted-foreground text-center py-8">No profiles found</p>
           ) : (
             <>
+              {/* Bulk actions bar */}
+              <div className="flex items-center gap-3 py-2 px-1">
+                <Checkbox
+                  checked={paginatedProfiles.length > 0 && paginatedProfiles.every((p: any) => selectedIds.has(p.id))}
+                  onCheckedChange={toggleSelectAll}
+                  aria-label="Select all on page"
+                />
+                <span className="text-sm text-muted-foreground">
+                  {selectedIds.size > 0 ? `${selectedIds.size} selected` : "Select all"}
+                </span>
+                {selectedIds.size > 0 && (
+                  <>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      className="ml-auto flex items-center gap-1"
+                      onClick={() => setBulkDeleteOpen(true)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      Delete {selectedIds.size}
+                    </Button>
+                    <Button variant="ghost" size="sm" onClick={() => setSelectedIds(new Set())}>
+                      Clear
+                    </Button>
+                  </>
+                )}
+              </div>
+
               <div className="space-y-3">
                 {paginatedProfiles.map((profile: any) => (
-                  <div key={profile.id} className="border rounded-lg p-4 flex items-center justify-between gap-4">
+                  <div key={profile.id} className={`border rounded-lg p-4 flex items-center justify-between gap-4 ${selectedIds.has(profile.id) ? 'bg-muted/50 border-primary/30' : ''}`}>
+                    <Checkbox
+                      checked={selectedIds.has(profile.id)}
+                      onCheckedChange={() => toggleSelect(profile.id)}
+                      aria-label={`Select ${profile.name}`}
+                      className="shrink-0"
+                    />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
                         <h3 className="font-semibold truncate">{profile.name}</h3>
