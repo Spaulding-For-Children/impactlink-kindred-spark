@@ -34,7 +34,6 @@ export const Footer = () => {
       { name: t("collaboration.forums"), href: "/collaboration" },
     ],
     support: [
-      { name: "User Guide", href: "/user-guide" },
       { name: t("contact.helpCenter"), href: "/#contact" },
       { name: t("contact.sendMessage"), href: "/#contact" },
       { name: t("contact.faqTitle"), href: "/#contact" },

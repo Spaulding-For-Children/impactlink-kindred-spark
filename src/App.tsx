@@ -25,7 +25,6 @@ import Admin from "./pages/Admin";
 import DataTools from "./pages/DataTools";
 import UserGuide from "./pages/UserGuide";
 import UpdatePassword from "./pages/UpdatePassword";
-import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
