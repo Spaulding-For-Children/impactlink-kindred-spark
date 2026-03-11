@@ -90,6 +90,14 @@ export function AdminTutorialStepEditor({ steps, onSaveStep, onResetStep, isSavi
                   <div className="flex items-center gap-2 ml-2 shrink-0">
                     {step.target && <Badge variant="secondary" className="text-xs">Interactive</Badge>}
                     {step.route && <Badge variant="outline" className="text-xs">Navigation</Badge>}
+                    {overrides?.[step.id] && (
+                      <Badge variant="destructive" className="text-xs">Customized</Badge>
+                    )}
+                    {overrides?.[step.id] && (
+                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => onResetStep(step.id)} disabled={isSaving} title="Reset to default">
+                        <RotateCcw className="h-3.5 w-3.5" />
+                      </Button>
+                    )}
                     <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleStartEdit(step)}>
                       <Pencil className="h-3.5 w-3.5" />
                     </Button>
