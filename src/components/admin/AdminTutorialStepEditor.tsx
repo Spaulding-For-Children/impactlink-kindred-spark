@@ -4,13 +4,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Pencil, Check, X } from 'lucide-react';
-import { TutorialStep } from '@/config/tutorialSteps';
+import { Pencil, Check, X, RotateCcw } from 'lucide-react';
+import { TutorialStep, tutorialSteps as defaultSteps } from '@/config/tutorialSteps';
 
 interface AdminTutorialStepEditorProps {
   steps: TutorialStep[];
   onSaveStep: (stepId: string, title: string, content: string) => Promise<void>;
+  onResetStep: (stepId: string) => Promise<void>;
   isSaving: boolean;
+  overrides?: Record<string, { title: string; content: string }>;
 }
 
 export function AdminTutorialStepEditor({ steps, onSaveStep, isSaving }: AdminTutorialStepEditorProps) {
