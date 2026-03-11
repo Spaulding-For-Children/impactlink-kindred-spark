@@ -132,6 +132,10 @@ export default function Admin() {
                   <Play className="h-4 w-4" />
                   <span className="hidden sm:inline">Tutorial</span>
                 </TabsTrigger>
+                <TabsTrigger value="role-guides" className="flex items-center gap-2 data-[state=active]:bg-background">
+                  <GraduationCap className="h-4 w-4" />
+                  <span className="hidden sm:inline">Role Guides</span>
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="site-settings">
