@@ -15,7 +15,7 @@ interface AdminTutorialStepEditorProps {
   overrides?: Record<string, { title: string; content: string }>;
 }
 
-export function AdminTutorialStepEditor({ steps, onSaveStep, isSaving }: AdminTutorialStepEditorProps) {
+export function AdminTutorialStepEditor({ steps, onSaveStep, onResetStep, isSaving, overrides }: AdminTutorialStepEditorProps) {
   const [editingStepId, setEditingStepId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState('');
   const [editContent, setEditContent] = useState('');
