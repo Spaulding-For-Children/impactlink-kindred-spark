@@ -1,15 +1,17 @@
 import { useState } from "react";
-import { Plus, Trash2, Edit, MessageSquare } from "lucide-react";
+import { Plus, Trash2, Edit, MessageSquare, CheckSquare, Square, XCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useAdmin } from "@/hooks/useAdmin";
 import { CsvImportForumTopics } from "./CsvImportForumTopics";
+import { toast } from "sonner";
 
 interface ForumTopicForm {
   id?: string;
@@ -30,6 +32,8 @@ export function AdminForumTopics() {
   const { allForumTopics, isLoadingForumTopics, upsertForumTopic, deleteForumTopic } = useAdmin();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [form, setForm] = useState<ForumTopicForm>(emptyForm);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [bulkDeleting, setBulkDeleting] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,6 +54,41 @@ export function AdminForumTopics() {
       color: topic.color || "sage",
     });
     setIsDialogOpen(true);
+  };
+
+  const toggleSelect = (id: string) => {
+    setSelected(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleAll = () => {
+    if (selected.size === allForumTopics.length) {
+      setSelected(new Set());
+    } else {
+      setSelected(new Set(allForumTopics.map((t: any) => t.id)));
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    setBulkDeleting(true);
+    let failed = 0;
+    for (const id of selected) {
+      try {
+        await new Promise<void>((resolve, reject) => {
+          deleteForumTopic.mutate(id, { onSuccess: () => resolve(), onError: () => reject() });
+        });
+      } catch { failed++; }
+    }
+    setBulkDeleting(false);
+    if (failed === 0) {
+      toast.success(`${selected.size} topics deleted`);
+    } else {
+      toast.error(`${failed} of ${selected.size} deletions failed`);
+    }
+    setSelected(new Set());
   };
 
   if (isLoadingForumTopics) {
@@ -139,17 +178,70 @@ export function AdminForumTopics() {
           <p className="text-muted-foreground text-center py-8">No forum topics yet</p>
         ) : (
           <div className="space-y-3">
+            {/* Bulk actions bar */}
+            <div className="flex items-center justify-between border rounded-lg p-3 bg-muted/30">
+              <div className="flex items-center gap-3">
+                <Checkbox
+                  checked={selected.size === allForumTopics.length && allForumTopics.length > 0}
+                  onCheckedChange={toggleAll}
+                  aria-label="Select all topics"
+                />
+                <span className="text-sm text-muted-foreground">
+                  {selected.size > 0 ? `${selected.size} selected` : "Select all"}
+                </span>
+              </div>
+              {selected.size > 0 && (
+                <div className="flex items-center gap-2">
+                  <Button variant="ghost" size="sm" onClick={() => setSelected(new Set())}>
+                    <XCircle className="h-4 w-4 mr-1" /> Clear
+                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="destructive" size="sm" disabled={bulkDeleting}>
+                        <Trash2 className="h-4 w-4 mr-1" />
+                        Delete {selected.size}
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Delete {selected.size} Forum Topics</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Are you sure you want to delete {selected.size} topic{selected.size > 1 ? "s" : ""}? This will also delete all posts in these topics. This action cannot be undone.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={handleBulkDelete}
+                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                          {bulkDeleting ? "Deleting..." : `Delete ${selected.size} Topics`}
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
+              )}
+            </div>
+
             {allForumTopics.map((topic: any) => (
               <div
                 key={topic.id}
-                className="border rounded-lg p-4 flex items-center justify-between gap-4"
+                className={`border rounded-lg p-4 flex items-center justify-between gap-4 transition-colors ${selected.has(topic.id) ? "bg-primary/5 border-primary/30" : ""}`}
               >
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-semibold">{topic.name}</h3>
-                    <Badge variant="outline">{topic.post_count || 0} posts</Badge>
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <Checkbox
+                    checked={selected.has(topic.id)}
+                    onCheckedChange={() => toggleSelect(topic.id)}
+                    aria-label={`Select ${topic.name}`}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="font-semibold">{topic.name}</h3>
+                      <Badge variant="outline">{topic.post_count || 0} posts</Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground">{topic.description || "No description"}</p>
                   </div>
-                  <p className="text-sm text-muted-foreground">{topic.description || "No description"}</p>
                 </div>
                 <div className="flex gap-2">
                   <Button variant="outline" size="sm" onClick={() => handleEdit(topic)}>
