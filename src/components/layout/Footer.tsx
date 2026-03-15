@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 const socialLinks = [
-  { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Youtube, href: "#", label: "YouTube" },
-  { icon: Mail, href: "#", label: "Email" },
+  { icon: Twitter, href: "https://twitter.com/ImpactLinkOrg", label: "Twitter" },
+  { icon: Linkedin, href: "https://linkedin.com/company/impactlink", label: "LinkedIn" },
+  { icon: Youtube, href: "https://youtube.com/@ImpactLink", label: "YouTube" },
+  { icon: Mail, href: "mailto:contact@impactlink.org", label: "Email" },
 ];
 
 export const Footer = () => {
@@ -37,7 +37,7 @@ export const Footer = () => {
       { name: t("contact.helpCenter"), href: "/#contact" },
       { name: t("contact.sendMessage"), href: "/#contact" },
       { name: t("contact.faqTitle"), href: "/#contact" },
-      { name: t("footer.privacy"), href: "/#contact" },
+      { name: t("footer.privacy"), href: "/privacy" },
     ],
   };
 
@@ -53,6 +53,8 @@ export const Footer = () => {
           document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
         }, 300);
       }
+    } else if (href.startsWith("http") || href.startsWith("mailto:")) {
+      window.open(href, "_blank", "noopener,noreferrer");
     } else {
       navigate(href);
       window.scrollTo(0, 0);
@@ -76,7 +78,7 @@ export const Footer = () => {
             <p className="text-primary-foreground/70 text-sm mb-6 max-w-xs">{t("footer.tagline")}</p>
             <div className="flex gap-3">
               {socialLinks.map((social) => (
-                <a key={social.label} href={social.href} aria-label={social.label} className="w-10 h-10 rounded-xl bg-primary-foreground/10 hover:bg-primary-foreground/20 flex items-center justify-center transition-colors">
+                <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.label} className="w-10 h-10 rounded-xl bg-primary-foreground/10 hover:bg-primary-foreground/20 flex items-center justify-center transition-colors">
                   <social.icon className="h-5 w-5 text-primary-foreground" />
                 </a>
               ))}
@@ -120,9 +122,9 @@ export const Footer = () => {
         <div className="pt-8 border-t border-primary-foreground/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-primary-foreground/60">{t("footer.copyright", { year: new Date().getFullYear() })}</p>
           <div className="flex gap-6">
-            <a href="#" className="text-sm text-primary-foreground/60 hover:text-primary-foreground transition-colors">{t("footer.terms")}</a>
-            <a href="#" className="text-sm text-primary-foreground/60 hover:text-primary-foreground transition-colors">{t("footer.privacy")}</a>
-            <a href="#" className="text-sm text-primary-foreground/60 hover:text-primary-foreground transition-colors">{t("footer.cookies")}</a>
+            <a href="/terms" onClick={(e) => handleLinkClick(e, "/terms")} className="text-sm text-primary-foreground/60 hover:text-primary-foreground transition-colors">{t("footer.terms")}</a>
+            <a href="/privacy" onClick={(e) => handleLinkClick(e, "/privacy")} className="text-sm text-primary-foreground/60 hover:text-primary-foreground transition-colors">{t("footer.privacy")}</a>
+            <a href="/privacy" onClick={(e) => handleLinkClick(e, "/privacy")} className="text-sm text-primary-foreground/60 hover:text-primary-foreground transition-colors">{t("footer.cookies")}</a>
           </div>
         </div>
       </div>
