@@ -123,6 +123,14 @@ export default function Admin() {
                   <HelpCircle className="h-4 w-4" />
                   <span className="hidden sm:inline">Research Q's</span>
                 </TabsTrigger>
+                <TabsTrigger value="taxonomy" className="flex items-center gap-2 data-[state=active]:bg-background">
+                  <Tag className="h-4 w-4" />
+                  <span className="hidden sm:inline">Taxonomy</span>
+                </TabsTrigger>
+                <TabsTrigger value="suggestions" className="flex items-center gap-2 data-[state=active]:bg-background">
+                  <Lightbulb className="h-4 w-4" />
+                  <span className="hidden sm:inline">Suggestions</span>
+                </TabsTrigger>
                 <TabsTrigger value="datatools" className="flex items-center gap-2 data-[state=active]:bg-background">
                   <Database className="h-4 w-4" />
                   <span className="hidden sm:inline">Data & Tools</span>
