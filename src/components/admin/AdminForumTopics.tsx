@@ -70,7 +70,9 @@ export function AdminForumTopics() {
           Forum Topics
           <Badge variant="secondary" className="ml-2">{allForumTopics.length} topics</Badge>
         </CardTitle>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <div className="flex items-center gap-3">
+          <CsvImportForumTopics />
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button onClick={() => setForm(emptyForm)}>
               <Plus className="h-4 w-4 mr-2" />
