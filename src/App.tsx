@@ -25,6 +25,8 @@ import Admin from "./pages/Admin";
 import DataTools from "./pages/DataTools";
 
 import UpdatePassword from "./pages/UpdatePassword";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -51,6 +53,8 @@ const App = () => (
               <Route path="/data-tools" element={<DataTools />} />
               
               <Route path="/update-password" element={<UpdatePassword />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/privacy" element={<Privacy />} />
               <Route path="/students" element={<Students />} />
               <Route path="/students/:id" element={<StudentProfile />} />
               <Route path="/researchers" element={<Researchers />} />

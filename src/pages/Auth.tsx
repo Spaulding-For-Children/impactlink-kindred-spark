@@ -177,7 +177,7 @@ const Auth = () => {
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-display">Welcome to ImpactLink</CardTitle>
             <CardDescription>
-              Sign in or request access to join the agricultural research community
+              Sign in or request access to join the child welfare community
             </CardDescription>
           </CardHeader>
           <CardContent>
