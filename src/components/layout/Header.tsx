@@ -273,7 +273,13 @@ export const Header = () => {
                               {t("nav.admin")}
                             </Link>
                           </Button>
-                        )}
+                         )}
+                        <Button variant="ghost" className="w-full justify-center" asChild>
+                          <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                            <LayoutDashboard className="w-4 h-4 mr-2" />
+                            Dashboard
+                          </Link>
+                        </Button>
                         <Button variant="ghost" className="w-full justify-center" asChild>
                           <Link to="/profile-settings" onClick={() => setMobileMenuOpen(false)}>
                             <User className="w-4 h-4 mr-2" />
