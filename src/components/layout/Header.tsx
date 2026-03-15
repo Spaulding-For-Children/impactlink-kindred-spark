@@ -176,6 +176,13 @@ export const Header = () => {
                       </Link>
                     </Button>
                   )}
+                  <NotificationBell />
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to="/dashboard">
+                      <LayoutDashboard className="w-4 h-4 mr-2" />
+                      Dashboard
+                    </Link>
+                  </Button>
                   <Button variant="ghost" size="sm" asChild>
                     <Link to="/profile-settings" data-tutorial="profile-menu">
                       <User className="w-4 h-4 mr-2" />
