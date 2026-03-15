@@ -20,6 +20,7 @@ import {
   useCreateForumReply,
   useCurrentProfile,
 } from "@/hooks/useCollaboration";
+import { useCreateForumSuggestion } from "@/hooks/useForumSuggestions";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
