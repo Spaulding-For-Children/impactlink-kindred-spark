@@ -659,6 +659,73 @@ const ProfileSettings = () => {
               )}
             </CardContent>
           </Card>
+
+          {/* Notification Preferences */}
+          <Card className="mt-6">
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <Bell className="h-5 w-5 text-primary" />
+                <div>
+                  <CardTitle>Email Notifications</CardTitle>
+                  <CardDescription>Choose which email notifications you'd like to receive</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <p className="text-sm font-medium text-foreground">Collaboration Requests</p>
+                  <p className="text-xs text-muted-foreground">Receive an email when someone sends you a collaboration request</p>
+                </div>
+                <Switch
+                  checked={notifPrefs.email_collaboration_requests}
+                  onCheckedChange={(checked) => setNotifPrefs(prev => ({ ...prev, email_collaboration_requests: checked }))}
+                />
+              </div>
+              <Separator />
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <p className="text-sm font-medium text-foreground">Collaboration Status Updates</p>
+                  <p className="text-xs text-muted-foreground">Receive an email when your collaboration request is accepted or declined</p>
+                </div>
+                <Switch
+                  checked={notifPrefs.email_collaboration_status}
+                  onCheckedChange={(checked) => setNotifPrefs(prev => ({ ...prev, email_collaboration_status: checked }))}
+                />
+              </div>
+              <Separator />
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <p className="text-sm font-medium text-foreground">Event Registration Confirmations</p>
+                  <p className="text-xs text-muted-foreground">Receive an email with calendar invite when you register for an event</p>
+                </div>
+                <Switch
+                  checked={notifPrefs.email_event_registration}
+                  onCheckedChange={(checked) => setNotifPrefs(prev => ({ ...prev, email_event_registration: checked }))}
+                />
+              </div>
+              <Button
+                className="w-full"
+                disabled={savingNotifs}
+                onClick={async () => {
+                  if (!profile) return;
+                  setSavingNotifs(true);
+                  const { error } = await supabase
+                    .from('profiles')
+                    .update({ notification_preferences: notifPrefs as any })
+                    .eq('id', profile.id);
+                  setSavingNotifs(false);
+                  if (error) {
+                    toast({ title: "Error saving preferences", description: error.message, variant: "destructive" });
+                  } else {
+                    toast({ title: "Preferences saved!", description: "Your notification settings have been updated." });
+                  }
+                }}
+              >
+                {savingNotifs ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...</> : "Save Notification Preferences"}
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </main>
       <Footer />
