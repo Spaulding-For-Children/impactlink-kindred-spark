@@ -391,6 +391,39 @@ export type Database = {
           },
         ]
       }
+      forum_topic_suggestions: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          reviewed_at: string | null
+          status: string
+          suggested_by: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          reviewed_at?: string | null
+          status?: string
+          suggested_by: string
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          reviewed_at?: string | null
+          status?: string
+          suggested_by?: string
+        }
+        Relationships: []
+      }
       forum_topics: {
         Row: {
           color: string | null
@@ -604,6 +637,24 @@ export type Database = {
         }
         Relationships: []
       }
+      research_populations: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       research_questions: {
         Row: {
           author_id: string
@@ -707,6 +758,24 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      research_topics: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
       }
       resource_bookmarks: {
         Row: {
