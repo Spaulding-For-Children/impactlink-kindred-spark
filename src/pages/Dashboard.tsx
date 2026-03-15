@@ -15,7 +15,7 @@ import { Loader2, Users, Calendar, Bookmark, Handshake, ArrowRight, Clock } from
 import { format } from 'date-fns';
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { data: profile, isLoading: profileLoading } = useCurrentProfile();
   const { data: collaborations = [], isLoading: collabLoading } = useCollaborations();
@@ -52,10 +52,10 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
-    if (!user) navigate('/auth');
-  }, [user, navigate]);
+    if (!authLoading && !user) navigate('/auth');
+  }, [user, authLoading, navigate]);
 
-  if (!user) return null;
+  if (authLoading || !user) return null;
 
   const isLoading = profileLoading || collabLoading || regsLoading;
 
