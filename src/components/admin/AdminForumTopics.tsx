@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useAdmin } from "@/hooks/useAdmin";
+import { CsvImportForumTopics } from "./CsvImportForumTopics";
 
 interface ForumTopicForm {
   id?: string;
@@ -69,7 +70,9 @@ export function AdminForumTopics() {
           Forum Topics
           <Badge variant="secondary" className="ml-2">{allForumTopics.length} topics</Badge>
         </CardTitle>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <div className="flex items-center gap-3">
+          <CsvImportForumTopics />
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button onClick={() => setForm(emptyForm)}>
               <Plus className="h-4 w-4 mr-2" />
@@ -129,6 +132,7 @@ export function AdminForumTopics() {
             </form>
           </DialogContent>
         </Dialog>
+        </div>
       </CardHeader>
       <CardContent>
         {allForumTopics.length === 0 ? (
