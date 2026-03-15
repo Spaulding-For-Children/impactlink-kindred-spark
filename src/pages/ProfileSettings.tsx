@@ -55,6 +55,18 @@ const agencySchema = z.object({
   website: z.string().url().optional().or(z.literal('')),
 });
 
+interface NotificationPreferences {
+  email_collaboration_requests: boolean;
+  email_collaboration_status: boolean;
+  email_event_registration: boolean;
+}
+
+const defaultNotificationPrefs: NotificationPreferences = {
+  email_collaboration_requests: true,
+  email_collaboration_status: true,
+  email_event_registration: true,
+};
+
 interface Profile {
   id: string;
   profile_type: 'student' | 'researcher' | 'agency';
@@ -76,6 +88,7 @@ interface Profile {
   founded: string | null;
   website: string | null;
   interests: string[] | null;
+  notification_preferences: NotificationPreferences | null;
 }
 
 const ProfileSettings = () => {
