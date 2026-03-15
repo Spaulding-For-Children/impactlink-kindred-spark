@@ -61,6 +61,26 @@ export const Forums = () => {
   const { data: replies, isLoading: loadingReplies } = useForumReplies(selectedPost || "");
   const createPost = useCreateForumPost();
   const createReply = useCreateForumReply();
+  const createSuggestion = useCreateForumSuggestion();
+
+  const handleSuggestTopic = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!profile) {
+      toast({ title: "Profile required", description: "Please create a profile first.", variant: "destructive" });
+      return;
+    }
+    try {
+      await createSuggestion.mutateAsync({
+        name: suggestionData.name,
+        description: suggestionData.description || undefined,
+        suggested_by: profile.id,
+      });
+      setSuggestDialog(false);
+      setSuggestionData({ name: "", description: "" });
+    } catch {
+      toast({ title: "Error", description: "Failed to submit suggestion.", variant: "destructive" });
+    }
+  };
 
   const handleCreatePost = async (e: React.FormEvent) => {
     e.preventDefault();
