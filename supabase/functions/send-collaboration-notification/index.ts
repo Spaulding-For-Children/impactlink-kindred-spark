@@ -61,6 +61,14 @@ serve(async (req) => {
     if (userErr || !userData?.user?.email) throw new Error("Recipient email not found");
 
     const recipientEmail = userData.user.email;
+
+    if (!emailEnabled) {
+      return new Response(
+        JSON.stringify({ success: true, skipped: true, reason: "User opted out of collaboration request emails" }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const affiliation = requester.institution || requester.university || "";
     const profileType = requester.profile_type.charAt(0).toUpperCase() + requester.profile_type.slice(1);
 
