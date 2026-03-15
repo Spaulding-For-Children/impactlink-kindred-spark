@@ -23,6 +23,7 @@ import { AdminRoleGuides } from "@/components/admin/AdminRoleGuides";
 import { AdminAnalytics } from "@/components/admin/AdminAnalytics";
 import { AdminResearchTaxonomy } from "@/components/admin/AdminResearchTaxonomy";
 import { AdminForumSuggestions } from "@/components/admin/AdminForumSuggestions";
+import { AdminProspects } from "@/components/admin/AdminProspects";
 
 export default function Admin() {
   const navigate = useNavigate();
