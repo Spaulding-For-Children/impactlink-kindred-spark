@@ -12,20 +12,10 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useResearchQuestions, useCreateResearchQuestion, useCurrentProfile } from "@/hooks/useCollaboration";
+import { useResearchTopics, useResearchPopulations } from "@/hooks/useResearchTaxonomy";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
-
-const TOPICS = [
-  "Trauma & Resilience",
-  "Family Reunification",
-  "Youth Justice",
-  "Foster Care",
-  "Kinship Care",
-  "Child Protection",
-  "Mental Health",
-  "Education Outcomes",
-];
 
 const REGIONS = [
   "North America",
@@ -37,20 +27,12 @@ const REGIONS = [
   "Global",
 ];
 
-const POPULATIONS = [
-  "Children 0-5",
-  "Children 6-12",
-  "Adolescents 13-17",
-  "Young Adults 18-24",
-  "Families",
-  "Foster Parents",
-  "Kinship Caregivers",
-];
-
 export const ResearchQuestions = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const { data: profile } = useCurrentProfile();
+  const { data: dbTopics = [] } = useResearchTopics();
+  const { data: dbPopulations = [] } = useResearchPopulations();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [filters, setFilters] = useState<{
     topic?: string;
@@ -58,6 +40,9 @@ export const ResearchQuestions = () => {
     population?: string;
     status?: string;
   }>({});
+
+  const TOPICS = dbTopics.map((t) => t.name);
+  const POPULATIONS = dbPopulations.map((p) => p.name);
 
   const { data: questions, isLoading } = useResearchQuestions(filters);
   const createQuestion = useCreateResearchQuestion();

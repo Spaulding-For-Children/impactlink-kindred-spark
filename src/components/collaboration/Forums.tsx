@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Plus, MessageSquare, ArrowLeft, Send, Clock, Heart, Home, Scale, Globe, Users, HeartHandshake } from "lucide-react";
+import { Plus, MessageSquare, ArrowLeft, Send, Clock, Heart, Home, Scale, Globe, Users, HeartHandshake, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -20,6 +20,7 @@ import {
   useCreateForumReply,
   useCurrentProfile,
 } from "@/hooks/useCollaboration";
+import { useCreateForumSuggestion } from "@/hooks/useForumSuggestions";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
@@ -51,6 +52,8 @@ export const Forums = () => {
   const [newPostDialog, setNewPostDialog] = useState(false);
   const [newPostData, setNewPostData] = useState({ topic_id: "", title: "", content: "" });
   const [replyContent, setReplyContent] = useState("");
+  const [suggestDialog, setSuggestDialog] = useState(false);
+  const [suggestionData, setSuggestionData] = useState({ name: "", description: "" });
 
   const { data: topics, isLoading: loadingTopics } = useForumTopics();
   const { data: posts, isLoading: loadingPosts } = useForumPosts(selectedTopic || undefined);
@@ -58,6 +61,26 @@ export const Forums = () => {
   const { data: replies, isLoading: loadingReplies } = useForumReplies(selectedPost || "");
   const createPost = useCreateForumPost();
   const createReply = useCreateForumReply();
+  const createSuggestion = useCreateForumSuggestion();
+
+  const handleSuggestTopic = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!profile) {
+      toast({ title: "Profile required", description: "Please create a profile first.", variant: "destructive" });
+      return;
+    }
+    try {
+      await createSuggestion.mutateAsync({
+        name: suggestionData.name,
+        description: suggestionData.description || undefined,
+        suggested_by: profile.id,
+      });
+      setSuggestDialog(false);
+      setSuggestionData({ name: "", description: "" });
+    } catch {
+      toast({ title: "Error", description: "Failed to submit suggestion.", variant: "destructive" });
+    }
+  };
 
   const handleCreatePost = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -302,58 +325,98 @@ export const Forums = () => {
           <p className="text-muted-foreground">Join discussions on key issues in child welfare</p>
         </div>
         {user && (
-          <Dialog open={newPostDialog} onOpenChange={setNewPostDialog}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="w-4 h-4 mr-2" />
-                New Post
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Create New Post</DialogTitle>
-              </DialogHeader>
-              <form onSubmit={handleCreatePost} className="space-y-4">
-                <div className="space-y-2">
-                  <Label>Forum</Label>
-                  <Select
-                    value={newPostData.topic_id}
-                    onValueChange={(v) => setNewPostData((d) => ({ ...d, topic_id: v }))}
-                    required
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a forum" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {topics?.map((t) => (
-                        <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label>Title</Label>
-                  <Input
-                    value={newPostData.title}
-                    onChange={(e) => setNewPostData((d) => ({ ...d, title: e.target.value }))}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Content</Label>
-                  <Textarea
-                    value={newPostData.content}
-                    onChange={(e) => setNewPostData((d) => ({ ...d, content: e.target.value }))}
-                    rows={5}
-                    required
-                  />
-                </div>
-                <Button type="submit" className="w-full" disabled={createPost.isPending}>
-                  Post
+          <div className="flex gap-2">
+            <Dialog open={suggestDialog} onOpenChange={setSuggestDialog}>
+              <DialogTrigger asChild>
+                <Button variant="outline">
+                  <Lightbulb className="w-4 h-4 mr-2" />
+                  Suggest a Topic
                 </Button>
-              </form>
-            </DialogContent>
-          </Dialog>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Suggest a New Forum Topic</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleSuggestTopic} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label>Topic Name</Label>
+                    <Input
+                      value={suggestionData.name}
+                      onChange={(e) => setSuggestionData((d) => ({ ...d, name: e.target.value }))}
+                      placeholder="e.g., Aging Out of Care"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Description (optional)</Label>
+                    <Textarea
+                      value={suggestionData.description}
+                      onChange={(e) => setSuggestionData((d) => ({ ...d, description: e.target.value }))}
+                      placeholder="Why this topic matters..."
+                      rows={3}
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground">Your suggestion will be reviewed by a site administrator before being added.</p>
+                  <Button type="submit" className="w-full" disabled={createSuggestion.isPending}>
+                    {createSuggestion.isPending ? "Submitting..." : "Submit Suggestion"}
+                  </Button>
+                </form>
+              </DialogContent>
+            </Dialog>
+
+            <Dialog open={newPostDialog} onOpenChange={setNewPostDialog}>
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="w-4 h-4 mr-2" />
+                  New Post
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Create New Post</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleCreatePost} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label>Forum</Label>
+                    <Select
+                      value={newPostData.topic_id}
+                      onValueChange={(v) => setNewPostData((d) => ({ ...d, topic_id: v }))}
+                      required
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a forum" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {topics?.map((t) => (
+                          <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Title</Label>
+                    <Input
+                      value={newPostData.title}
+                      onChange={(e) => setNewPostData((d) => ({ ...d, title: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Content</Label>
+                    <Textarea
+                      value={newPostData.content}
+                      onChange={(e) => setNewPostData((d) => ({ ...d, content: e.target.value }))}
+                      rows={5}
+                      required
+                    />
+                  </div>
+                  <Button type="submit" className="w-full" disabled={createPost.isPending}>
+                    Post
+                  </Button>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </div>
         )}
       </div>
 

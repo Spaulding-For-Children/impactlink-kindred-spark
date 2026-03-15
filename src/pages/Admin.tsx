@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Shield, Users, FileText, Calendar, BookOpen, MessageSquare, HelpCircle, Database, UserPlus, BookMarked, Settings, Cog, Play, GraduationCap, BarChart3 } from "lucide-react";
+import { Shield, Users, FileText, Calendar, BookOpen, MessageSquare, HelpCircle, Database, UserPlus, BookMarked, Settings, Cog, Play, GraduationCap, BarChart3, Tag, Lightbulb } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -21,6 +21,8 @@ import { AdminOperationalGuide } from "@/components/admin/AdminOperationalGuide"
 import { AdminTutorial } from "@/components/admin/AdminTutorial";
 import { AdminRoleGuides } from "@/components/admin/AdminRoleGuides";
 import { AdminAnalytics } from "@/components/admin/AdminAnalytics";
+import { AdminResearchTaxonomy } from "@/components/admin/AdminResearchTaxonomy";
+import { AdminForumSuggestions } from "@/components/admin/AdminForumSuggestions";
 
 export default function Admin() {
   const navigate = useNavigate();
@@ -84,7 +86,7 @@ export default function Admin() {
         <section className="py-8">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <Tabs defaultValue="analytics" className="space-y-6">
-              <TabsList className="grid grid-cols-2 md:grid-cols-14 gap-2 h-auto p-2 bg-muted/50">
+              <TabsList className="flex flex-wrap gap-2 h-auto p-2 bg-muted/50">
                 <TabsTrigger value="analytics" className="flex items-center gap-2 data-[state=active]:bg-background">
                   <BarChart3 className="h-4 w-4" />
                   <span className="hidden sm:inline">Analytics</span>
@@ -120,6 +122,14 @@ export default function Admin() {
                 <TabsTrigger value="questions" className="flex items-center gap-2 data-[state=active]:bg-background">
                   <HelpCircle className="h-4 w-4" />
                   <span className="hidden sm:inline">Research Q's</span>
+                </TabsTrigger>
+                <TabsTrigger value="taxonomy" className="flex items-center gap-2 data-[state=active]:bg-background">
+                  <Tag className="h-4 w-4" />
+                  <span className="hidden sm:inline">Taxonomy</span>
+                </TabsTrigger>
+                <TabsTrigger value="suggestions" className="flex items-center gap-2 data-[state=active]:bg-background">
+                  <Lightbulb className="h-4 w-4" />
+                  <span className="hidden sm:inline">Suggestions</span>
                 </TabsTrigger>
                 <TabsTrigger value="datatools" className="flex items-center gap-2 data-[state=active]:bg-background">
                   <Database className="h-4 w-4" />
@@ -177,6 +187,14 @@ export default function Admin() {
 
               <TabsContent value="questions">
                 <AdminResearchQuestions />
+              </TabsContent>
+
+              <TabsContent value="taxonomy">
+                <AdminResearchTaxonomy />
+              </TabsContent>
+
+              <TabsContent value="suggestions">
+                <AdminForumSuggestions />
               </TabsContent>
 
               <TabsContent value="datatools">
