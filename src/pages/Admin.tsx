@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Shield, Users, FileText, Calendar, BookOpen, MessageSquare, HelpCircle, Database, UserPlus, BookMarked, Settings, Cog, Play, GraduationCap, BarChart3, Tag, Lightbulb } from "lucide-react";
+import { Shield, Users, FileText, Calendar, BookOpen, MessageSquare, HelpCircle, Database, UserPlus, BookMarked, Settings, Cog, Play, GraduationCap, BarChart3, Tag, Lightbulb, UserSearch } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -23,6 +23,7 @@ import { AdminRoleGuides } from "@/components/admin/AdminRoleGuides";
 import { AdminAnalytics } from "@/components/admin/AdminAnalytics";
 import { AdminResearchTaxonomy } from "@/components/admin/AdminResearchTaxonomy";
 import { AdminForumSuggestions } from "@/components/admin/AdminForumSuggestions";
+import { AdminProspects } from "@/components/admin/AdminProspects";
 
 export default function Admin() {
   const navigate = useNavigate();
@@ -131,6 +132,10 @@ export default function Admin() {
                   <Lightbulb className="h-4 w-4" />
                   <span className="hidden sm:inline">Suggestions</span>
                 </TabsTrigger>
+                <TabsTrigger value="prospects" className="flex items-center gap-2 data-[state=active]:bg-background">
+                  <UserSearch className="h-4 w-4" />
+                  <span className="hidden sm:inline">Prospects</span>
+                </TabsTrigger>
                 <TabsTrigger value="datatools" className="flex items-center gap-2 data-[state=active]:bg-background">
                   <Database className="h-4 w-4" />
                   <span className="hidden sm:inline">Data & Tools</span>
@@ -195,6 +200,10 @@ export default function Admin() {
 
               <TabsContent value="suggestions">
                 <AdminForumSuggestions />
+              </TabsContent>
+
+              <TabsContent value="prospects">
+                <AdminProspects />
               </TabsContent>
 
               <TabsContent value="datatools">

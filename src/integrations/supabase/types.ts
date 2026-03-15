@@ -600,6 +600,116 @@ export type Database = {
         }
         Relationships: []
       }
+      prospect_searches: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          error_message: string | null
+          id: string
+          initiated_by: string
+          populations_used: string[]
+          prospect_count: number
+          status: string
+          topics_used: string[]
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          initiated_by: string
+          populations_used?: string[]
+          prospect_count?: number
+          status?: string
+          topics_used?: string[]
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          initiated_by?: string
+          populations_used?: string[]
+          prospect_count?: number
+          status?: string
+          topics_used?: string[]
+        }
+        Relationships: []
+      }
+      prospects: {
+        Row: {
+          created_at: string
+          department_title: string | null
+          email: string | null
+          id: string
+          location: string | null
+          name: string
+          notes: string | null
+          organization: string | null
+          outreach_status: string
+          phone: string | null
+          prospect_type: string
+          relevance_score: number | null
+          relevant_topics: string[] | null
+          search_id: string
+          social_profiles: Json | null
+          source_url: string | null
+          suggested_outreach: string | null
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          created_at?: string
+          department_title?: string | null
+          email?: string | null
+          id?: string
+          location?: string | null
+          name: string
+          notes?: string | null
+          organization?: string | null
+          outreach_status?: string
+          phone?: string | null
+          prospect_type?: string
+          relevance_score?: number | null
+          relevant_topics?: string[] | null
+          search_id: string
+          social_profiles?: Json | null
+          source_url?: string | null
+          suggested_outreach?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          created_at?: string
+          department_title?: string | null
+          email?: string | null
+          id?: string
+          location?: string | null
+          name?: string
+          notes?: string | null
+          organization?: string | null
+          outreach_status?: string
+          phone?: string | null
+          prospect_type?: string
+          relevance_score?: number | null
+          relevant_topics?: string[] | null
+          search_id?: string
+          social_profiles?: Json | null
+          source_url?: string | null
+          suggested_outreach?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prospects_search_id_fkey"
+            columns: ["search_id"]
+            isOneToOne: false
+            referencedRelation: "prospect_searches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       registration_requests: {
         Row: {
           admin_notes: string | null
