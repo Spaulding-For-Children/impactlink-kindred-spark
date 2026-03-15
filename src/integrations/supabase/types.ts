@@ -421,6 +421,60 @@ export type Database = {
         }
         Relationships: []
       }
+      newsletter_subscribers: {
+        Row: {
+          email: string
+          id: string
+          subscribed_at: string
+          unsubscribed_at: string | null
+        }
+        Insert: {
+          email: string
+          id?: string
+          subscribed_at?: string
+          unsubscribed_at?: string | null
+        }
+        Update: {
+          email?: string
+          id?: string
+          subscribed_at?: string
+          unsubscribed_at?: string | null
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          link: string | null
+          message: string
+          read: boolean
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          link?: string | null
+          message: string
+          read?: boolean
+          title: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          link?: string | null
+          message?: string
+          read?: boolean
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           agency_type: string | null

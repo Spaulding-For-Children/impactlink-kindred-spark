@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, User, LogOut, Shield } from "lucide-react";
+import { Menu, X, ChevronDown, User, LogOut, Shield, LayoutDashboard } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { NotificationBell } from "@/components/notifications/NotificationBell";
 
 export const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -175,6 +176,13 @@ export const Header = () => {
                       </Link>
                     </Button>
                   )}
+                  <NotificationBell />
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to="/dashboard">
+                      <LayoutDashboard className="w-4 h-4 mr-2" />
+                      Dashboard
+                    </Link>
+                  </Button>
                   <Button variant="ghost" size="sm" asChild>
                     <Link to="/profile-settings" data-tutorial="profile-menu">
                       <User className="w-4 h-4 mr-2" />
@@ -265,7 +273,13 @@ export const Header = () => {
                               {t("nav.admin")}
                             </Link>
                           </Button>
-                        )}
+                         )}
+                        <Button variant="ghost" className="w-full justify-center" asChild>
+                          <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                            <LayoutDashboard className="w-4 h-4 mr-2" />
+                            Dashboard
+                          </Link>
+                        </Button>
                         <Button variant="ghost" className="w-full justify-center" asChild>
                           <Link to="/profile-settings" onClick={() => setMobileMenuOpen(false)}>
                             <User className="w-4 h-4 mr-2" />

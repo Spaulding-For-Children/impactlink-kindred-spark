@@ -368,13 +368,29 @@ export function useUpdateCollaboration() {
         .from("collaborations")
         .update({ status })
         .eq("id", id)
-        .select()
+        .select(`
+          *,
+          requester:profiles!requester_id(id, name, user_id),
+          recipient:profiles!recipient_id(id, name, user_id)
+        `)
         .single();
       if (error) throw error;
+
+      // Send status change notification email (fire-and-forget)
+      supabase.functions.invoke("send-collaboration-status-notification", {
+        body: {
+          collaboration_id: id,
+          status,
+          requester_profile_id: result.requester_id,
+          responder_profile_id: result.recipient_id,
+        },
+      }).catch((err) => console.error("Failed to send status notification:", err));
+
       return result;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["collaborations"] });
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
     },
   });
 }
