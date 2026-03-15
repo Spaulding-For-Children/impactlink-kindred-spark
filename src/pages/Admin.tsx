@@ -202,6 +202,10 @@ export default function Admin() {
                 <AdminForumSuggestions />
               </TabsContent>
 
+              <TabsContent value="prospects">
+                <AdminProspects />
+              </TabsContent>
+
               <TabsContent value="datatools">
                 <AdminDataTools />
               </TabsContent>
