@@ -86,7 +86,7 @@ export default function Admin() {
         <section className="py-8">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <Tabs defaultValue="analytics" className="space-y-6">
-              <TabsList className="grid grid-cols-2 md:grid-cols-14 gap-2 h-auto p-2 bg-muted/50">
+              <TabsList className="flex flex-wrap gap-2 h-auto p-2 bg-muted/50">
                 <TabsTrigger value="analytics" className="flex items-center gap-2 data-[state=active]:bg-background">
                   <BarChart3 className="h-4 w-4" />
                   <span className="hidden sm:inline">Analytics</span>
