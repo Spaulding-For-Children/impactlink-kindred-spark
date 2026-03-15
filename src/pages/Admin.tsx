@@ -143,6 +143,10 @@ export default function Admin() {
                 </TabsTrigger>
               </TabsList>
 
+              <TabsContent value="analytics">
+                <AdminAnalytics />
+              </TabsContent>
+
               <TabsContent value="site-settings">
                 <AdminSiteSettings />
               </TabsContent>
