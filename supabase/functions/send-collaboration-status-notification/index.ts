@@ -65,8 +65,9 @@ serve(async (req) => {
       link: "/collaboration",
     });
 
-    // Send email
-    await fetch("https://api.resend.com/emails", {
+    // Send email only if user opted in
+    if (emailEnabled) {
+      await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
