@@ -25,30 +25,14 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Store subscription in site_settings under newsletter_subscribers key
-    const { data: existing } = await supabase
-      .from("site_settings")
-      .select("value")
-      .eq("key", "newsletter_subscribers")
-      .maybeSingle();
+    const { error } = await supabase
+      .from("newsletter_subscribers")
+      .upsert(
+        { email: email.toLowerCase() },
+        { onConflict: "email" }
+      );
 
-    const subscribers: string[] = existing?.value?.emails || [];
-    
-    if (subscribers.includes(email.toLowerCase())) {
-      return new Response(JSON.stringify({ success: true, message: "Already subscribed" }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    subscribers.push(email.toLowerCase());
-
-    await supabase
-      .from("site_settings")
-      .upsert({
-        key: "newsletter_subscribers",
-        value: { emails: subscribers },
-        updated_at: new Date().toISOString(),
-      }, { onConflict: "key" });
+    if (error) throw error;
 
     return new Response(JSON.stringify({ success: true }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
