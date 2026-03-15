@@ -332,15 +332,46 @@ const ProfileSettings = () => {
 
           <Card>
             <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className={`p-2 rounded-full ${config.color}`}>
-                  <Icon className={`w-6 h-6 ${config.textColor}`} />
+              <div className="flex items-center gap-4">
+                <div className="relative group">
+                  <Avatar className="h-16 w-16">
+                    <AvatarImage src={profile.avatar_url || undefined} alt={profile.name} />
+                    <AvatarFallback className={`${config.color} ${config.textColor} text-lg font-bold`}>
+                      {profile.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploadingAvatar}
+                    className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                  >
+                    {uploadingAvatar ? (
+                      <Loader2 className="h-5 w-5 text-white animate-spin" />
+                    ) : (
+                      <Camera className="h-5 w-5 text-white" />
+                    )}
+                  </button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleAvatarUpload}
+                  />
                 </div>
                 <div>
                   <CardTitle>Edit Profile</CardTitle>
                   <CardDescription>
                     Update your {profile.profile_type} profile information
                   </CardDescription>
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="text-xs text-primary hover:underline mt-1"
+                  >
+                    Change photo
+                  </button>
                 </div>
               </div>
             </CardHeader>
