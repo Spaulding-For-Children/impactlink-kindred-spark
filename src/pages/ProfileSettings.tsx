@@ -58,6 +58,7 @@ interface Profile {
   profile_type: 'student' | 'researcher' | 'agency';
   name: string;
   email: string;
+  avatar_url: string | null;
   location: string | null;
   bio: string | null;
   university: string | null;
