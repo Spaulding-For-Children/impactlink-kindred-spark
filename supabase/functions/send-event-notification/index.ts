@@ -106,6 +106,13 @@ serve(async (req) => {
 
     const userEmail = userData.user.email;
 
+    if (!emailEnabled) {
+      return new Response(
+        JSON.stringify({ success: true, skipped: true, reason: "User opted out of event registration emails" }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     // Generate .ics file
     const icsContent = generateICS(event);
     const icsBase64 = btoa(icsContent);
