@@ -46,6 +46,16 @@ serve(async (req) => {
       .single();
     if (recErr || !recipient) throw new Error("Recipient profile not found");
 
+    // Check notification preferences
+    const { data: recipientFull } = await supabase
+      .from("profiles")
+      .select("notification_preferences")
+      .eq("id", recipient_profile_id)
+      .single();
+
+    const prefs = (recipientFull?.notification_preferences as any) || {};
+    const emailEnabled = prefs.email_collaboration_requests !== false;
+
     // Get recipient's email
     const { data: userData, error: userErr } = await supabase.auth.admin.getUserById(recipient.user_id);
     if (userErr || !userData?.user?.email) throw new Error("Recipient email not found");
