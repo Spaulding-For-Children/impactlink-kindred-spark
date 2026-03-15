@@ -53,6 +53,8 @@ const App = () => (
               <Route path="/data-tools" element={<DataTools />} />
               
               <Route path="/update-password" element={<UpdatePassword />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/privacy" element={<Privacy />} />
               <Route path="/students" element={<Students />} />
               <Route path="/students/:id" element={<StudentProfile />} />
               <Route path="/researchers" element={<Researchers />} />
