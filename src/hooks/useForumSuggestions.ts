@@ -25,7 +25,7 @@ export function useForumSuggestions(status?: string) {
       if (status) query = query.eq("status", status);
       const { data, error } = await query;
       if (error) throw error;
-      return data as ForumTopicSuggestion[];
+      return (data || []) as unknown as ForumTopicSuggestion[];
     },
   });
 }
