@@ -15,7 +15,7 @@ import { Loader2, Users, Calendar, Bookmark, Handshake, ArrowRight, Clock } from
 import { format } from 'date-fns';
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { data: profile, isLoading: profileLoading } = useCurrentProfile();
   const { data: collaborations = [], isLoading: collabLoading } = useCollaborations();
