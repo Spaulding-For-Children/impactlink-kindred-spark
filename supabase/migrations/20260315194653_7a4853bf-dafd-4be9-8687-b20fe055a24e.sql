@@ -1,0 +1,1 @@
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS notification_preferences jsonb NOT NULL DEFAULT '{"email_collaboration_requests": true, "email_collaboration_status": true, "email_event_registration": true}'::jsonb;

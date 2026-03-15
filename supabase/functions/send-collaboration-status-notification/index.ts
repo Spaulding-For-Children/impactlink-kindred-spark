@@ -38,6 +38,16 @@ serve(async (req) => {
 
     if (!responder || !requester) throw new Error("Profiles not found");
 
+    // Check requester's notification preferences
+    const { data: requesterFull } = await supabase
+      .from("profiles")
+      .select("notification_preferences")
+      .eq("id", requester_profile_id)
+      .single();
+
+    const prefs = (requesterFull?.notification_preferences as any) || {};
+    const emailEnabled = prefs.email_collaboration_status !== false;
+
     const { data: userData } = await supabase.auth.admin.getUserById(requester.user_id);
     if (!userData?.user?.email) throw new Error("Requester email not found");
 
@@ -55,8 +65,9 @@ serve(async (req) => {
       link: "/collaboration",
     });
 
-    // Send email
-    await fetch("https://api.resend.com/emails", {
+    // Send email only if user opted in
+    if (emailEnabled) {
+      await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -85,6 +96,7 @@ serve(async (req) => {
         `,
       }),
     });
+    }
 
     return new Response(JSON.stringify({ success: true }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

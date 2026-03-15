@@ -46,11 +46,29 @@ serve(async (req) => {
       .single();
     if (recErr || !recipient) throw new Error("Recipient profile not found");
 
+    // Check notification preferences
+    const { data: recipientFull } = await supabase
+      .from("profiles")
+      .select("notification_preferences")
+      .eq("id", recipient_profile_id)
+      .single();
+
+    const prefs = (recipientFull?.notification_preferences as any) || {};
+    const emailEnabled = prefs.email_collaboration_requests !== false;
+
     // Get recipient's email
     const { data: userData, error: userErr } = await supabase.auth.admin.getUserById(recipient.user_id);
     if (userErr || !userData?.user?.email) throw new Error("Recipient email not found");
 
     const recipientEmail = userData.user.email;
+
+    if (!emailEnabled) {
+      return new Response(
+        JSON.stringify({ success: true, skipped: true, reason: "User opted out of collaboration request emails" }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const affiliation = requester.institution || requester.university || "";
     const profileType = requester.profile_type.charAt(0).toUpperCase() + requester.profile_type.slice(1);
 

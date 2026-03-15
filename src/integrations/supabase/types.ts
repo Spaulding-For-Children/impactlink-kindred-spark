@@ -492,6 +492,7 @@ export type Database = {
           location: string | null
           major: string | null
           name: string
+          notification_preferences: Json
           profile_type: Database["public"]["Enums"]["profile_type"]
           publications: number | null
           title: string | null
@@ -518,6 +519,7 @@ export type Database = {
           location?: string | null
           major?: string | null
           name: string
+          notification_preferences?: Json
           profile_type: Database["public"]["Enums"]["profile_type"]
           publications?: number | null
           title?: string | null
@@ -544,6 +546,7 @@ export type Database = {
           location?: string | null
           major?: string | null
           name?: string
+          notification_preferences?: Json
           profile_type?: Database["public"]["Enums"]["profile_type"]
           publications?: number | null
           title?: string | null

@@ -76,6 +76,16 @@ serve(async (req) => {
       );
     }
 
+    // Check user's notification preferences
+    const { data: userProfile } = await supabase
+      .from("profiles")
+      .select("notification_preferences")
+      .eq("user_id", user_id)
+      .single();
+
+    const prefs = (userProfile?.notification_preferences as any) || {};
+    const emailEnabled = prefs.email_event_registration !== false;
+
     // Fetch event details
     const { data: event, error: eventError } = await supabase
       .from("events")
@@ -95,6 +105,13 @@ serve(async (req) => {
     }
 
     const userEmail = userData.user.email;
+
+    if (!emailEnabled) {
+      return new Response(
+        JSON.stringify({ success: true, skipped: true, reason: "User opted out of event registration emails" }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     // Generate .ics file
     const icsContent = generateICS(event);
