@@ -27,6 +27,8 @@ import DataTools from "./pages/DataTools";
 import UpdatePassword from "./pages/UpdatePassword";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
+import UserGuide from "./pages/UserGuide";
+import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
