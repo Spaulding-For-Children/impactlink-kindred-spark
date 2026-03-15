@@ -422,7 +422,15 @@ export type Database = {
           status?: string
           suggested_by?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "forum_topic_suggestions_suggested_by_fkey"
+            columns: ["suggested_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       forum_topics: {
         Row: {
