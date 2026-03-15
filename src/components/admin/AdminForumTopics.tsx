@@ -132,6 +132,7 @@ export function AdminForumTopics() {
             </form>
           </DialogContent>
         </Dialog>
+        </div>
       </CardHeader>
       <CardContent>
         {allForumTopics.length === 0 ? (
