@@ -96,6 +96,8 @@ const ProfileSettings = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [notifPrefs, setNotifPrefs] = useState<NotificationPreferences>(defaultNotificationPrefs);
+  const [savingNotifs, setSavingNotifs] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { user } = useAuth();
   const navigate = useNavigate();
