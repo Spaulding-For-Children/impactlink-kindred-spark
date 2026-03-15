@@ -15,7 +15,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { GraduationCap, Microscope, Building2, ArrowLeft, Loader2, Camera } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { Separator } from '@/components/ui/separator';
+import { GraduationCap, Microscope, Building2, ArrowLeft, Loader2, Camera, Bell } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const studentSchema = z.object({
