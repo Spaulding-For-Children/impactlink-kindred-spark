@@ -137,7 +137,10 @@ const ProfileSettings = () => {
       } else if (!data) {
         navigate('/create-profile');
       } else {
-        setProfile(data as Profile);
+        const profileData = data as unknown as Profile;
+        setProfile(profileData);
+        const prefs = (data.notification_preferences as unknown as NotificationPreferences) || defaultNotificationPrefs;
+        setNotifPrefs(prefs);
         
         // Populate form based on profile type
         if (data.profile_type === 'student') {
