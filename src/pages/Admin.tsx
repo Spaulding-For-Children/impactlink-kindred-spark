@@ -20,6 +20,7 @@ import { AdminSiteSettings } from "@/components/admin/AdminSiteSettings";
 import { AdminOperationalGuide } from "@/components/admin/AdminOperationalGuide";
 import { AdminTutorial } from "@/components/admin/AdminTutorial";
 import { AdminRoleGuides } from "@/components/admin/AdminRoleGuides";
+import { AdminAnalytics } from "@/components/admin/AdminAnalytics";
 
 export default function Admin() {
   const navigate = useNavigate();
