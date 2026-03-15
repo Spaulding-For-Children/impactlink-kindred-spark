@@ -189,6 +189,15 @@ export default function Admin() {
                 <AdminResearchQuestions />
               </TabsContent>
 
+              <TabsContent value="taxonomy">
+                <AdminResearchTaxonomy />
+              </TabsContent>
+
+              <TabsContent value="suggestions">
+                <AdminForumSuggestions />
+              </TabsContent>
+              </TabsContent>
+
               <TabsContent value="datatools">
                 <AdminDataTools />
               </TabsContent>
