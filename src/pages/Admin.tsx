@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Shield, Users, FileText, Calendar, BookOpen, MessageSquare, HelpCircle, Database, UserPlus, BookMarked, Settings, Cog, Play, GraduationCap } from "lucide-react";
+import { Shield, Users, FileText, Calendar, BookOpen, MessageSquare, HelpCircle, Database, UserPlus, BookMarked, Settings, Cog, Play, GraduationCap, BarChart3 } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -20,6 +20,7 @@ import { AdminSiteSettings } from "@/components/admin/AdminSiteSettings";
 import { AdminOperationalGuide } from "@/components/admin/AdminOperationalGuide";
 import { AdminTutorial } from "@/components/admin/AdminTutorial";
 import { AdminRoleGuides } from "@/components/admin/AdminRoleGuides";
+import { AdminAnalytics } from "@/components/admin/AdminAnalytics";
 
 export default function Admin() {
   const navigate = useNavigate();
@@ -82,8 +83,12 @@ export default function Admin() {
         {/* Admin Tabs */}
         <section className="py-8">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <Tabs defaultValue="site-settings" className="space-y-6">
-              <TabsList className="grid grid-cols-2 md:grid-cols-13 gap-2 h-auto p-2 bg-muted/50">
+            <Tabs defaultValue="analytics" className="space-y-6">
+              <TabsList className="grid grid-cols-2 md:grid-cols-14 gap-2 h-auto p-2 bg-muted/50">
+                <TabsTrigger value="analytics" className="flex items-center gap-2 data-[state=active]:bg-background">
+                  <BarChart3 className="h-4 w-4" />
+                  <span className="hidden sm:inline">Analytics</span>
+                </TabsTrigger>
                 <TabsTrigger value="site-settings" className="flex items-center gap-2 data-[state=active]:bg-background">
                   <Settings className="h-4 w-4" />
                   <span className="hidden sm:inline">Site</span>
@@ -137,6 +142,10 @@ export default function Admin() {
                   <span className="hidden sm:inline">Role Guides</span>
                 </TabsTrigger>
               </TabsList>
+
+              <TabsContent value="analytics">
+                <AdminAnalytics />
+              </TabsContent>
 
               <TabsContent value="site-settings">
                 <AdminSiteSettings />
