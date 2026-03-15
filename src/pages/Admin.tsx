@@ -132,6 +132,10 @@ export default function Admin() {
                   <Lightbulb className="h-4 w-4" />
                   <span className="hidden sm:inline">Suggestions</span>
                 </TabsTrigger>
+                <TabsTrigger value="prospects" className="flex items-center gap-2 data-[state=active]:bg-background">
+                  <UserSearch className="h-4 w-4" />
+                  <span className="hidden sm:inline">Prospects</span>
+                </TabsTrigger>
                 <TabsTrigger value="datatools" className="flex items-center gap-2 data-[state=active]:bg-background">
                   <Database className="h-4 w-4" />
                   <span className="hidden sm:inline">Data & Tools</span>
