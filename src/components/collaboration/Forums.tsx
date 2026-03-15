@@ -52,6 +52,8 @@ export const Forums = () => {
   const [newPostDialog, setNewPostDialog] = useState(false);
   const [newPostData, setNewPostData] = useState({ topic_id: "", title: "", content: "" });
   const [replyContent, setReplyContent] = useState("");
+  const [suggestDialog, setSuggestDialog] = useState(false);
+  const [suggestionData, setSuggestionData] = useState({ name: "", description: "" });
 
   const { data: topics, isLoading: loadingTopics } = useForumTopics();
   const { data: posts, isLoading: loadingPosts } = useForumPosts(selectedTopic || undefined);
