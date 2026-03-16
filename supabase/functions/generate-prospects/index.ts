@@ -212,8 +212,25 @@ Return ONLY a valid JSON array, no other text.`;
 
     if (!Array.isArray(prospects)) prospects = [prospects];
 
-    // Insert prospects
-    const prospectRecords = prospects.map((p: any) => ({
+    // Deduplicate: fetch existing prospects by name+organization
+    const { data: existingProspects } = await supabase
+      .from("prospects")
+      .select("name, organization, email");
+
+    const existingKeys = new Set(
+      (existingProspects || []).map((e: any) =>
+        `${(e.name || "").toLowerCase().trim()}|${(e.organization || "").toLowerCase().trim()}|${(e.email || "").toLowerCase().trim()}`
+      )
+    );
+
+    // Filter out duplicates
+    const uniqueProspects = prospects.filter((p: any) => {
+      const key = `${(p.name || "").toLowerCase().trim()}|${(p.organization || "").toLowerCase().trim()}|${(p.email || "").toLowerCase().trim()}`;
+      return !existingKeys.has(key);
+    });
+
+    // Insert only new prospects
+    const prospectRecords = uniqueProspects.map((p: any) => ({
       search_id: search.id,
       name: p.name || "Unknown",
       organization: p.organization || null,
@@ -230,11 +247,14 @@ Return ONLY a valid JSON array, no other text.`;
       outreach_status: "not_contacted",
     }));
 
-    const { error: insertErr } = await supabase
-      .from("prospects")
-      .insert(prospectRecords);
+    const skippedCount = prospects.length - uniqueProspects.length;
 
-    if (insertErr) throw insertErr;
+    if (prospectRecords.length > 0) {
+      const { error: insertErr } = await supabase
+        .from("prospects")
+        .insert(prospectRecords);
+      if (insertErr) throw insertErr;
+    }
 
     // Update search record
     await supabase
@@ -251,6 +271,7 @@ Return ONLY a valid JSON array, no other text.`;
         success: true,
         search_id: search.id,
         prospect_count: prospectRecords.length,
+        duplicates_skipped: skippedCount,
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
