@@ -57,7 +57,8 @@ export function AdminProspects() {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["prospect-searches"] });
       queryClient.invalidateQueries({ queryKey: ["prospects"] });
-      toast.success(`Found ${data.prospect_count} prospects!`);
+      const dupMsg = data.duplicates_skipped > 0 ? ` (${data.duplicates_skipped} duplicates skipped)` : "";
+      toast.success(`Found ${data.prospect_count} new prospects!${dupMsg}`);
     },
     onError: (error) => {
       toast.error("Failed to generate prospects: " + error.message);
