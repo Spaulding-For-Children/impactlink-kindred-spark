@@ -370,6 +370,19 @@ export function AdminResources() {
                     onChange={(e) => setForm({ ...form, external_url: e.target.value })}
                   />
                 </div>
+                {form.resource_type === "toolkit" && (
+                  <div className="space-y-2">
+                    <Label htmlFor="content">Guide Content (Markdown)</Label>
+                    <p className="text-xs text-muted-foreground">Full toolkit content. Supports markdown formatting (headings, lists, tables, bold, etc.)</p>
+                    <Textarea
+                      id="content"
+                      value={form.content || ""}
+                      onChange={(e) => setForm({ ...form, content: e.target.value })}
+                      className="min-h-[300px] font-mono text-xs"
+                      placeholder="# Guide Title&#10;&#10;## Chapter 1: Getting Started&#10;&#10;Write your comprehensive guide content here..."
+                    />
+                  </div>
+                )}
                 <div className="flex justify-end gap-2">
                   <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
                     Cancel
