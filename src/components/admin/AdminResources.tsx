@@ -116,6 +116,7 @@ export function AdminResources() {
       id: resource.id,
       title: resource.title,
       description: resource.description,
+      content: resource.content || "",
       category: resource.category,
       resource_type: resource.resource_type,
       format: resource.format,
