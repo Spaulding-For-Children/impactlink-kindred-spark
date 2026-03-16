@@ -22,6 +22,7 @@ interface ResourceForm {
   id?: string;
   title: string;
   description: string;
+  content?: string;
   category: string;
   resource_type: "workshop" | "toolkit" | "reading";
   format: "live" | "recorded" | "pdf" | "article" | "report" | "book";
@@ -32,6 +33,7 @@ interface ResourceForm {
 const emptyForm: ResourceForm = {
   title: "",
   description: "",
+  content: "",
   category: "",
   resource_type: "reading",
   format: "article",
