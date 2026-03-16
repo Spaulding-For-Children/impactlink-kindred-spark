@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { FileText, Download, User, Star, Bookmark, BookmarkCheck, ExternalLink } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { FileText, Download, User, Star, Bookmark, BookmarkCheck, Eye } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useResources, useResourceCategories, useToggleBookmark, useBookmarks } from "@/hooks/useResources";
+import { useResources, useResourceCategories, useToggleBookmark, useBookmarks, Resource } from "@/hooks/useResources";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { ToolkitDetailModal } from "./ToolkitDetailModal";
 
 const CATEGORY_ICONS: Record<string, string> = {
   "Academic-Agency Partnerships": "🤝",
@@ -23,6 +24,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 export const ToolkitsGuides = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
   const { user } = useAuth();
   const { toast } = useToast();
 
@@ -53,7 +55,6 @@ export const ToolkitsGuides = () => {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
       <div>
         <h2 className="text-2xl font-display font-bold mb-2">Toolkits & Guides</h2>
         <p className="text-muted-foreground">
@@ -128,7 +129,6 @@ export const ToolkitsGuides = () => {
               <Card className="hover:shadow-md transition-all group">
                 <CardContent className="py-6">
                   <div className="flex flex-col md:flex-row gap-4">
-                    {/* Icon */}
                     <div
                       className={`w-16 h-16 rounded-xl flex items-center justify-center shrink-0 ${
                         CATEGORY_COLORS[resource.category] || "bg-muted"
@@ -137,7 +137,6 @@ export const ToolkitsGuides = () => {
                       <FileText className="w-8 h-8" />
                     </div>
 
-                    {/* Content */}
                     <div className="flex-1">
                       <div className="flex items-start justify-between gap-4">
                         <div>
@@ -174,14 +173,16 @@ export const ToolkitsGuides = () => {
                               <Bookmark className="w-5 h-5" />
                             )}
                           </Button>
-                          <Button className="gap-2">
-                            <Download className="w-4 h-4" />
-                            Download PDF
+                          <Button
+                            className="gap-2"
+                            onClick={() => setSelectedResource(resource)}
+                          >
+                            <Eye className="w-4 h-4" />
+                            Read Guide
                           </Button>
                         </div>
                       </div>
 
-                      {/* Tags */}
                       {resource.tags && resource.tags.length > 0 && (
                         <div className="flex flex-wrap gap-1 mt-3">
                           {resource.tags.map((tag) => (
@@ -199,6 +200,15 @@ export const ToolkitsGuides = () => {
           ))}
         </div>
       )}
+
+      {/* Detail Modal */}
+      <ToolkitDetailModal
+        resource={selectedResource}
+        open={!!selectedResource}
+        onOpenChange={(open) => !open && setSelectedResource(null)}
+        isBookmarked={selectedResource ? bookmarkedIds.has(selectedResource.id) : false}
+        onBookmark={handleBookmark}
+      />
     </div>
   );
 };

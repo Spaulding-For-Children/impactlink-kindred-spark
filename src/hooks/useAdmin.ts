@@ -220,6 +220,7 @@ export function useAdmin() {
       id?: string;
       title: string;
       description: string;
+      content?: string;
       category: string;
       resource_type: "workshop" | "toolkit" | "reading";
       format: "live" | "recorded" | "pdf" | "article" | "report" | "book";
