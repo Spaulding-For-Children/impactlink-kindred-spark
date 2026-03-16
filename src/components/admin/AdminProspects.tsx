@@ -7,17 +7,26 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Search, Download, RefreshCw, Eye, ExternalLink, Mail, Phone, Globe } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Search, Download, RefreshCw, Eye, ExternalLink, Mail, Phone, Globe, Send } from "lucide-react";
 import { toast } from "sonner";
 
 export function AdminProspects() {
   const queryClient = useQueryClient();
   const [selectedSearch, setSelectedSearch] = useState<string | null>(null);
   const [viewProspect, setViewProspect] = useState<any>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [emailDialogOpen, setEmailDialogOpen] = useState(false);
+  const [emailSubject, setEmailSubject] = useState("Invitation to Join ImpactLink – A Research Collaboration Platform");
+  const [emailBody, setEmailBody] = useState(
+    `Dear {name},\n\nI'm reaching out from ImpactLink, a collaborative platform connecting child welfare researchers, agencies, and students.\n\n{suggested_outreach}\n\nWe believe {organization} would be a valuable addition to our growing network. Our platform offers:\n\n• A searchable directory of researchers and agencies\n• Collaboration matching tools\n• Shared research resources and datasets\n• Forums for discussion on key topics\n\nWe'd love to have you join us. You can learn more and create a profile at our website.\n\nBest regards,\nThe ImpactLink Team`
+  );
+  const [emailFromName, setEmailFromName] = useState("ImpactLink");
 
   // Fetch search history
-  const { data: searches = [], isLoading: loadingSearches } = useQuery({
+  const { data: searches = [] } = useQuery({
     queryKey: ["prospect-searches"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -79,6 +88,59 @@ export function AdminProspects() {
     },
   });
 
+  // Send bulk outreach emails
+  const sendEmailMutation = useMutation({
+    mutationFn: async () => {
+      const { data, error } = await supabase.functions.invoke("send-prospect-outreach", {
+        body: {
+          prospect_ids: Array.from(selectedIds),
+          subject: emailSubject,
+          body: emailBody,
+          from_name: emailFromName,
+        },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      return data;
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["prospects"] });
+      setEmailDialogOpen(false);
+      setSelectedIds(new Set());
+      let msg = `Sent ${data.sent} email(s)`;
+      if (data.failed > 0) msg += `, ${data.failed} failed`;
+      if (data.skipped_no_email > 0) msg += `, ${data.skipped_no_email} skipped (no email)`;
+      toast.success(msg);
+    },
+    onError: (error) => {
+      toast.error("Failed to send emails: " + error.message);
+    },
+  });
+
+  // Selection helpers
+  const toggleSelect = (id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedIds.size === prospects.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(prospects.map((p: any) => p.id)));
+    }
+  };
+
+  const selectedWithEmail = prospects.filter(
+    (p: any) => selectedIds.has(p.id) && p.email
+  ).length;
+
+  const selectedWithoutEmail = selectedIds.size - selectedWithEmail;
+
   // CSV export
   const exportCSV = () => {
     if (prospects.length === 0) return toast.error("No prospects to export");
@@ -124,6 +186,16 @@ export function AdminProspects() {
               <Download className="h-4 w-4" />
               Export CSV
             </Button>
+            {selectedIds.size > 0 && (
+              <Button
+                variant="default"
+                onClick={() => setEmailDialogOpen(true)}
+                className="flex items-center gap-2"
+              >
+                <Send className="h-4 w-4" />
+                Email Selected ({selectedIds.size})
+              </Button>
+            )}
             <div className="ml-auto flex items-center gap-2">
               <span className="text-sm text-muted-foreground">Filter by search:</span>
               <Select value={selectedSearch || "all"} onValueChange={(v) => setSelectedSearch(v === "all" ? null : v)}>
@@ -177,6 +249,11 @@ export function AdminProspects() {
         <CardHeader>
           <CardTitle className="text-lg">
             Prospects ({prospects.length})
+            {selectedIds.size > 0 && (
+              <span className="text-sm font-normal text-muted-foreground ml-2">
+                · {selectedIds.size} selected ({selectedWithEmail} with email)
+              </span>
+            )}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -193,6 +270,12 @@ export function AdminProspects() {
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead className="w-10">
+                      <Checkbox
+                        checked={prospects.length > 0 && selectedIds.size === prospects.length}
+                        onCheckedChange={toggleSelectAll}
+                      />
+                    </TableHead>
                     <TableHead>Name</TableHead>
                     <TableHead>Organization</TableHead>
                     <TableHead>Type</TableHead>
@@ -204,7 +287,13 @@ export function AdminProspects() {
                 </TableHeader>
                 <TableBody>
                   {prospects.map((p: any) => (
-                    <TableRow key={p.id}>
+                    <TableRow key={p.id} className={selectedIds.has(p.id) ? "bg-muted/50" : ""}>
+                      <TableCell>
+                        <Checkbox
+                          checked={selectedIds.has(p.id)}
+                          onCheckedChange={() => toggleSelect(p.id)}
+                        />
+                      </TableCell>
                       <TableCell className="font-medium">{p.name}</TableCell>
                       <TableCell>{p.organization || "—"}</TableCell>
                       <TableCell>
@@ -255,6 +344,75 @@ export function AdminProspects() {
           )}
         </CardContent>
       </Card>
+
+      {/* Bulk Email Dialog */}
+      <Dialog open={emailDialogOpen} onOpenChange={setEmailDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Send className="h-5 w-5" />
+              Send Outreach Emails
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="flex gap-4 text-sm">
+              <Badge variant="default">{selectedIds.size} selected</Badge>
+              <Badge variant="secondary">{selectedWithEmail} with email</Badge>
+              {selectedWithoutEmail > 0 && (
+                <Badge variant="destructive">{selectedWithoutEmail} without email (will be skipped)</Badge>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">From Name</label>
+              <Input
+                value={emailFromName}
+                onChange={(e) => setEmailFromName(e.target.value)}
+                placeholder="Sender name"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Subject</label>
+              <Input
+                value={emailSubject}
+                onChange={(e) => setEmailSubject(e.target.value)}
+                placeholder="Email subject line"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Email Body</label>
+              <Textarea
+                value={emailBody}
+                onChange={(e) => setEmailBody(e.target.value)}
+                rows={12}
+                placeholder="Write your outreach email..."
+              />
+              <p className="text-xs text-muted-foreground">
+                Available placeholders: <code className="bg-muted px-1 rounded">{"{name}"}</code>,{" "}
+                <code className="bg-muted px-1 rounded">{"{organization}"}</code>,{" "}
+                <code className="bg-muted px-1 rounded">{"{suggested_outreach}"}</code>
+              </p>
+            </div>
+          </div>
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={() => setEmailDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              onClick={() => sendEmailMutation.mutate()}
+              disabled={sendEmailMutation.isPending || selectedWithEmail === 0}
+              className="flex items-center gap-2"
+            >
+              <Send className="h-4 w-4" />
+              {sendEmailMutation.isPending
+                ? "Sending..."
+                : `Send to ${selectedWithEmail} prospect${selectedWithEmail !== 1 ? "s" : ""}`}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Prospect Detail Dialog */}
       <Dialog open={!!viewProspect} onOpenChange={() => setViewProspect(null)}>
