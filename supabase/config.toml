@@ -14,3 +14,6 @@ verify_jwt = false
 
 [functions.generate-prospects]
 verify_jwt = false
+
+[functions.send-prospect-outreach]
+verify_jwt = false
