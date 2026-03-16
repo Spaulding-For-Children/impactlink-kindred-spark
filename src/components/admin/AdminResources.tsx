@@ -22,6 +22,7 @@ interface ResourceForm {
   id?: string;
   title: string;
   description: string;
+  content?: string;
   category: string;
   resource_type: "workshop" | "toolkit" | "reading";
   format: "live" | "recorded" | "pdf" | "article" | "report" | "book";
@@ -32,6 +33,7 @@ interface ResourceForm {
 const emptyForm: ResourceForm = {
   title: "",
   description: "",
+  content: "",
   category: "",
   resource_type: "reading",
   format: "article",
@@ -114,6 +116,7 @@ export function AdminResources() {
       id: resource.id,
       title: resource.title,
       description: resource.description,
+      content: resource.content || "",
       category: resource.category,
       resource_type: resource.resource_type,
       format: resource.format,
@@ -280,7 +283,7 @@ export function AdminResources() {
                 Add Resource
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-lg">
+            <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>{form.id ? "Edit Resource" : "Add New Resource"}</DialogTitle>
               </DialogHeader>
@@ -367,6 +370,19 @@ export function AdminResources() {
                     onChange={(e) => setForm({ ...form, external_url: e.target.value })}
                   />
                 </div>
+                {form.resource_type === "toolkit" && (
+                  <div className="space-y-2">
+                    <Label htmlFor="content">Guide Content (Markdown)</Label>
+                    <p className="text-xs text-muted-foreground">Full toolkit content. Supports markdown formatting (headings, lists, tables, bold, etc.)</p>
+                    <Textarea
+                      id="content"
+                      value={form.content || ""}
+                      onChange={(e) => setForm({ ...form, content: e.target.value })}
+                      className="min-h-[300px] font-mono text-xs"
+                      placeholder="# Guide Title&#10;&#10;## Chapter 1: Getting Started&#10;&#10;Write your comprehensive guide content here..."
+                    />
+                  </div>
+                )}
                 <div className="flex justify-end gap-2">
                   <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
                     Cancel

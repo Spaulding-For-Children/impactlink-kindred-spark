@@ -1,0 +1,1 @@
+ALTER TABLE public.resources ADD COLUMN content text DEFAULT NULL;

@@ -928,6 +928,7 @@ export type Database = {
         Row: {
           author: string | null
           category: string
+          content: string | null
           created_at: string
           description: string
           download_count: number | null
@@ -948,6 +949,7 @@ export type Database = {
         Insert: {
           author?: string | null
           category: string
+          content?: string | null
           created_at?: string
           description: string
           download_count?: number | null
@@ -968,6 +970,7 @@ export type Database = {
         Update: {
           author?: string | null
           category?: string
+          content?: string | null
           created_at?: string
           description?: string
           download_count?: number | null
