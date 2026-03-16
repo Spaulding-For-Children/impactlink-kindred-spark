@@ -271,6 +271,7 @@ Return ONLY a valid JSON array, no other text.`;
         success: true,
         search_id: search.id,
         prospect_count: prospectRecords.length,
+        duplicates_skipped: skippedCount,
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
