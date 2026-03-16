@@ -283,7 +283,7 @@ export function AdminResources() {
                 Add Resource
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-lg">
+            <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>{form.id ? "Edit Resource" : "Add New Resource"}</DialogTitle>
               </DialogHeader>
