@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Loader2, Users, Calendar, Bookmark, Handshake, ArrowRight, Clock } from 'lucide-react';
 import { format } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 
 const Dashboard = () => {
   const { user, loading: authLoading } = useAuth();
@@ -20,6 +21,7 @@ const Dashboard = () => {
   const { data: profile, isLoading: profileLoading } = useCurrentProfile();
   const { data: collaborations = [], isLoading: collabLoading } = useCollaborations();
   const { data: registrations = [], isLoading: regsLoading } = useMyRegistrations();
+  const { t } = useTranslation();
 
   const { data: bookmarks = [] } = useQuery({
     queryKey: ['my-bookmarks-count', user?.id],
@@ -83,7 +85,6 @@ const Dashboard = () => {
       <Header />
       <main className="flex-1 pt-28 pb-16 px-4">
         <div className="container mx-auto max-w-6xl">
-          {/* Welcome */}
           <div className="flex items-center gap-4 mb-8">
             <Avatar className="h-14 w-14">
               <AvatarImage src={profile?.avatar_url || undefined} />
@@ -93,7 +94,7 @@ const Dashboard = () => {
             </Avatar>
             <div>
               <h1 className="text-2xl font-display font-bold text-foreground">
-                Welcome back, {profile?.name?.split(' ')[0] || 'User'}
+                {t('dashboard.welcomeBack', { name: profile?.name?.split(' ')[0] || 'User' })}
               </h1>
               <p className="text-muted-foreground">
                 <Badge variant="outline" className="capitalize mr-2">{profile?.profile_type}</Badge>
@@ -102,52 +103,50 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <Card>
               <CardContent className="pt-6 text-center">
                 <Handshake className="h-6 w-6 text-primary mx-auto mb-2" />
                 <p className="text-2xl font-bold text-foreground">{acceptedCollabs.length}</p>
-                <p className="text-xs text-muted-foreground">Active Collaborations</p>
+                <p className="text-xs text-muted-foreground">{t('dashboard.activeCollaborations')}</p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="pt-6 text-center">
                 <Clock className="h-6 w-6 text-amber mx-auto mb-2" />
                 <p className="text-2xl font-bold text-foreground">{pendingReceived.length}</p>
-                <p className="text-xs text-muted-foreground">Pending Requests</p>
+                <p className="text-xs text-muted-foreground">{t('dashboard.pendingRequests')}</p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="pt-6 text-center">
                 <Calendar className="h-6 w-6 text-sage mx-auto mb-2" />
                 <p className="text-2xl font-bold text-foreground">{upcomingEvents.length}</p>
-                <p className="text-xs text-muted-foreground">Upcoming Events</p>
+                <p className="text-xs text-muted-foreground">{t('dashboard.upcomingEvents')}</p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="pt-6 text-center">
                 <Bookmark className="h-6 w-6 text-secondary mx-auto mb-2" />
                 <p className="text-2xl font-bold text-foreground">{bookmarkCount}</p>
-                <p className="text-xs text-muted-foreground">Saved Resources</p>
+                <p className="text-xs text-muted-foreground">{t('dashboard.savedResources')}</p>
               </CardContent>
             </Card>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            {/* Pending Collaboration Requests */}
             <Card>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg">Collaboration Requests</CardTitle>
+                  <CardTitle className="text-lg">{t('dashboard.collaborationRequests')}</CardTitle>
                   <Button variant="ghost" size="sm" asChild>
-                    <Link to="/collaboration">View all <ArrowRight className="h-4 w-4 ml-1" /></Link>
+                    <Link to="/collaboration">{t('dashboard.viewAll')} <ArrowRight className="h-4 w-4 ml-1" /></Link>
                   </Button>
                 </div>
               </CardHeader>
               <CardContent>
                 {pendingReceived.length === 0 ? (
-                  <p className="text-sm text-muted-foreground py-4 text-center">No pending requests</p>
+                  <p className="text-sm text-muted-foreground py-4 text-center">{t('dashboard.noPendingRequests')}</p>
                 ) : (
                   <div className="space-y-3">
                     {pendingReceived.slice(0, 5).map((collab) => (
@@ -162,7 +161,7 @@ const Dashboard = () => {
                           <p className="text-sm font-medium text-foreground truncate">{collab.requester?.name}</p>
                           <p className="text-xs text-muted-foreground capitalize">{collab.requester?.profile_type}</p>
                         </div>
-                        <Badge variant="outline" className="text-amber border-amber/30">Pending</Badge>
+                        <Badge variant="outline" className="text-amber border-amber/30">{t('dashboard.pending')}</Badge>
                       </div>
                     ))}
                   </div>
@@ -170,19 +169,18 @@ const Dashboard = () => {
               </CardContent>
             </Card>
 
-            {/* Upcoming Events */}
             <Card>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg">Upcoming Events</CardTitle>
+                  <CardTitle className="text-lg">{t('dashboard.upcomingEvents')}</CardTitle>
                   <Button variant="ghost" size="sm" asChild>
-                    <Link to="/events">View all <ArrowRight className="h-4 w-4 ml-1" /></Link>
+                    <Link to="/events">{t('dashboard.viewAll')} <ArrowRight className="h-4 w-4 ml-1" /></Link>
                   </Button>
                 </div>
               </CardHeader>
               <CardContent>
                 {upcomingEvents.length === 0 ? (
-                  <p className="text-sm text-muted-foreground py-4 text-center">No upcoming events</p>
+                  <p className="text-sm text-muted-foreground py-4 text-center">{t('dashboard.noUpcomingEvents')}</p>
                 ) : (
                   <div className="space-y-3">
                     {upcomingEvents.map((reg: any) => (
@@ -202,19 +200,18 @@ const Dashboard = () => {
               </CardContent>
             </Card>
 
-            {/* Saved Resources */}
             <Card className="md:col-span-2">
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg">Saved Resources</CardTitle>
+                  <CardTitle className="text-lg">{t('dashboard.savedResources')}</CardTitle>
                   <Button variant="ghost" size="sm" asChild>
-                    <Link to="/resources">View all <ArrowRight className="h-4 w-4 ml-1" /></Link>
+                    <Link to="/resources">{t('dashboard.viewAll')} <ArrowRight className="h-4 w-4 ml-1" /></Link>
                   </Button>
                 </div>
               </CardHeader>
               <CardContent>
                 {bookmarks.length === 0 ? (
-                  <p className="text-sm text-muted-foreground py-4 text-center">No saved resources yet</p>
+                  <p className="text-sm text-muted-foreground py-4 text-center">{t('dashboard.noSavedResources')}</p>
                 ) : (
                   <div className="grid sm:grid-cols-2 gap-3">
                     {bookmarks.map((bm: any) => (

@@ -10,16 +10,17 @@ import { ResearchSubmissions } from "@/components/resources/ResearchSubmissions"
 import { Video, FileText, BookOpen, Bookmark, Upload } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { SavedResources } from "@/components/resources/SavedResources";
+import { useTranslation } from "react-i18next";
 
 const Resources = () => {
   const [activeTab, setActiveTab] = useState("workshops");
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
       <main className="pt-20">
-        {/* Hero Section */}
         <section className="py-16 bg-gradient-to-b from-amber/10 to-background">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
@@ -29,84 +30,53 @@ const Resources = () => {
               className="text-center max-w-3xl mx-auto"
             >
               <span className="inline-block px-4 py-1.5 rounded-full bg-amber/10 text-amber text-sm font-medium mb-4">
-                Resources & Learning
+                {t('resourcesPage.badge')}
               </span>
               <h1 className="text-4xl sm:text-5xl font-display font-bold text-foreground mb-6">
-                Grow Your
-                <span className="block text-amber">Research Impact</span>
+                {t('resourcesPage.title')}
+                <span className="block text-amber">{t('resourcesPage.titleHighlight')}</span>
               </h1>
               <p className="text-lg text-muted-foreground">
-                Access workshops, toolkits, and curated readings to enhance your child welfare
-                research skills and build meaningful partnerships.
+                {t('resourcesPage.description')}
               </p>
             </motion.div>
           </div>
         </section>
 
-        {/* Tabs Section */}
         <section className="py-12">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="w-full justify-start flex-wrap h-auto gap-2 bg-transparent p-0 mb-8">
-                <TabsTrigger
-                  value="workshops"
-                  className="data-[state=active]:bg-amber data-[state=active]:text-white rounded-full px-6 py-2.5"
-                >
+                <TabsTrigger value="workshops" className="data-[state=active]:bg-amber data-[state=active]:text-white rounded-full px-6 py-2.5">
                   <Video className="w-4 h-4 mr-2" />
-                  Workshops & Webinars
+                  {t('resourcesPage.workshops')}
                 </TabsTrigger>
-                <TabsTrigger
-                  value="toolkits"
-                  className="data-[state=active]:bg-amber data-[state=active]:text-white rounded-full px-6 py-2.5"
-                >
+                <TabsTrigger value="toolkits" className="data-[state=active]:bg-amber data-[state=active]:text-white rounded-full px-6 py-2.5">
                   <FileText className="w-4 h-4 mr-2" />
-                  Toolkits & Guides
+                  {t('resourcesPage.toolkits')}
                 </TabsTrigger>
-                <TabsTrigger
-                  value="readings"
-                  className="data-[state=active]:bg-amber data-[state=active]:text-white rounded-full px-6 py-2.5"
-                >
+                <TabsTrigger value="readings" className="data-[state=active]:bg-amber data-[state=active]:text-white rounded-full px-6 py-2.5">
                   <BookOpen className="w-4 h-4 mr-2" />
-                  Reading Lists
+                  {t('resourcesPage.readingLists')}
                 </TabsTrigger>
-                <TabsTrigger
-                  value="submissions"
-                  className="data-[state=active]:bg-amber data-[state=active]:text-white rounded-full px-6 py-2.5"
-                >
+                <TabsTrigger value="submissions" className="data-[state=active]:bg-amber data-[state=active]:text-white rounded-full px-6 py-2.5">
                   <Upload className="w-4 h-4 mr-2" />
-                  Research Showcase
+                  {t('resourcesPage.researchShowcase')}
                 </TabsTrigger>
                 {user && (
-                  <TabsTrigger
-                    value="saved"
-                    className="data-[state=active]:bg-amber data-[state=active]:text-white rounded-full px-6 py-2.5"
-                  >
+                  <TabsTrigger value="saved" className="data-[state=active]:bg-amber data-[state=active]:text-white rounded-full px-6 py-2.5">
                     <Bookmark className="w-4 h-4 mr-2" />
-                    Saved
+                    {t('resourcesPage.saved')}
                   </TabsTrigger>
                 )}
               </TabsList>
 
-              <TabsContent value="workshops" className="mt-0">
-                <WorkshopsWebinars />
-              </TabsContent>
-
-              <TabsContent value="toolkits" className="mt-0">
-                <ToolkitsGuides />
-              </TabsContent>
-
-              <TabsContent value="readings" className="mt-0">
-                <ReadingLists />
-              </TabsContent>
-
-              <TabsContent value="submissions" className="mt-0">
-                <ResearchSubmissions />
-              </TabsContent>
-
+              <TabsContent value="workshops" className="mt-0"><WorkshopsWebinars /></TabsContent>
+              <TabsContent value="toolkits" className="mt-0"><ToolkitsGuides /></TabsContent>
+              <TabsContent value="readings" className="mt-0"><ReadingLists /></TabsContent>
+              <TabsContent value="submissions" className="mt-0"><ResearchSubmissions /></TabsContent>
               {user && (
-                <TabsContent value="saved" className="mt-0">
-                  <SavedResources />
-                </TabsContent>
+                <TabsContent value="saved" className="mt-0"><SavedResources /></TabsContent>
               )}
             </Tabs>
           </div>
