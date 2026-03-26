@@ -738,4 +738,71 @@ const ProfileSettings = () => {
   );
 };
 
+function TwoFactorSection() {
+  const { securitySettings } = useSecuritySettings();
+  const [hasFactor, setHasFactor] = useState<boolean | null>(null);
+  const [showSetup, setShowSetup] = useState(false);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    supabase.auth.mfa.listFactors().then(({ data }) => {
+      setHasFactor(!!(data?.totp && data.totp.length > 0));
+    });
+  }, []);
+
+  if (!securitySettings.totp_enabled) return null;
+
+  const handleUnenroll = async () => {
+    try {
+      const { data } = await supabase.auth.mfa.listFactors();
+      const factor = data?.totp?.[0];
+      if (factor) {
+        await supabase.auth.mfa.unenroll({ factorId: factor.id });
+        setHasFactor(false);
+        toast({ title: "2FA disabled", description: "Two-factor authentication has been removed from your account." });
+      }
+    } catch (err: any) {
+      toast({ title: "Error", description: err.message, variant: "destructive" });
+    }
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Shield className="h-5 w-5" />
+          Two-Factor Authentication
+        </CardTitle>
+        <CardDescription>
+          Add an extra layer of security to your account
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        {hasFactor === null ? (
+          <div className="flex justify-center py-4"><Loader2 className="h-5 w-5 animate-spin" /></div>
+        ) : hasFactor ? (
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 text-sm text-green-600">
+              <Shield className="h-4 w-4" />
+              Two-factor authentication is enabled
+            </div>
+            <Button variant="destructive" size="sm" onClick={handleUnenroll}>
+              Disable 2FA
+            </Button>
+          </div>
+        ) : showSetup ? (
+          <TotpSetup
+            onComplete={() => { setHasFactor(true); setShowSetup(false); }}
+            onSkip={() => setShowSetup(false)}
+          />
+        ) : (
+          <Button onClick={() => setShowSetup(true)}>
+            Set Up 2FA
+          </Button>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
 export default ProfileSettings;
