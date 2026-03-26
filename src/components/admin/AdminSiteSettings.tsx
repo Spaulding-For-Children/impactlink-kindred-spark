@@ -7,7 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
-import { Save, Palette, Type, Layout, Eye, EyeOff, GripVertical } from "lucide-react";
+import { Save, Palette, Type, Layout, Eye, EyeOff, GripVertical, Shield } from "lucide-react";
+import { AdminSecuritySettings } from "@/components/admin/AdminSecuritySettings";
 
 export function AdminSiteSettings() {
   const { settings, isLoading, updateSetting } = useSiteSettings();
@@ -143,7 +144,7 @@ export function AdminSiteSettings() {
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-      <TabsList className="grid grid-cols-3 w-fit">
+      <TabsList className="grid grid-cols-4 w-fit">
         <TabsTrigger value="content" className="flex items-center gap-2">
           <Type className="h-4 w-4" />Content
         </TabsTrigger>
@@ -152,6 +153,9 @@ export function AdminSiteSettings() {
         </TabsTrigger>
         <TabsTrigger value="layout" className="flex items-center gap-2">
           <Layout className="h-4 w-4" />Layout
+        </TabsTrigger>
+        <TabsTrigger value="security" className="flex items-center gap-2">
+          <Shield className="h-4 w-4" />Security
         </TabsTrigger>
       </TabsList>
 
@@ -269,6 +273,10 @@ export function AdminSiteSettings() {
             </Button>
           </CardContent>
         </Card>
+      </TabsContent>
+
+      <TabsContent value="security" className="space-y-6">
+        <AdminSecuritySettings />
       </TabsContent>
     </Tabs>
   );

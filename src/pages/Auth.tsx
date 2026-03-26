@@ -12,6 +12,9 @@ import { z } from 'zod';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { supabase } from '@/integrations/supabase/client';
+import { useSecuritySettings, validatePasswordStrength, checkRateLimiting, recordLoginAttempt } from '@/hooks/useSecuritySettings';
+import { PasswordStrengthIndicator } from '@/components/auth/PasswordStrengthIndicator';
+import { TotpChallenge } from '@/components/auth/TotpChallenge';
 
 const signInSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -49,15 +52,17 @@ const Auth = () => {
   const [forgotPassword, setForgotPassword] = useState(false);
   const [resetSent, setResetSent] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [showMfaChallenge, setShowMfaChallenge] = useState(false);
   const { signIn, user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { securitySettings } = useSecuritySettings();
 
   useEffect(() => {
-    if (user) {
+    if (user && !showMfaChallenge) {
       navigate('/create-profile');
     }
-  }, [user, navigate]);
+  }, [user, navigate, showMfaChallenge]);
 
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,11 +102,26 @@ const Auth = () => {
       return;
     }
 
+    // Rate limiting check
+    if (securitySettings.rate_limiting_enabled) {
+      const { locked, minutesRemaining } = await checkRateLimiting(email, securitySettings);
+      if (locked) {
+        toast({
+          title: "Account temporarily locked",
+          description: `Too many failed login attempts. Please try again in ${minutesRemaining} minutes.`,
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+
     setLoading(true);
     const { error } = await signIn(email, password);
     setLoading(false);
 
     if (error) {
+      // Record failed attempt
+      await recordLoginAttempt(email, false);
       toast({
         title: "Sign in failed",
         description: error.message === "Invalid login credentials"
@@ -110,12 +130,40 @@ const Auth = () => {
         variant: "destructive",
       });
     } else {
+      // Record successful attempt
+      await recordLoginAttempt(email, true);
+
+      // Check if user has MFA factors and TOTP is enabled
+      if (securitySettings.totp_enabled) {
+        try {
+          const { data: factors } = await supabase.auth.mfa.listFactors();
+          if (factors?.totp && factors.totp.length > 0) {
+            setShowMfaChallenge(true);
+            return;
+          }
+        } catch {}
+      }
+
       toast({
         title: "Welcome back!",
         description: "You have successfully signed in.",
       });
       navigate('/');
     }
+  };
+
+  const handleMfaSuccess = () => {
+    setShowMfaChallenge(false);
+    toast({
+      title: "Welcome back!",
+      description: "You have successfully signed in.",
+    });
+    navigate('/');
+  };
+
+  const handleMfaCancel = async () => {
+    setShowMfaChallenge(false);
+    await supabase.auth.signOut();
   };
 
   const handleSignUp = async (e: React.FormEvent) => {
@@ -148,7 +196,6 @@ const Auth = () => {
 
       if (error) throw error;
 
-      // Notify admin via edge function
       supabase.functions.invoke('send-registration-notification', {
         body: { name, email, organization, organization_type: organizationType, phone_number: phoneNumber },
       }).catch((err) => console.error('Failed to send registration notification:', err));
@@ -168,6 +215,19 @@ const Auth = () => {
       setLoading(false);
     }
   };
+
+  // Show MFA challenge screen
+  if (showMfaChallenge) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background">
+        <Header />
+        <main className="flex-1 flex items-center justify-center py-12 px-4">
+          <TotpChallenge onSuccess={handleMfaSuccess} onCancel={handleMfaCancel} />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
