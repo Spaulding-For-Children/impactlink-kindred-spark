@@ -728,6 +728,9 @@ const ProfileSettings = () => {
               </Button>
             </CardContent>
           </Card>
+
+          {/* 2FA Section */}
+          <TwoFactorSection />
         </div>
       </main>
       <Footer />
