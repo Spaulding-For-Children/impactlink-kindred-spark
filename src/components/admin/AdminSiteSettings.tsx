@@ -144,7 +144,7 @@ export function AdminSiteSettings() {
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-      <TabsList className="grid grid-cols-3 w-fit">
+      <TabsList className="grid grid-cols-4 w-fit">
         <TabsTrigger value="content" className="flex items-center gap-2">
           <Type className="h-4 w-4" />Content
         </TabsTrigger>
@@ -153,6 +153,9 @@ export function AdminSiteSettings() {
         </TabsTrigger>
         <TabsTrigger value="layout" className="flex items-center gap-2">
           <Layout className="h-4 w-4" />Layout
+        </TabsTrigger>
+        <TabsTrigger value="security" className="flex items-center gap-2">
+          <Shield className="h-4 w-4" />Security
         </TabsTrigger>
       </TabsList>
 
