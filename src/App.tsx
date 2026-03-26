@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { TutorialProvider } from "@/contexts/TutorialContext";
 import { TutorialOverlay } from "@/components/tutorial/TutorialOverlay";
+import { SessionTimeoutProvider } from "@/components/auth/SessionTimeoutProvider";
 import Index from "./pages/Index";
 import Directory from "./pages/Directory";
 import Students from "./pages/Students";
@@ -40,6 +41,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <SessionTimeoutProvider />
           <TutorialProvider>
             <Routes>
               <Route path="/" element={<Index />} />

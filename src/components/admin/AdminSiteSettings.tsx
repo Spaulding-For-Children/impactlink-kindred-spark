@@ -274,6 +274,10 @@ export function AdminSiteSettings() {
           </CardContent>
         </Card>
       </TabsContent>
+
+      <TabsContent value="security" className="space-y-6">
+        <AdminSecuritySettings />
+      </TabsContent>
     </Tabs>
   );
 }

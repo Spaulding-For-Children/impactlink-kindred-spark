@@ -8,6 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useToast } from '@/hooks/use-toast';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { useSecuritySettings, validatePasswordStrength } from '@/hooks/useSecuritySettings';
+import { PasswordStrengthIndicator } from '@/components/auth/PasswordStrengthIndicator';
 
 const UpdatePassword = () => {
   const [password, setPassword] = useState('');
@@ -16,16 +18,15 @@ const UpdatePassword = () => {
   const [sessionReady, setSessionReady] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { securitySettings } = useSecuritySettings();
 
   useEffect(() => {
-    // Listen for the PASSWORD_RECOVERY event which fires when user clicks the reset link
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'PASSWORD_RECOVERY') {
         setSessionReady(true);
       }
     });
 
-    // Also check if we already have a session (user may have already been authenticated via the token)
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         setSessionReady(true);
@@ -37,6 +38,13 @@ const UpdatePassword = () => {
 
   const handleUpdatePassword = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Password strength validation
+    const strengthError = validatePasswordStrength(password, securitySettings);
+    if (strengthError) {
+      toast({ title: "Weak password", description: strengthError, variant: "destructive" });
+      return;
+    }
 
     if (password.length < 6) {
       toast({ title: "Error", description: "Password must be at least 6 characters.", variant: "destructive" });
@@ -93,6 +101,7 @@ const UpdatePassword = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
+                  <PasswordStrengthIndicator password={password} settings={securitySettings} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="confirm-password">Confirm Password</Label>
