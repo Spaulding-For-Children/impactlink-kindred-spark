@@ -17,8 +17,10 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
-import { GraduationCap, Microscope, Building2, ArrowLeft, Loader2, Camera, Bell } from 'lucide-react';
+import { GraduationCap, Microscope, Building2, ArrowLeft, Loader2, Camera, Bell, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useSecuritySettings } from '@/hooks/useSecuritySettings';
+import { TotpSetup } from '@/components/auth/TotpSetup';
 
 const studentSchema = z.object({
   name: z.string().min(2).max(100),
