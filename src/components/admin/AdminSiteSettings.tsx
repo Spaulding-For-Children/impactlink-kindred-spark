@@ -7,7 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
-import { Save, Palette, Type, Layout, Eye, EyeOff, GripVertical } from "lucide-react";
+import { Save, Palette, Type, Layout, Eye, EyeOff, GripVertical, Shield } from "lucide-react";
+import { AdminSecuritySettings } from "@/components/admin/AdminSecuritySettings";
 
 export function AdminSiteSettings() {
   const { settings, isLoading, updateSetting } = useSiteSettings();
