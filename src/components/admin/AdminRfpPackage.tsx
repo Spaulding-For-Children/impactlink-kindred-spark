@@ -180,10 +180,13 @@ export function AdminRfpPackage() {
 
   function exportWord(scope: "all" | "single") {
     const items = scope === "single" && selected ? [selected] : sections;
-    const body = items
-      .map((s) => `<h2>${s.title}</h2>${(s.content_markdown || "").replace(/\n/g, "<br/>")}`)
-      .join("<hr/>");
-    const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>RFP Package</title></head><body>${body}</body></html>`;
+    const title = scope === "single" && selected ? selected.title : "RFP / NOFO Grant Package";
+    const inner = renderSectionsHtml(items);
+    const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head><meta charset='utf-8'><title>${title}</title>
+<style>${PRINT_CSS}</style>
+<xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml>
+</head><body><h1>${title}</h1>${inner}</body></html>`;
     const blob = new Blob(["\ufeff", html], { type: "application/msword" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -195,14 +198,12 @@ export function AdminRfpPackage() {
 
   function exportPdf(scope: "all" | "single") {
     const items = scope === "single" && selected ? [selected] : sections;
+    const title = scope === "single" && selected ? selected.title : "RFP / NOFO Grant Package";
     const w = window.open("", "_blank");
-    if (!w) return;
-    w.document.write(`<html><head><title>RFP Package</title>
-      <style>body{font-family:Georgia,serif;max-width:780px;margin:2rem auto;padding:0 1rem;line-height:1.6;color:#222}
-      h1{border-bottom:2px solid #333}h2{margin-top:2rem;color:#111}hr{margin:2rem 0;border:0;border-top:1px solid #ccc}</style>
-      </head><body><h1>RFP / NOFO Grant Package</h1>${items.map((s) => `<h2>${s.title}</h2><div>${(s.content_markdown || "").replace(/\n/g, "<br/>")}</div>`).join("<hr/>")}</body></html>`);
+    if (!w) { toast.error("Popup blocked — allow popups to export PDF"); return; }
+    w.document.write(`<html><head><title>${title}</title><style>${PRINT_CSS}</style></head><body><h1>${title}</h1>${renderSectionsHtml(items)}</body></html>`);
     w.document.close();
-    setTimeout(() => w.print(), 400);
+    setTimeout(() => w.print(), 500);
   }
 
   return (
