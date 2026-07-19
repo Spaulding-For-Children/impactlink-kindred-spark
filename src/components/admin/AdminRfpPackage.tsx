@@ -9,6 +9,33 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import { Sparkles, Download, FileText, Loader2, Save, Plus, Trash2 } from "lucide-react";
+import { marked } from "marked";
+
+const PRINT_CSS = `body{font-family:Georgia,'Times New Roman',serif;max-width:780px;margin:2rem auto;padding:0 1rem;line-height:1.6;color:#222}
+h1{border-bottom:2px solid #333;padding-bottom:.3rem}
+h2{margin-top:2rem;color:#111;border-bottom:1px solid #ddd;padding-bottom:.2rem}
+h3{margin-top:1.5rem;color:#333}
+hr{margin:2.5rem 0;border:0;border-top:1px solid #ccc}
+ul,ol{margin:.5rem 0 1rem 1.5rem}
+li{margin:.25rem 0}
+blockquote{border-left:4px solid #ccc;margin:1rem 0;padding:.25rem 1rem;color:#555;background:#f9f9f9}
+code{background:#f4f4f4;padding:1px 4px;border-radius:3px;font-family:Consolas,monospace}
+pre{background:#f4f4f4;padding:.75rem;border-radius:4px;overflow:auto}
+table{border-collapse:collapse;margin:1rem 0;width:100%}
+th,td{border:1px solid #ccc;padding:.4rem .6rem;text-align:left}
+th{background:#f0f0f0}
+p{margin:.5rem 0}`;
+
+function renderSectionsHtml(items: RfpSection[]) {
+  return items
+    .map((s) => {
+      const body = s.content_markdown?.trim()
+        ? marked.parse(s.content_markdown, { async: false }) as string
+        : "<p><em>(empty)</em></p>";
+      return `<section><h2>${s.title}</h2>${body}</section>`;
+    })
+    .join('<hr/>');
+}
 
 interface RfpSection {
   id: string;
