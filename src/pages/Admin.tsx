@@ -158,6 +158,14 @@ export default function Admin() {
                   <GraduationCap className="h-4 w-4" />
                   <span className="hidden sm:inline">Role Guides</span>
                 </TabsTrigger>
+                <TabsTrigger value="rfp" className="flex items-center gap-2 data-[state=active]:bg-background">
+                  <ScrollText className="h-4 w-4" />
+                  <span className="hidden sm:inline">RFP Package</span>
+                </TabsTrigger>
+                <TabsTrigger value="vuln-alerts" className="flex items-center gap-2 data-[state=active]:bg-background">
+                  <ShieldAlert className="h-4 w-4" />
+                  <span className="hidden sm:inline">Vulnerabilities</span>
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="analytics">
