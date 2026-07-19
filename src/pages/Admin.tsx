@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Shield, Users, FileText, Calendar, BookOpen, MessageSquare, HelpCircle, Database, UserPlus, BookMarked, Settings, Cog, Play, GraduationCap, BarChart3, Tag, Lightbulb, UserSearch } from "lucide-react";
+import { Shield, Users, FileText, Calendar, BookOpen, MessageSquare, HelpCircle, Database, UserPlus, BookMarked, Settings, Cog, Play, GraduationCap, BarChart3, Tag, Lightbulb, UserSearch, ScrollText, ShieldAlert } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -24,6 +24,8 @@ import { AdminAnalytics } from "@/components/admin/AdminAnalytics";
 import { AdminResearchTaxonomy } from "@/components/admin/AdminResearchTaxonomy";
 import { AdminForumSuggestions } from "@/components/admin/AdminForumSuggestions";
 import { AdminProspects } from "@/components/admin/AdminProspects";
+import { AdminRfpPackage } from "@/components/admin/AdminRfpPackage";
+import { AdminVulnerabilityAlerts } from "@/components/admin/AdminVulnerabilityAlerts";
 
 export default function Admin() {
   const navigate = useNavigate();

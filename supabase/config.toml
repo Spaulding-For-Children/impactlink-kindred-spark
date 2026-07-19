@@ -17,3 +17,9 @@ verify_jwt = false
 
 [functions.send-prospect-outreach]
 verify_jwt = false
+
+[functions.generate-rfp-section]
+verify_jwt = false
+
+[functions.scan-dependencies]
+verify_jwt = false
