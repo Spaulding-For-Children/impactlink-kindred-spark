@@ -164,6 +164,69 @@ export type Database = {
         }
         Relationships: []
       }
+      dependency_advisories: {
+        Row: {
+          advisory_id: string
+          advisory_url: string | null
+          first_seen_at: string
+          fixed_version: string | null
+          id: string
+          installed_version: string | null
+          notified: boolean
+          package_name: string
+          resolved: boolean
+          severity: string | null
+          summary: string | null
+        }
+        Insert: {
+          advisory_id: string
+          advisory_url?: string | null
+          first_seen_at?: string
+          fixed_version?: string | null
+          id?: string
+          installed_version?: string | null
+          notified?: boolean
+          package_name: string
+          resolved?: boolean
+          severity?: string | null
+          summary?: string | null
+        }
+        Update: {
+          advisory_id?: string
+          advisory_url?: string | null
+          first_seen_at?: string
+          fixed_version?: string | null
+          id?: string
+          installed_version?: string | null
+          notified?: boolean
+          package_name?: string
+          resolved?: boolean
+          severity?: string | null
+          summary?: string | null
+        }
+        Relationships: []
+      }
+      dependency_snapshot: {
+        Row: {
+          id: string
+          installed_version: string
+          package_name: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          installed_version: string
+          package_name: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          installed_version?: string
+          package_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ethics_resources: {
         Row: {
           created_at: string
@@ -1014,6 +1077,42 @@ export type Database = {
         }
         Relationships: []
       }
+      rfp_sections: {
+        Row: {
+          content_markdown: string
+          group_name: string
+          id: string
+          is_custom: boolean
+          slug: string
+          sort_order: number
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          content_markdown?: string
+          group_name: string
+          id?: string
+          is_custom?: boolean
+          slug: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          content_markdown?: string
+          group_name?: string
+          id?: string
+          is_custom?: boolean
+          slug?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           id: string
@@ -1056,6 +1155,33 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      vulnerability_scan_runs: {
+        Row: {
+          advisories_found: number
+          error: string | null
+          id: string
+          new_advisories: number
+          ran_at: string
+          status: string
+        }
+        Insert: {
+          advisories_found?: number
+          error?: string | null
+          id?: string
+          new_advisories?: number
+          ran_at?: string
+          status?: string
+        }
+        Update: {
+          advisories_found?: number
+          error?: string | null
+          id?: string
+          new_advisories?: number
+          ran_at?: string
+          status?: string
         }
         Relationships: []
       }

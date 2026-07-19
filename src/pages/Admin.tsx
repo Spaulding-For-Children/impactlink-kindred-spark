@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Shield, Users, FileText, Calendar, BookOpen, MessageSquare, HelpCircle, Database, UserPlus, BookMarked, Settings, Cog, Play, GraduationCap, BarChart3, Tag, Lightbulb, UserSearch } from "lucide-react";
+import { Shield, Users, FileText, Calendar, BookOpen, MessageSquare, HelpCircle, Database, UserPlus, BookMarked, Settings, Cog, Play, GraduationCap, BarChart3, Tag, Lightbulb, UserSearch, ScrollText, ShieldAlert } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -24,6 +24,8 @@ import { AdminAnalytics } from "@/components/admin/AdminAnalytics";
 import { AdminResearchTaxonomy } from "@/components/admin/AdminResearchTaxonomy";
 import { AdminForumSuggestions } from "@/components/admin/AdminForumSuggestions";
 import { AdminProspects } from "@/components/admin/AdminProspects";
+import { AdminRfpPackage } from "@/components/admin/AdminRfpPackage";
+import { AdminVulnerabilityAlerts } from "@/components/admin/AdminVulnerabilityAlerts";
 
 export default function Admin() {
   const navigate = useNavigate();
@@ -156,6 +158,14 @@ export default function Admin() {
                   <GraduationCap className="h-4 w-4" />
                   <span className="hidden sm:inline">Role Guides</span>
                 </TabsTrigger>
+                <TabsTrigger value="rfp" className="flex items-center gap-2 data-[state=active]:bg-background">
+                  <ScrollText className="h-4 w-4" />
+                  <span className="hidden sm:inline">RFP Package</span>
+                </TabsTrigger>
+                <TabsTrigger value="vuln-alerts" className="flex items-center gap-2 data-[state=active]:bg-background">
+                  <ShieldAlert className="h-4 w-4" />
+                  <span className="hidden sm:inline">Vulnerabilities</span>
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="analytics">
@@ -224,6 +234,14 @@ export default function Admin() {
 
               <TabsContent value="role-guides">
                 <AdminRoleGuides />
+              </TabsContent>
+
+              <TabsContent value="rfp">
+                <AdminRfpPackage />
+              </TabsContent>
+
+              <TabsContent value="vuln-alerts">
+                <AdminVulnerabilityAlerts />
               </TabsContent>
             </Tabs>
           </div>
