@@ -235,6 +235,14 @@ export default function Admin() {
               <TabsContent value="role-guides">
                 <AdminRoleGuides />
               </TabsContent>
+
+              <TabsContent value="rfp">
+                <AdminRfpPackage />
+              </TabsContent>
+
+              <TabsContent value="vuln-alerts">
+                <AdminVulnerabilityAlerts />
+              </TabsContent>
             </Tabs>
           </div>
         </section>
