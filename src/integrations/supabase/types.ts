@@ -99,10 +99,24 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "collaborations_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "profiles_directory"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "collaborations_requester_id_fkey"
             columns: ["requester_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collaborations_requester_id_fkey"
+            columns: ["requester_id"]
+            isOneToOne: false
+            referencedRelation: "profiles_directory"
             referencedColumns: ["id"]
           },
         ]
@@ -404,6 +418,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "forum_posts_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles_directory"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "forum_posts_topic_id_fkey"
             columns: ["topic_id"]
             isOneToOne: false
@@ -443,6 +464,13 @@ export type Database = {
             columns: ["author_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "forum_replies_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles_directory"
             referencedColumns: ["id"]
           },
           {
@@ -491,6 +519,13 @@ export type Database = {
             columns: ["suggested_by"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "forum_topic_suggestions_suggested_by_fkey"
+            columns: ["suggested_by"]
+            isOneToOne: false
+            referencedRelation: "profiles_directory"
             referencedColumns: ["id"]
           },
         ]
@@ -909,6 +944,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "research_questions_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles_directory"
+            referencedColumns: ["id"]
+          },
         ]
       }
       research_submissions: {
@@ -963,6 +1005,13 @@ export type Database = {
             columns: ["author_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "research_submissions_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles_directory"
             referencedColumns: ["id"]
           },
         ]
@@ -1190,7 +1239,87 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      profiles_directory: {
+        Row: {
+          agency_type: string | null
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          department: string | null
+          employees: string | null
+          focus_areas: string[] | null
+          founded: string | null
+          id: string | null
+          institution: string | null
+          interests: string[] | null
+          location: string | null
+          major: string | null
+          name: string | null
+          notification_preferences: Json | null
+          profile_type: Database["public"]["Enums"]["profile_type"] | null
+          publications: number | null
+          title: string | null
+          tutorial_completed: boolean | null
+          university: string | null
+          updated_at: string | null
+          user_id: string | null
+          website: string | null
+          year: string | null
+        }
+        Insert: {
+          agency_type?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          department?: string | null
+          employees?: string | null
+          focus_areas?: string[] | null
+          founded?: string | null
+          id?: string | null
+          institution?: string | null
+          interests?: string[] | null
+          location?: string | null
+          major?: string | null
+          name?: string | null
+          notification_preferences?: Json | null
+          profile_type?: Database["public"]["Enums"]["profile_type"] | null
+          publications?: number | null
+          title?: string | null
+          tutorial_completed?: boolean | null
+          university?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          website?: string | null
+          year?: string | null
+        }
+        Update: {
+          agency_type?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          department?: string | null
+          employees?: string | null
+          focus_areas?: string[] | null
+          founded?: string | null
+          id?: string | null
+          institution?: string | null
+          interests?: string[] | null
+          location?: string | null
+          major?: string | null
+          name?: string | null
+          notification_preferences?: Json | null
+          profile_type?: Database["public"]["Enums"]["profile_type"] | null
+          publications?: number | null
+          title?: string | null
+          tutorial_completed?: boolean | null
+          university?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          website?: string | null
+          year?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       count_recent_failed_logins: {
