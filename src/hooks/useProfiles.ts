@@ -58,7 +58,7 @@ export function useProfiles() {
     setError(null);
 
     const { data, error } = await supabase
-      .from('profiles')
+      .from('profiles_directory' as any)
       .select('*')
       .order('created_at', { ascending: false });
 
