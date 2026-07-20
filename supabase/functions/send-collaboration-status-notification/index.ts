@@ -20,7 +20,35 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
+    // Require authenticated caller
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const token = authHeader.replace("Bearer ", "");
+    const { data: authData, error: authErr } = await supabase.auth.getUser(token);
+    if (authErr || !authData?.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const callerUserId = authData.user.id;
+
     const { collaboration_id, status, requester_profile_id, responder_profile_id } = await req.json();
+
+    // Verify caller owns the responder profile (they are the one accepting/declining)
+    const { data: responderOwner } = await supabase
+      .from("profiles")
+      .select("user_id")
+      .eq("id", responder_profile_id)
+      .single();
+    if (!responderOwner || responderOwner.user_id !== callerUserId) {
+      return new Response(JSON.stringify({ error: "Forbidden" }), {
+        status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     // Get responder profile (the person who accepted/declined)
     const { data: responder } = await supabase
