@@ -1345,6 +1345,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      user_meets_aal: { Args: never; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"

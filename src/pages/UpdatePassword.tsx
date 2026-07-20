@@ -57,11 +57,13 @@ const UpdatePassword = () => {
     }
 
     setLoading(true);
-    const { error } = await supabase.auth.updateUser({ password });
+    const { data, error } = await supabase.functions.invoke('update-password', {
+      body: { password },
+    });
     setLoading(false);
 
-    if (error) {
-      toast({ title: "Error", description: error.message, variant: "destructive" });
+    if (error || (data as any)?.error) {
+      toast({ title: "Error", description: (data as any)?.error || error?.message || "Failed to update password", variant: "destructive" });
     } else {
       toast({ title: "Password updated", description: "Your password has been successfully updated." });
       navigate('/');

@@ -5,16 +5,40 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+function escapeHtml(s: unknown): string {
+  return String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function clip(s: unknown, max: number): string {
+  return String(s ?? "").slice(0, max);
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { firstName, lastName, email, subject, message } = await req.json();
+    const body = await req.json();
+    const firstName = clip(body.firstName, 100).trim();
+    const lastName = clip(body.lastName, 100).trim();
+    const email = clip(body.email, 255).trim();
+    const subject = clip(body.subject, 200).trim();
+    const message = clip(body.message, 5000).trim();
 
     if (!firstName || !lastName || !email || !subject || !message) {
       return new Response(JSON.stringify({ error: "All fields are required" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return new Response(JSON.stringify({ error: "Invalid email" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -39,13 +63,13 @@ serve(async (req) => {
         from: "ImpactLink <onboarding@resend.dev>",
         to: ["admin@impactlink.org"],
         reply_to: email,
-        subject: `[Contact] ${subject}`,
+        subject: `[Contact] ${escapeHtml(subject)}`,
         html: `
           <h2>New Contact Message</h2>
-          <p><strong>From:</strong> ${firstName} ${lastName} (${email})</p>
-          <p><strong>Subject:</strong> ${subject}</p>
+          <p><strong>From:</strong> ${escapeHtml(firstName)} ${escapeHtml(lastName)} (${escapeHtml(email)})</p>
+          <p><strong>Subject:</strong> ${escapeHtml(subject)}</p>
           <hr/>
-          <p>${message.replace(/\n/g, "<br/>")}</p>
+          <p>${escapeHtml(message).replace(/\n/g, "<br/>")}</p>
         `,
       }),
     });
