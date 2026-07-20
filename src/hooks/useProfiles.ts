@@ -68,7 +68,7 @@ export function useProfiles() {
       return;
     }
 
-    const dbProfiles = data as DatabaseProfile[];
+    const dbProfiles = (data as unknown) as (Omit<DatabaseProfile, 'email'> & { email?: string })[];
     
     // Transform to unified format
     const unified: UnifiedProfile[] = dbProfiles.map((p) => {
@@ -92,7 +92,7 @@ export function useProfiles() {
         title,
         organization,
         location: p.location || '',
-        email: p.email,
+        email: p.email || '',
         tags: p.interests || p.focus_areas || [],
         description: p.bio || '',
         type: p.profile_type,
@@ -126,7 +126,7 @@ export function useProfile(id: string) {
     const fetchProfile = async () => {
       setLoading(true);
       const { data, error } = await supabase
-        .from('profiles')
+        .from('profiles_directory' as any)
         .select('*')
         .eq('id', id)
         .maybeSingle();
@@ -134,7 +134,7 @@ export function useProfile(id: string) {
       if (error) {
         setError(error.message);
       } else {
-        setProfile(data as DatabaseProfile);
+        setProfile(data as unknown as DatabaseProfile);
       }
       setLoading(false);
     };
