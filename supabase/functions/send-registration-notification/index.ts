@@ -8,6 +8,16 @@ const corsHeaders = {
 
 const ADMIN_EMAIL = "khenneman@spaulding.org";
 
+function escapeHtml(s: unknown): string {
+  return String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+function clip(s: unknown, max: number) { return String(s ?? "").slice(0, max).trim(); }
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -17,11 +27,22 @@ serve(async (req) => {
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
     if (!RESEND_API_KEY) throw new Error("RESEND_API_KEY is not configured");
 
-    const { name, email, organization, organization_type, phone_number } = await req.json();
+    const body = await req.json();
+    const name = clip(body.name, 200);
+    const email = clip(body.email, 255);
+    const organization = clip(body.organization, 200);
+    const organization_type = clip(body.organization_type, 100);
+    const phone_number = clip(body.phone_number, 50);
 
     if (!name || !email) {
       return new Response(
         JSON.stringify({ error: "name and email are required" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return new Response(
+        JSON.stringify({ error: "Invalid email" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -35,7 +56,7 @@ serve(async (req) => {
       body: JSON.stringify({
         from: "ImpactLink <onboarding@resend.dev>",
         to: [ADMIN_EMAIL],
-        subject: `📋 New Registration Request: ${name}`,
+        subject: `📋 New Registration Request: ${escapeHtml(name)}`,
         html: `
           <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
             <div style="background: linear-gradient(135deg, #1a365d, #2d5a87); border-radius: 16px; padding: 32px; margin-bottom: 24px;">
@@ -47,23 +68,23 @@ serve(async (req) => {
               <table style="width: 100%; border-collapse: collapse;">
                 <tr>
                   <td style="padding: 10px 0; color: #64748b; font-size: 14px; width: 140px; vertical-align: top;">Name</td>
-                  <td style="padding: 10px 0; color: #1e293b; font-size: 14px; font-weight: 600;">${name}</td>
+                  <td style="padding: 10px 0; color: #1e293b; font-size: 14px; font-weight: 600;">${escapeHtml(name)}</td>
                 </tr>
                 <tr>
                   <td style="padding: 10px 0; color: #64748b; font-size: 14px; vertical-align: top;">Email</td>
-                  <td style="padding: 10px 0; color: #1e293b; font-size: 14px;">${email}</td>
+                  <td style="padding: 10px 0; color: #1e293b; font-size: 14px;">${escapeHtml(email)}</td>
                 </tr>
                 <tr>
                   <td style="padding: 10px 0; color: #64748b; font-size: 14px; vertical-align: top;">Organization</td>
-                  <td style="padding: 10px 0; color: #1e293b; font-size: 14px;">${organization}</td>
+                  <td style="padding: 10px 0; color: #1e293b; font-size: 14px;">${escapeHtml(organization)}</td>
                 </tr>
                 <tr>
                   <td style="padding: 10px 0; color: #64748b; font-size: 14px; vertical-align: top;">Organization Type</td>
-                  <td style="padding: 10px 0; color: #1e293b; font-size: 14px;">${organization_type}</td>
+                  <td style="padding: 10px 0; color: #1e293b; font-size: 14px;">${escapeHtml(organization_type)}</td>
                 </tr>
                 <tr>
                   <td style="padding: 10px 0; color: #64748b; font-size: 14px; vertical-align: top;">Phone</td>
-                  <td style="padding: 10px 0; color: #1e293b; font-size: 14px;">${phone_number}</td>
+                  <td style="padding: 10px 0; color: #1e293b; font-size: 14px;">${escapeHtml(phone_number)}</td>
                 </tr>
               </table>
             </div>
