@@ -917,6 +917,7 @@ export type Database = {
           created_at: string
           description: string
           file_name: string
+          file_path: string | null
           file_size: number | null
           file_url: string
           id: string
@@ -931,6 +932,7 @@ export type Database = {
           created_at?: string
           description: string
           file_name: string
+          file_path?: string | null
           file_size?: number | null
           file_url: string
           id?: string
@@ -945,6 +947,7 @@ export type Database = {
           created_at?: string
           description?: string
           file_name?: string
+          file_path?: string | null
           file_size?: number | null
           file_url?: string
           id?: string
@@ -1190,6 +1193,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      count_recent_failed_logins: {
+        Args: { _cutoff: string; _email: string }
+        Returns: number
+      }
       get_partner_matches: {
         Args: { user_profile_id: string }
         Returns: {
