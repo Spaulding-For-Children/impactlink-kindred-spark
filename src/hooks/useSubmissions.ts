@@ -97,20 +97,21 @@ export function useCreateSubmission() {
     }) => {
       if (!user) throw new Error("Must be logged in");
 
-      // Upload file to storage
+      // Upload file to storage (private bucket)
       const fileExt = file.name.split(".").pop();
-      const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+      const filePath = `${user.id}/${Date.now()}.${fileExt}`;
 
       const { error: uploadError } = await supabase.storage
         .from("research-uploads")
-        .upload(fileName, file);
+        .upload(filePath, file);
 
       if (uploadError) throw uploadError;
 
-      // Get public URL
-      const { data: urlData } = supabase.storage
+      // Long-lived signed URL (1 year) — bucket is private
+      const { data: signed, error: signErr } = await supabase.storage
         .from("research-uploads")
-        .getPublicUrl(fileName);
+        .createSignedUrl(filePath, 60 * 60 * 24 * 365);
+      if (signErr) throw signErr;
 
       // Create submission record
       const { data, error } = await supabase
@@ -120,13 +121,15 @@ export function useCreateSubmission() {
           title,
           description,
           submission_type: submissionType,
-          file_url: urlData.publicUrl,
+          file_url: signed.signedUrl,
+          file_path: filePath,
           file_name: file.name,
           file_size: file.size,
           tags,
         })
         .select()
         .single();
+
 
       if (error) throw error;
       return data;

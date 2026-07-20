@@ -77,25 +77,24 @@ export async function checkRateLimiting(
   if (!settings.rate_limiting_enabled) return { locked: false, minutesRemaining: 0 };
 
   const cutoff = new Date(Date.now() - settings.rate_limit_lockout_minutes * 60 * 1000).toISOString();
-  
-  const { data, error } = await supabase
-    .from("login_attempts")
-    .select("id")
-    .eq("email", email.toLowerCase())
-    .eq("success", false)
-    .gte("attempted_at", cutoff);
+
+  const { data, error } = await supabase.rpc("count_recent_failed_logins", {
+    _email: email.toLowerCase(),
+    _cutoff: cutoff,
+  });
 
   if (error) {
     console.error("Rate limit check error:", error);
     return { locked: false, minutesRemaining: 0 };
   }
 
-  const failedCount = data?.length || 0;
+  const failedCount = (data as number) ?? 0;
   if (failedCount >= settings.rate_limit_max_attempts) {
     return { locked: true, minutesRemaining: settings.rate_limit_lockout_minutes };
   }
   return { locked: false, minutesRemaining: 0 };
 }
+
 
 export async function recordLoginAttempt(email: string, success: boolean) {
   await supabase
