@@ -41,7 +41,7 @@ export const Contact = () => {
     e.preventDefault();
     const result = contactSchema.safeParse(contactForm);
     if (!result.success) {
-      toast({ title: "Validation Error", description: result.error.errors[0].message, variant: "destructive" });
+      toast({ title: "Validation Error", description: result.error.issues[0].message, variant: "destructive" });
       return;
     }
     setContactLoading(true);
@@ -63,7 +63,7 @@ export const Contact = () => {
     e.preventDefault();
     const result = newsletterSchema.safeParse({ email: newsletterEmail });
     if (!result.success) {
-      toast({ title: "Invalid email", description: result.error.errors[0].message, variant: "destructive" });
+      toast({ title: "Invalid email", description: result.error.issues[0].message, variant: "destructive" });
       return;
     }
     setNewsletterLoading(true);
