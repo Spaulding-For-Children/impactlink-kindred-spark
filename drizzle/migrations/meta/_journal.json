@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1794609290442,
+      "tag": "0000_tighten_research_uploads_and_forum_reads",
+      "breakpoints": true
+    }
+  ]
+}
